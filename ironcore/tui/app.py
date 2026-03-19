@@ -22,6 +22,7 @@ from ironcore.tui.screens.language import LanguageScreen
 from ironcore.tui.screens.preflight import PreflightScreen
 from ironcore.tui.screens.auth_search import AuthScreen, SearchProviderScreen
 from ironcore.tui.screens.models import ModelProvidersScreen, ModelPickerScreen
+from ironcore.tui.screens.channels import ChannelScreen
 from ironcore.tui.screens.features import SkillsScreen, HooksScreen, GatewayScreen
 from ironcore.tui.screens.system import SecretsScreen, PersonaScreen, MonitoringScreen
 from ironcore.tui.screens.final import FinalSmokeTestScreen, SummaryExportScreen
@@ -79,6 +80,8 @@ class IronCoreTUI(App):
             self.push_screen(ModelProvidersScreen(), self.handle_screen_result)
         elif result == "model_picker":
             self.push_screen(ModelPickerScreen(), self.handle_screen_result)
+        elif result == "channels":
+            self.push_screen(ChannelScreen(), self.handle_screen_result)
         elif result == "skills":
             self.push_screen(SkillsScreen(), self.handle_screen_result)
         elif result == "hooks":

@@ -14,8 +14,8 @@ class BaseWizardScreen(Screen):
     
     def compose_navigation(self) -> ComposeResult:
         with Horizontal(classes="wizard-nav"):
-            yield Button("Back", id="btn-back", variant="default")
-            yield Button("Next", id="btn-next", variant="primary")
+            yield Button(i18n.t("Back"), id="btn-back", variant="default")
+            yield Button(i18n.t("Next"), id="btn-next", variant="primary")
             
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-back":

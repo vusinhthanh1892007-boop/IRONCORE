@@ -1,3 +1,4 @@
+from ironcore.tui.i18n import i18n
 from textual.app import ComposeResult
 from textual.widgets import Header, Footer, Label, Button, Log, Switch
 from textual.containers import Vertical, Horizontal
@@ -8,10 +9,10 @@ class FinalSmokeTestScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):
-            yield Label("Sandbox Smoke Test", id="step-title")
-            yield Label("Click below to run a dry-run test with your configuration.")
+            yield Label(i18n.t("Sandbox Smoke Test"), id="step-title")
+            yield Label(i18n.t("Click below to run a dry-run test with your configuration."))
             
-            yield Button("Run Smoke Test", id="btn-test", variant="success")
+            yield Button(i18n.t("Run Smoke Test"), id="btn-test", variant="success")
             yield Log(id="smoke-logs", classes="hidden")
             
             yield from self.compose_navigation()
@@ -38,20 +39,20 @@ class SummaryExportScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):
-            yield Label("Summary & Deploy", id="step-title")
+            yield Label(i18n.t("Summary & Deploy"), id="step-title")
             
             cfg_snippet = json.dumps(self.app.cfg, indent=2)
-            yield Label("Configuration Preview (Secrets mask enforced):\n")
+            yield Label(i18n.t("Configuration Preview (Secrets mask enforced):\n"))
             yield Label(cfg_snippet, classes="code-preview")
             
-            yield Label("\n[bold red]Destructive Action Confirmation[/]")
+            yield Label(i18n.t("\n[bold red]Destructive Action Confirmation[/]"))
             with Horizontal():
                 yield Switch(id="ack-overwrite")
-                yield Label("  I confirm overwriting any existing configurations (~/.ironcore/config.json)")
+                yield Label(i18n.t("  I confirm overwriting any existing configurations (~/.ironcore/config.json)"))
             
             with Horizontal(classes="wizard-nav"):
-                yield Button("Back", id="btn-back", variant="default")
-                yield Button("EXPORT & START", id="btn-deploy", variant="error")
+                yield Button(i18n.t("Back"), id="btn-back", variant="default")
+                yield Button(i18n.t("EXPORT & START"), id="btn-deploy", variant="error")
         yield Footer()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -59,9 +60,9 @@ class SummaryExportScreen(BaseWizardScreen):
             self.dismiss(None)
         elif event.button.id == "btn-deploy":
             if not self.query_one("#ack-overwrite", Switch).value:
-                self.notify("Please acknowledge overwriting existing config.", severity="error")
+                self.notify(i18n.t("Please acknowledge overwriting existing config."), severity="error")
                 return
             
             # Simulated export
-            self.notify("Configuration Exported successfully! Starting IronCore...", title="Deployment Success")
+            self.notify(i18n.t("Configuration Exported successfully! Starting IronCore..."), title="Deployment Success")
             self.dismiss("done")

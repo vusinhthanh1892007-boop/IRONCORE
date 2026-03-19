@@ -1,3 +1,4 @@
+from ironcore.tui.i18n import i18n
 from textual.app import ComposeResult
 from textual.widgets import Header, Footer, Label, Input, RadioSet, RadioButton
 from textual.containers import Vertical
@@ -7,14 +8,14 @@ class AuthScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):
-            yield Label("Authentication", id="step-title")
-            yield Label("Select your authentication mode:")
+            yield Label(i18n.t("Authentication"), id="step-title")
+            yield Label(i18n.t("Select your authentication mode:"))
             
             with RadioSet(id="auth-mode"):
-                yield RadioButton("Local only — no account, config saved to ~/.ironcore", id="local", value=True)
-                yield RadioButton("Cloud Token — sync settings across devices", id="cloud")
+                yield RadioButton(i18n.t("Local only — no account, config saved to ~/.ironcore"), id="local", value=True)
+                yield RadioButton(i18n.t("Cloud Token — sync settings across devices"), id="cloud")
                 
-            yield Input(placeholder="Paste your IronCore Cloud token...", password=True, id="auth-token", classes="hidden")
+            yield Input(placeholder=i18n.t("Paste your IronCore Cloud token..."), password=True, id="auth-token", classes="hidden")
             
             yield from self.compose_navigation()
         yield Footer()
@@ -37,16 +38,18 @@ class SearchProviderScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):
-            yield Label("Web Search / RAG Provider", id="step-title")
-            yield Label("Select search provider so your agent can fetch live information:")
+            yield Label(i18n.t("Web Search / RAG Provider"), id="step-title")
+            yield Label(i18n.t("Select search provider so your agent can fetch live information:"))
             
             with RadioSet(id="search-mode"):
-                yield RadioButton("Brave Search (Private, fast)", id="brave", value=True)
-                yield RadioButton("Perplexity AI (LLM-powered)", id="perplexity")
-                yield RadioButton("Tavily (Built for AI agents)", id="tavily")
-                yield RadioButton("Skip for now", id="none")
-                
-            yield Input(placeholder="API Key (Leave blank if you don't have one)...", password=True, id="search-key")
+                yield RadioButton(i18n.t("Brave Search (Structured results, filters)"), id="brave", value=True)
+                yield RadioButton(i18n.t("Gemini (Google Search)"), id="gemini")
+                yield RadioButton(i18n.t("Grok (xAI)"), id="grok")
+                yield RadioButton(i18n.t("Kimi (Moonshot)"), id="kimi")
+                yield RadioButton(i18n.t("Perplexity AI"), id="perplexity")
+                yield RadioButton(i18n.t("Tavily (Built for AI agents)"), id="tavily")
+                yield RadioButton(i18n.t("Skip for now"), id="none")
+            yield Input(placeholder=i18n.t("API Key (Leave blank if you don't have one)..."), password=True, id="search-key")
             yield from self.compose_navigation()
         yield Footer()
 
