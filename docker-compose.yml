@@ -1,0 +1,123 @@
+x-llm-env: &llm-env
+  # ── LLM Provider API Keys ────────────────────────────────
+  ANTHROPIC_API_KEY:   ${ANTHROPIC_API_KEY:-}
+  OPENAI_API_KEY:      ${OPENAI_API_KEY:-}
+  GOOGLE_API_KEY:      ${GOOGLE_API_KEY:-}
+  # ── LiteLLM Tiered Routing ───────────────────────────────
+  IRONCORE_LLM_SIMPLE_MODEL:   ${IRONCORE_LLM_SIMPLE_MODEL:-ollama/llama3.1:8b}
+  IRONCORE_LLM_MEDIUM_MODEL:   ${IRONCORE_LLM_MEDIUM_MODEL:-claude-haiku-3-5}
+  IRONCORE_LLM_COMPLEX_MODEL:  ${IRONCORE_LLM_COMPLEX_MODEL:-claude-sonnet-4-6}
+  IRONCORE_LLM_CRITICAL_MODEL: ${IRONCORE_LLM_CRITICAL_MODEL:-claude-opus-4-6}
+  # ── VLM CAPTCHA Bridge ───────────────────────────────────
+  IRONCORE_VLM_BACKEND:   ${IRONCORE_VLM_BACKEND:-ollama}
+  IRONCORE_VLM_ENDPOINT:  ${IRONCORE_VLM_ENDPOINT:-http://ollama:11434/api/generate}
+  IRONCORE_VLM_MODEL:     ${IRONCORE_VLM_MODEL:-llava:13b}
+  IRONCORE_VLM_TIMEOUT:   ${IRONCORE_VLM_TIMEOUT:-30}
+  # ── Security & Auth ──────────────────────────────────────
+  IRONCORE_VAULT_KEY:       ${IRONCORE_VAULT_KEY:-}
+  IRONCORE_API_KEY:         ${IRONCORE_API_KEY:-ironcore-user-key}
+  IRONCORE_ADMIN_API_KEY:   ${IRONCORE_ADMIN_API_KEY:-ironcore-admin-key}
+  # ── Misc ─────────────────────────────────────────────────
+  IRONCORE_LOG_LEVEL: ${IRONCORE_LOG_LEVEL:-INFO}
+
+services:
+  # ── Redis (task queue / cache) ────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: ironcore-redis
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ── API Server ────────────────────────────────────────────
+  ironcore-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ironcore:latest
+    container_name: ironcore-api
+    command:
+      - uvicorn
+      - ironcore.api.server:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --workers
+      - "1"
+    environment:
+      <<: *llm-env
+      IRONCORE_PORT: "8000"
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ironcore_data:/app/data
+      - ironcore_logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── Background Worker ─────────────────────────────────────
+  ironcore-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ironcore:latest
+    container_name: ironcore-worker
+    command: ["python", "-m", "deployment.worker"]
+    environment:
+      <<: *llm-env
+      REDIS_URL: redis://redis:6379/0
+      IRONCORE_WORKER_HEARTBEAT_SECONDS: ${IRONCORE_WORKER_HEARTBEAT_SECONDS:-30}
+      IRONCORE_WORKER_MAX_ITERATIONS:    ${IRONCORE_WORKER_MAX_ITERATIONS:-10}
+      IRONCORE_WORKER_PROMPT:            ${IRONCORE_WORKER_PROMPT:-}
+    volumes:
+      - ironcore_data:/app/data
+      - ironcore_logs:/app/logs
+    depends_on:
+      ironcore-api:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Local VLM (optional — enable with: docker compose --profile vlm up) ──
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ironcore-ollama
+    profiles: ["vlm"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL:-2}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  ironcore_data:
+    driver: local
+  ironcore_logs:
+    driver: local
+  ollama_models:
+    driver: local

@@ -1,0 +1,807 @@
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+6d ago
+ZeroBucketsPFM
+My OpenClaw is useful!
+
+I've been running OpenClaw and set up 4 autonomous agents. Each has its own workspace, SOUL.md, and cron schedule. Here's what works for me.
+
+My set-up
+
+    OpenClaw on 2017 MacBook Pro with Intel
+
+    MiniMax 2.5 for all agents (fast + cheap)
+
+    Thinking level set to "high"
+
+My Agents
+
+    Tib - Research Agent. Rotates through B2B, B2C and AI2AI ideas every 15 minutes
+
+    Vector - Trading. Scans markets using Kalshi & Polymarket
+
+    Bou - OpenClaw environment scanner. New releases, security issues, configuration options
+
+    Gus - Controlling agent. This is who I speak to via Telegram
+
+Each Agent has his own SOUL.md. This tells them...
+
+    Their role and mission
+
+    What they do/don't do
+
+    Specific mandates or parameters
+
+    How to validate opportunities
+
+Cron configuration
+
+    Tib: 15-min cycles
+
+    Vector: 15-min cycles
+
+    Bou: 15-min cycles
+
+    Gus : Status report every 30 minutes
+
+    Backup : 2am backup to bitbucket repo
+
+Each agent has its own memory files:
+
+    memory/2026-MM-DD.md — Daily logs of what they did
+
+    status.json — Current state, last job, findings
+
+    rotation-log.md — Tracks which job ran last (so they don't repeat)
+
+        This is important. It helps them "break out" of idea loops when they are stuck. Their SOUL.md says you cannot work on the same thing back to back.
+
+Here are the real game changes
+
+    Set their "think" level to high (https://docs.openclaw.ai/tools/thinking)
+
+        Docs says this only works for GPT or Codex models. It works for MiniMax 2.5
+
+        If this is not set - it defaults to "Low"
+
+    I used Claude Code to get most of this configured. I didnt trust OpenClaw to configure itself until i set it to xhigh. Now "Gus" has been able to fix most of his open problems.
+
+So why do I say its useful? It took 2 weeks, but Tib is now generating good ideas with a validation framework. Bou has helped me further secure the environment and drummed up some interesting ideas as well. Vector.. well.. vector isnt useful yet.
+
+**Edit** - While I had set the config to xhigh, i was downgraded to high. So MiniMax2.5 only supports "high." Still, this configuration is useful. Some people have fairly poked at it in the comments - useful is in the eye of the user. Its not making money or solving world hunger... but its working autonomously throughout the day on a cheap LLM and providing value to me. This is why I shared.
+
+
+pondy12
+•
+5d ago
+
+You should try local Qwen3 8B Q4 quantization, loads in at 5 GB, multiple agents one at a time via cron staggering, eliminating MiniMax API costs and adding complete privacy, critical for trading scans(Vector) and environment security(Bou).
+18
+Laabc123
+•
+5d ago
+
+Are you getting the right level of reasoning out of the model?
+5
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I'm not sure how to answer that discretely.
+
+I'd share that OpenClaw w/ MiniMax was fairly frustrating until i found the "think" parameter and set it to "xhigh." hence the post.
+
+I've read alot about people using Anthropic models and the token burn there. I've generally avoided that. In my daily job I'm quite aware of how quickly Opus 4.6 can burn tokens. As stated before - its GREAT. but not cheap.
+
+MiniMax 2.5 with the "think" parameter set to "xhigh" has yielded strong results. That said - i've not compared directly to Opus 4.6 and wont... b/c of the spend. I assume Opus 4.6 will be better.
+3
+jake-n-elwood
+•
+5d ago
+
+How’s the latency with the xhigh setting?
+2
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I've never measured that or worried about it. So that is a curious question to me. I do have my Telegram response timeout up to 90 seconds, but i did that b/c it takes time to formulate a response. I suppose latency could factor into that.
+1
+Continue this thread
+UrAn8
+•
+5d ago
+
+Qwen 8B Q4 quant really sufficient, don’t find it too slow/dumb on q4 quant? Know if Mac mini have the specs to hold it?
+3
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+i do have a local model on my 3080 - qwen2.5-coder:14b via Ollama. i havent had to use it yet b/c i dont run out of MiniMax. at $20/month... its cheaper than netflix
+4
+Mastershima
+•
+5d ago
+
+Is this with their $20 "plus" plan?
+2
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Yup. I'm paying $20/month. 300/prompts w/in 5 hours. I just checked and I've used 18% of my quota and the window resets in 15 min
+4
+Mastershima
+•
+5d ago
+
+Thanks for the info!
+1
+u/EazziBrezzy avatar
+EazziBrezzy
+•
+5d ago
+
+Wait,, their plan at minimac is 2.5? I thought its only 2.1?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+2.5 came out a week or so ago
+2
+Continue this thread
+FlatwormMean1690
+•
+5d ago
+
+IDK why but my agent HATES Minimax. Every time I set it as model, he doesn't answer or his answers are like: "Yes. It's done. Anything else?". He HATES Minimax :D
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Set the think at "high" - that is the point of my post. It was fairly useless until i made that change. Also memory, soul.md tweaking, etc...
+1
+Continue this thread
+SirxXxSavage
+•
+5d ago
+
+Are you using the Mini Max Plus Coding plan for $20 and have tied it up with Openclaw with Api or Oauth?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Yes. Just an API key required
+1
+u/emptyharddrive avatar
+emptyharddrive
+•
+5d ago
+
+Yes, but you don't give the use cases. How are you using this daily? What is it managing for you, doing for you? How do you interact with it and what is it giving back?
+
+Are you saving time and increasing productivity or tinkering? Tinkering is fine, but your post makes it sound like you're really using it and I think the use case details are as important as how it's set up.
+
+Thanks in advance for sharing if you choose to!
+12
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Yup - super fair feedback.
+
+I'm not using it to answer emails, balance books or do work. Well yet. I'm having it to market research about solo entrepreneur ideas. What i've choosen to share here is... its gone from very silly & non-validated ideas to valid, good business ideas. Ideas where its using various sources to find pain points for users and opportunities in emerging markets. Many (MANY) of these ideas are too large for me, but that doesnt make them bad ideas.
+
+I see alot of posts about "OpenClaw" isnt useful. People expect it to be magic. My post here is... here are some configuration options that "moved the ball" for me. And the emphasis on SOUL.md development is critical. You have to develop it. Its not magic.
+4
+u/emptyharddrive avatar
+emptyharddrive
+•
+5d ago
+
+Thanks for this. I am interested in use cases because for me, email/calendar/reminder stuff is not a pain point for me... so after that sort of thing, I struggle to find a use case.
+
+Maybe daily system log review (look for errors and alert me if a backup failed...that sort of thing...) but other than that, I have trouble coming up with stuff.. at least stuff I want to delegate to an automated agent.
+
+Your idea ball-toss-around type of thing might have also been done in Claude/GPT research mode right? So for me, that's where I struggle to find a place for "the bot".
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I think of it like this…. What would I like to be researching autonomously while I’m at work, the gym, with family. How can I use these tools to multiply myself
+2
+Beejsbj
+•
+3d ago
+
+I'll share mine. And it's fairly simple.
+
+I used an old gaming laptop and turned it headless. And put my audio/ebook library stack on it through coolify. The laptop's keyboard and monitor were broken. So being able to reuse the laptop in this way is pretty neat. And now I can just ask it to get/clean up book metadatas.
+
+No more 20 tabs of books I want to read. 🤞?
+
+I had it hosted on hetzner before so that saved me soem moeny too and the headache that comes with managing self hosted apps.
+
+I also use a second agent to journal.
+
+I'm considering replacing my budgeting , workout tracker app with it.
+
+And ofcourse tinkering.
+2
+u/emptyharddrive avatar
+emptyharddrive
+•
+3d ago
+
+Interesting.. how do you use AI to journal?
+
+Right now I am just using it to check my backup logs every day to look for critical, high, med, low issues/errors and offer suggestions for root cause & fix and then it sends me only the criticals/highs via telegram (if they exist).
+
+I'm also doing an update-embedding index of my 2 Obsidian vaults (work/personal) because I do entries in both almost daily and then I use it as a local RAG of sorts and ask questions of either vault and mine them like a knowledge base.
+
+Also keeping track of my grocery shopping list.
+
+Other than that, I'm having problems coming up with use cases for myself. I know they're out there though, so I appreciate the sharing.. I keep scanning various sub-reddits looking for use cases I hadn't thought of..
+1
+Beejsbj
+•
+3d ago
+
+I've a whole agent dedicated to journal/personal/managemnt
+
+I'm still experimenting with the Journaling. But I had a really great experience with rosebud Ai journaling, showing me how powerful it is with memory of your journal entries and decided to try to create my own for the sake of privacy.
+
+I'm trying to have it check into my energy/mood with buttons in the heartbeat.
+
+Send/log/voice random ideas, thoughts, brain dumps, vents.
+
+Cron jobs for a morning/evening prompts prompt I do.
+
+Daily summaries(contingent on me logging)
+
+One thing I want it to learn(heartbeat) to do with journaling is to understand my language and use it to remind me of the insights I've had and shared with it that I'm now blanking or could use.
+1
+u/railwayapp avatar u/railwayapp
+•
+Promoted
+And that's just money we're talking about
+Learn More
+railway.com
+Thumbnail image: And that's just money we're talking about
+BuildingWide2431
+•
+5d ago
+
+What’s your vector, Victor?
+4
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+:)
+1
+u/terAREya avatar
+terAREya
+•
+5d ago
+
+Roger, Over.
+1
+bulutarkan
+•
+5d ago
+
+have you made any money from this setup? or have they just made everything easier for you? thats the measurement of the usefulness in my terms.
+
+sometimes these setups and hard working makes me think like we are 30 years old boys playing with AI tools all day long.. but never getting anything from that, just satisfaction. actually with subscriptions, API usages, we are spending more rather than earning lol. I hope you are beyond it and achieve someting useful for you. I think I'm as well, but havent got paid for these skills and knowledge :D
+3
+Beejsbj
+•
+3d ago
+
+We are those boys lol. I'm not sure why you feel shame in that.
+
+People spend to play and chase their curiosities all the time.
+2
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I've not made any money. making money isnt the measure of usefulness.
+
+i want to build things that people want to use. that solve problems for them. from that, money will come. I have OpenClaw researching ideas for me that will feed my "solve problems" plan.
+
+Yes - we are all just tinkering. If you working software... that is what your doing most of the time anyway
+1
+u/Famous-Tomorrow5337 avatar
+Famous-Tomorrow5337
+•
+5d ago
+
+Thanks for sharing. I tried something like this but it was a disaster. Sub agents giving bad data or making up data, master agent saying sub was done with work when sub did not even start. etc. etc.
+
+May have to give it a try again. What is your daily cost average on minimax?
+2
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+i pay $20/month and i dont run out of tokens. now... i'm not coding anything - just researching via Brave API - so perhaps it'll get worse when i ask them to start coding.
+
+FWIW - I use Opus 4.6 in Claude Code and its great. Super powerful. Though I find MiniMax 2.5 with the OpenClaw think setting at "xhigh" to be in the ball park. Changing the "think" setting was a game-changer for me. Whole reason I posted - i wasnt seeing people say anything about it.
+
+The SOUL.md files are really important. You need to be very clear and concise on what you want done. You should be iterating on these (daily?) until you are happy with the agents performance.
+12
+adspendagency
+•
+5d ago
+
+this.
+2
+u/Famous-Tomorrow5337 avatar
+Famous-Tomorrow5337
+•
+5d ago
+
+Thanks again for sharing. Can you explain more about your $20 per month for Opus 4.6. Is this part of a monthly plan or is that just want your tokens average out to be per month?
+1
+wingman_anytime
+•
+5d ago
+
+Not OP, but they are saying they get Minimax 2.5 for $20 / month, not Opus 4.6 for $20 / month - they use Opus 4.6 for Claude Code, not for OpenClaw.
+1
+u/terAREya avatar
+terAREya
+•
+5d ago
+
+You mention the brave API. Have you tinkered at with a locally hosted searxNG search engine?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I have not. Brave is working this far - but I’ll certainly look into that
+1
+u/HooklistenerApp avatar u/HooklistenerApp
+•
+Promoted
+Debug webhooks in minutes, not hours
+View More
+hooklistener.com
+Thumbnail image: Debug webhooks in minutes, not hours
+bezbol
+•
+5d ago
+
+Thanks for sharing. How do you set minimax to xhigh, I type in command it says: Thinking level "xhigh" is only supported for openai/gpt-5.2, openai-codex/gpt-5.3-codex, openai-codex/gpt-5.3-codex-spark, openai-codex/gpt-5.2-codex, openai-codex/gpt-5.1-codex, github-copilot/gpt-5.2-codex or github-copilot/gpt-5.2.
+2
+u/Livid_Ride8261 avatar
+Livid_Ride8261
+•
+5d ago
+
+Use '/think' in chat
+1
+jponte84
+•
+5d ago
+
+I think you have to edit manually the openclaw.json file and set the default to xhigh
+1
+u/blind0wl avatar
+blind0wl
+•
+5d ago
+
+openclaw config set agents.defaults.thinkingDefault xhigh
+
+Edit: It seemed to work the first time and then went back to high and I cant seem to get it back to xhigh
+1
+kinkvoid
+•
+5d ago
+
+Thanks for the xhigh tip. Currently I am running 2 agents in signal using Kimi 2.5 . I am gonna try minimax.
+0
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Let me know how it goes. I'm curious about others experience.
+1
+u/Intelligent-Fig6055 avatar
+Intelligent-Fig6055
+•
+5d ago
+
+Hi can we chat? I have a 2017 Intel Macbook Pro too but I have some issues setting up. I do want to make a bot for Polymarket market scanning and another for news scanning. Willing to pay for consultation!!!
+0
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+PM me. I'm US / CST - so I can talk past 5pm CST.
+1
+Applethiefnz
+•
+5d ago
+
+Interesting... thanks
+1
+u/letmebereed avatar
+letmebereed
+•
+5d ago
+
+Thanks bro these are some tool agents
+1
+Much-Signal1718
+•
+5d ago
+
+Wow, so cool dude
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+TY!
+1
+axiomoixa
+•
+5d ago
+
+thanks for sharing
+1
+Slow_Hotel2259
+•
+5d ago
+
+How much has MiniMax cost you in two weeks?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+$20. its a flat subscription, like Claude Code.
+
+I've not run out of tokens in a single context window.
+2
+Polite_Jello_377
+•
+5d ago
+
+Trading and get rich quick ideas is such a boring use case
+1
+u/Due-Photograph-2664 avatar
+Due-Photograph-2664
+•
+5d ago
+
+Thanks for sharing! After joining xHigh, it seems like a lot of my problems have dropped off. I was already about to subscribe to Claude Max 'cause I was so fed up with the dumb models.
+1
+xdragonballkid
+•
+5d ago
+
+hiw did you sey to xhigh? i always get: Thinking level "xhigh" is only supported for openai/gpt-5.2, openai-codex/gpt-5.3-codex, openai-codex/gpt-5.3-codex-spark, openai-codex/gpt-5.2-codex, openai-codex/gpt-5.1-codex, github-copilot/gpt-5.2-codex or github-copilot/gpt-5.2.
+1
+u/blind0wl avatar
+blind0wl
+•
+5d ago
+
+openclaw config set agents.defaults.thinkingDefault xhigh
+
+Edit: It seemed to work the first time and then went back to high and I cant seem to get it back to xhigh
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I was wrong about xhigh. It only supports high.
+
+Still... its useful and providing value on a $20/month subscription. Turns out it didnt need xhigh
+1
+Little_Statement2276
+•
+5d ago
+
+How do you set up multiple agents on one PC?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+https://docs.openclaw.ai/cli/agents
+1
+u/smurff1975 avatar
+smurff1975
+•
+5d ago
+
+Nice post but I've seen a lot of posts about using these models such as minimax/glm/kimi but none of them do a comparison or show actual replies that make me believe they are "as good" or "good enough"
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+i answered something similar earlier. asking for discrete comparison between LLMs is well beyond my capability AND there are organizations attempting to do this elsewhere. my post is about a couple of settings - think, a memory plan, a rotation log, and a cheap LLM.
+
+I see many people saying "they cant make OpenClaw useful" on this subreddit. just trying to show the other side
+2
+u/smurff1975 avatar
+smurff1975
+•
+3d ago
+
+The benchmarking methodology has some red flags. They used Claude Code as the scaffolding for SWE-Bench but "overrode the default system prompt." That's a meaningful detail. What they replaced it with could significantly affect results. They also averaged over 4 runs, which is fine, but cherry-picking the best scaffolding for their model while reporting results against competitors who may have been tested under different conditions is a common way to inflate numbers.
+Several of their benchmarks are internal. VIBE-Pro, RISE, GDPval-MM, MEWC, and Finance Modeling are all their own benchmarks. When you create and evaluate on your own benchmarks, you can (consciously or not) optimise for them. A 10B active parameter MoE model likely handles things very differently from a full frontier model. I'm seeing this as a "for a massive cost saving, I would take a 20% hit on getting shit done, compared to a SOTA model" Appreciate you posting your findings though dude
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+https://www.swebench.com/index.html
+1
+u/gasza avatar
+gasza
+•
+5d ago
+
+Wait till vector asks you to fund his polymarkets and full ports the account like a degenerate (speaking from experience) 😅
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+yea... he's paper trading right now. i'm not ready to give him real money
+2
+u/gasza avatar
+gasza
+•
+5d ago
+
+I’m going live and it’s fun watching it! Definitely got to try it maybe with a little fun pot!
+1
+xdragonballkid
+•
+5d ago
+
+can you tell us how did you managed to changed minimax 2.5 thnking to xhigh? because I tried and it wouldn't let me. Can you enlighten us pls?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+i'll update my post. its a high. i got downgraded and didnt know it.
+
+Also - thanks for pointing this out
+2
+u/blind0wl avatar
+blind0wl
+•
+5d ago
+
+I think it would be good to explain how you got minimax to use xhigh. Openclaw has a bug fix where it downgrades to high when a non-xhigh model is used...at least in isolated cron jobs, which I expect affect normal agents. I've seen it go to xhigh and then reverts to high again.
+
+https://github.com/openclaw/openclaw/issues/9360
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+I've updated my post. It is at high. It was downgraded.
+
+As I stated in my updates - its still a useful config. "high" reasoning on MiniMax2.5 is providing value.
+
+Thank you for point this out
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+5d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+Tunikamisin
+•
+5d ago
+
+Sounds wonderful. May I ask what is the token usage daily looks like ? I am running 2 agents and it’s using 12M a day based on the default dashboard calculation.
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+No idea. Minimax is a window setup. I get a number of tokens per window and then the window resets. I’ve never ran out of tokens
+1
+kinkvoid
+•
+5d ago
+
+I usually just do /think high and /reasoning on per session.
+1
+u/thecanonicalmg avatar
+thecanonicalmg
+•
+5d ago
+
+Running 4 agents autonomously on cron is exactly the setup where things can go sideways without you noticing, especially with a trading agent in the mix. Having Bou scan for security issues is smart but you might want something that monitors what all your agents actually do in real time across the board. Moltwire was built for this kind of multi-agent setup if you want that extra visibility.
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Gus is supposed to be watching them. I’ll take a look at moltwire. Ty. Also - vector is paper trading right now
+2
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+5d ago
+
+all of this can be easily and more efficiently done wihtout openclaw
+1
+u/EazziBrezzy avatar
+EazziBrezzy
+•
+5d ago
+
+How?
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Yea… I’ll bite. How
+1
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+5d ago
+
+Codex, Claude Code, Cursor there is nothing here that might need agentic loops burning tokes for nothing
+
+openclaw attracted non technical "apple people" who know nothing about programming so to them it looks revolutionary in reality its a vibe codes buggy mess
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+Required? Maybe not required. But OpenClaw provides a couple of optimizations that make this easier
+
+While I’d never say these agents are autonomous - leveraging cron, soul.md, memory files, rotating assignments - it makes them feel autonomous. And I can redirect them from my phone. Change assignments or soul files remotely.
+
+Could you do the same with other setups. Probably.
+1
+Continue this thread
+u/godzoftea avatar
+godzoftea
+•
+4d ago
+
+But openclaw did and is pushing the imagination of the public for what’s possible. The idea is to achieve J.A.R.V.I.S
+1
+domi_niku
+•
+5d ago
+
+I'm using MiniMax-m2.5 too but I can't get it to run multiple agents - it says current OpenClaw doesn't support it. Of course since I tried everything fell apart and now I would be happy with one working agent.
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+5d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+5d ago
+
+are you on the latest version of openclaw? one thing i do... almost nightly... tell my agent to execute backup (bitbucket), tell everyone we are shutting down so write their memory. then i halt and update to the latest.
+
+https://docs.openclaw.ai/concepts/multi-agent#quick-start
+1
+domi_niku
+•
+5d ago
+
+Yeah I have a daily backup then update routine. I'm not sure if it knows what it's talking about. standalone gemini tells me it's possible and set up all the scripting and messed everything up. I didn't think I needed all those agents but then I saw your examples and now I want to try.
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+4d ago
+
+I do not have 4 instances of openclaw installed.
+
+i'm gonna run my agents for a few more days and then put another article up on how they are configured.
+1
+domi_niku
+•
+5d ago
+
+Ah I see now - you have 4 instances of OpenClaw installed. I think that's too much of a hassle for me with the constant problems that I cause messing with it.
+1
+naibaF5891
+•
+4d ago
+
+I had minimax and am now using Kimi coder after I was frustrated with minimax.
+
+You've got some great inputs, I will take them ;-) Bitbucket backuo for example, love it!
+1
+u/Late_Orange9332 avatar
+Late_Orange9332
+•
+1d ago
+
+Could you run through how you set up ‘Tib’?
+1
+u/Select_Nectarine4846 avatar
+Select_Nectarine4846
+•
+1d ago
+
+how did you get it running on the 2017? i have a 2016 mbp running monterey and clawbot wouldn’t install. i have it on my pc but its a bit dusty cause of windows.
+1
+u/ZeroBucketsPFM avatar
+ZeroBucketsPFM
+OP •
+22h ago
+
+What kind of issue are you seeing. It’s just a nom package.
+1
+

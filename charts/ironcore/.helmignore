@@ -1,0 +1,42 @@
+# Helm packaging exclusions — prevents Python source, tests, and dev artifacts
+# from being bundled into the chart tarball.
+
+# Python source and bytecode
+*.py
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Tests
+tests/
+ironcore/tests/
+
+# Development and CI files
+.env*
+Makefile
+docker-compose*.yml
+Dockerfile*
+.github/
+.gitlab/
+.git/
+.gitignore
+
+# Documentation and prompts
+*.md
+README*
+prompt_*.md
+PROJECT_STATUS.md
+walkthrough.md
+
+# Build artifacts
+dist/
+build/
+*.tar.gz
+*.zip

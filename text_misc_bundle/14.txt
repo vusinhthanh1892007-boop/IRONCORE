@@ -1,0 +1,876 @@
+ Anyone else is also disappointed from OpenClaw?
+
+I tried OpenClaw on a VPS a week ago and was pretty impressed. I purchased mac mini for security, set it up and...it's just bad. I have to feed it exact instructions, no proactivity, no resourcefulness. It just keeps coming back to me with issues and problems about why it can't do certain things, and then I explain exactly how to do it, and it works - so it's not a wall it can't pass, it's just poor performance. I gave it a couple of specific use cases as well, from simple ones to more complex, all resulted in mediocre results that could be achieved with claude code alone. Anyone else having the same experience?
+ 
+
+AutoModerator
+MOD •
+15d ago
+u/LeaderBriefs-com avatar
+LeaderBriefs-com
+•
+15d ago
+
+I’ve seen a Mission Control board being floated around and instead of installing someone’s project I just told my bot to make one. It did. It’s great.
+
+I have a video editing workflow that is cumbersome and asked it how it could streamline it. It was able to completely do it saving me 90% of my work.
+
+It’s set to send me interesting or trending PolyMarket odds each morning. It does.
+
+It gives me a daily briefing on my interests, nightly wrap up of all we did together and if we learned anything or could have done anything better.
+
+It backs itself up to GitHub every night like it’s putting itself to bed. 😅
+
+I know Alex Finn allegedly has a nightly ask where he says “build me an app that might be beneficial to me each night and present it in the morning”
+
+That’s a simple scheduled task. Making the app and presenting it or basically scheduled crons triggering agents.
+
+All that being said have a direction you are going, put reoccurring asks out there that it can iterate on and play with models to see which ones can compliment what you need.
+
+But aside from quick updates that I know are coming the chat is silent until I ask it to do something.
+
+But I can easily say “every 30 mins provide me with 3 ideas that could help xyz, do not repeat past suggestions”
+
+You build the proactiveness
+16
+OneLessLagger
+•
+15d ago
+
+Would love to understand your setup? I haven’t started my setup just yet but wanted to know if there were guides you followed or videos that can recommend hardware and also setup? TIA!
+2
+u/ziplock9000 avatar
+ziplock9000
+•
+15d ago
+
+> I just told my bot to make one. It did. It’s great.
+
+That is the model that is great.
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+15d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-1
+u/grimmzt avatar
+grimmzt
+•
+15d ago
+
+Any chance you'd be willing to share the prompt you used to build the dashboard? Curious if you gave it specific details on what would be useful features of said dashboard.
+1
+u/LeaderBriefs-com avatar
+LeaderBriefs-com
+•
+15d ago
+
+It’s me specific and project specific.
+
+But honestly, just ask an then build upon that ask.
+
+It has project steps, who owns what, a monthly calendar and highlights what’s winding, what’s in jeopardy and a section for ideas it has as well.
+Comment Image
+1
+grizzly_teddy
+•
+15d ago
+
+    I’ve seen a Mission Control board being floated around and instead of installing someone’s project I just told my bot to make one. It did. It’s great.
+
+What was your prompt for that?
+1
+u/LeaderBriefs-com avatar
+LeaderBriefs-com
+•
+15d ago
+Comment Image
+1
+u/PermitNo6307 avatar
+PermitNo6307
+•
+14d ago
+
+This sounds like the most degen shit ever. I love it
+1
+u/LeaderBriefs-com avatar
+LeaderBriefs-com
+•
+15d ago
+
+Sounds like a skill issue honestly? What model are you using?
+
+There is no “proactively” out of the box. It won’t randomly ping you and ask you questions and just “do task” that it thinks it should do.
+
+But it will set up crons, schedules, build apps you ask it to. All that jazz.
+
+The more instructions you give the more useful it is.
+
+But if your model isn’t getting it done it will just trap you in a circle of needing more and more guidance
+27
+Lo-mazhik
+OP •
+15d ago
+
+I use Opus 4.5, I'm currently at the point where I'll invest as much as needed to get some useful use cases and then think about optimizing costs but I can't really get to that point. Example from today: I created a slack channel called #fitness-coach and asked it to build an agent to coach me on that channel. Details aside, I then asked it respond as "Arnold" on that channel - it worked for 1 message, then reverted back. I spent 20 minutes trying to teach it how to reply as "Arnold", even though it already succeeded once, and then gave up
+6
+Electronic-Blood-885
+•
+15d ago
+
+That’s the problem opus 4.5 tries to be personal and not proactive try Kim 2.5 it legit
+6
+u/yungjeesy avatar
+yungjeesy
+•
+14d ago
+
+Sorry but this is not true at all. Just have to properly configure cron jobs, skills, and heartbeat. Opus is by far the best in every facet. And opus 4.6 just dropped.
+1
+Electronic-Blood-885
+•
+14d ago
+
+Ok I wasn’t that thorough but yes your right the power is in the cron jobs heartbeats etc but have you used codex5.3 ?
+1
+aeyrtonsenna
+•
+15d ago
+
+Using API key or CC token? I tried with API key and it just didn't work for me. Opus 4.5 and 4.6.
+2
+u/IWillFlipOut avatar
+IWillFlipOut
+•
+15d ago
+
+I use Kimi code k2.5 API for my daily driver. It does an excellent job. After a couple days, we had a conversation to train its personality, soul, guidelines, etc. based on our collaboration to that point. Asked it for insights on that, offered my insights and needs (for example collaboration vs nagging). It created a design plan for revising soul.md, agents.md, user, identity, etc. Then I switched to opus for a higher level analysis and revision of the plan, committed the changes to file, and switched back to Kimi. I've been more than satisfied with the result, although I have no doubt that there are other or better ways to achieve this - I'm just a hack hobbyist. We revisit that conversation occasionally, as well as use that process to tune/train other aspects of our workflow and OpenClaw optimization. I think most people that are unsatisfied with their experience are not aware this is possible or useful.
+6
+timbo2m
+•
+15d ago
+
+Quick question , you have to use their api for it right, can't just use the chatbot
+1
+Continue this thread
+Onotadaki2
+•
+15d ago
+
+Tell it to write stuff down and follow it.
+
+For this, tell it you want it to make a file it references every time it talks in the fitness coach channel. The document should have it's personality, your goals and your milestones. Tell it to write down whenever you make fitness progress so it doesn't forget it. To start everything off, you can even tell it to go off and research fitness coaching and to make the base file from it's research.
+0
+u/yungjeesy avatar
+yungjeesy
+•
+14d ago
+
+Be specific about it though. These documents are actually just called skills. Any time you do a task you know you'll be repeating, have it make a skill for that task. Then every time it does the task, give it detailed feedback on what needs to be better, what you dont like, and then tell it to update the skill based on the feedback. This feedback loop is what makes it give increasingly better output day after day after day.
+
+I went to an official anthropic AI Agents event and learned all about this stuff. Just dropped a video about it here. https://youtu.be/4MgCMI0NHGA
+1
+u/troubleshootmertr avatar
+troubleshootmertr
+•
+15d ago
+
+I'm over here using minimax m2.5 and have decent results.
+1
+u/EchoOfIntent avatar
+EchoOfIntent
+•
+15d ago
+
+Use windsurf. You will have to be a bit more specific about what and how you want it made but with testing and troubleshooting you can get an ai agent or app that does what you want. Welcome to vibecoding.:. I have a ai router that i built that can can bolt stuff onto similar to what your wanting but you have to program the ai and give it some guardrails otherwise its gonna color all over the dam coloringbook
+1
+u/yungjeesy avatar
+yungjeesy
+•
+14d ago
+
+LITERALLY a skill issue. Bro probably has zero custom developed skill and incredibly bloated system files. Just dropped a vid on this exact topic here https://youtu.be/4MgCMI0NHGA
+1
+u/tilmx avatar u/tilmx
+•
+Promoted
+Wispr Flow but 100% local and 100% free
+Learn More
+getonit.ai
+Clickable image which will reveal the video player: Wispr Flow but 100% local and 100% free
+0:00 / 0:00
+u/Deep_Traffic_7873 avatar
+Deep_Traffic_7873
+•
+15d ago
+
+I think it's a skill issue, i gave my paypal api to openclaw and now i'm rich /s
+14
+ThersATypo
+•
+15d ago
+
+I gave your paypal creds to openclaw, too - and now I am rich.
+10
+Crumbedsausage
+•
+15d ago
+
+Mine sucked my dick!
+1
+u/yungjeesy avatar
+yungjeesy
+•
+14d ago
+
+Literally a skill issue. You have to tell it to develop tailored skills for the tasks you will be doing a lot. Next to no need for 3rd party skills. The personalized skills you develop with it are far better for your specific use cases.
+1
+u/yungjeesy avatar
+yungjeesy
+•
+15d ago
+
+You gotta make it make skills for the things you do, give it feedback on its results and tell it to update the skill based on that, and repeat. It will get smarter at whatever you do together if you do that repeatedly
+5
+u/terAREya avatar
+terAREya
+•
+15d ago
+
+Give us an example of what you told it to do, whats the prompt. What do your config files look like? What tools have you given it?
+3
+Lo-mazhik
+OP •
+15d ago
+
+I gave openclaw a monday API key before. I told it: Can you watch this video and let me know how we can implement something similar? https://youtu.be/_ISs5FavbJ4?si=5UaMKpRczVAh6_sD
+
+    he told me it can do it, I approved the plan, and then it said “you need to create a board for me”, even though the API key has the permission to create a board.
+
+This is just an example, the point is that I have feed it exactly like I’d need to do with other AI tools and I don’t see the magic or the resourcefulness people are talking about online
+2
+u/terAREya avatar
+terAREya
+•
+15d ago
+
+Maybe youre doing this but I will say it anyway. You need to have a long chat with your openclaw about how you work together. For example I initially had it build a kanban board that looks like trello and gave it a rule set about how we were going to use it. Something like "every project will have its own board with minimally 'backlog' 'in progress' 'waiting for approval' 'done'. I will create items to be done in 'backlog' or I may ask you to create them in a chat. Only I can move an item from 'backlog' unless I tell you to move something." We went back and forth with this and we built the board and added features. This was all while using Opus and the output was great.
+
+We also spent time on tools.md What it can use. things like Monday.com. We set up these tools tested that could access them, how they would access them and all that.
+
+I setup a gitea instance for code and made sure we had a process for shipping and updating code.
+
+Only after all this did I finally say something like your prompt.
+
+I am not an expert, I have just been reading and watching videos like crazy and trying to think logically about what I want it to do, how it will do it, the tools it needs to do it. And I am now getting real results.
+
+Pay attention to models you are using. Dont be afraid to let it try to build something with sonnet or haiku or Kimi. If it fails miserably tell it to switch models to sonnet. Still fails? Try Opus.
+
+Often I find haiku and sonnet are able to build something with a few bugs and then I can have Opus come in and fix bugs which is much cheaper than one-shotting with Opus.
+
+Watch your session tokens! Especially if you are using an expensive model. Openclaw will throw all your session memory, md files etc at a prompt and loop and constantly grow the session tokens and you can watch money burn.
+
+There are a lot of guides on how to start a session with minimal tokens and keep it from growing too much.
+
+Lastly, before you ask it to do something try to reason with yourself about complexity of the task. If you ask haiku to make you a replica of openclaw but to your design, it will fail miserably. Opus might not but will be expensive. Personally I make tiny dashboards and little tools for personal productivity and I have not had to throw opus at much.
+4
+u/terAREya avatar
+terAREya
+•
+15d ago
+
+Also I found this guide EXTREMELY helpful:
+
+https://youtu.be/RX-fQTW2To8?si=uKh64ToxppYSRTDd
+
+https://docs.google.com/document/d/1ffmZEfT7aenfAz2lkjyHsQIlYRWFpGcM/edit
+6
+SIGH_I_CALL
+•
+15d ago
+
+The more access you give it the better it is but also the more dangerous it is. Also try explaining exactly what you said here to the bot and ask it to build tools for itself and to update all it's internal docs to avoid this in the future. I've got 2 things on github for tools and memory, send the link to your agent and have them install it or give a summary of what they are.
+
+https://github.com/ucsandman/OpenClaw-Hierarchical-Memory-System
+
+https://github.com/ucsandman/DashClaw
+
+Edit: completely remade everything and made it an opensource project, now DashClaw. Check it out I'm proud of this one. https://dash-claw.vercel.app/
+3
+dmstomps
+•
+15d ago
+
+Yes and No. I spent a lot of time, and some money, getting it setup securely on a VPS. It's more or less running in sandbox mode in an echo chamber, so in many ways is a bit underwhelming because I built it to be that way and don't plan to give it direct access to my personal data.
+
+However I have it doing some pretty fun stuff such as feeding me curated stock market data at specific times and scraping eBay for ultra-specific auctioned items and sending me the hits, if they exist, directly into Discord. It's not a lot, and it cost about $75 in token usage on Opus. 4.5 to get setup the way I wanted but now its running well and usage is way down.
+2
+Altairandrew
+•
+15d ago
+
+I think it’s pretty amazing. A work in progress in terms of getting it to work properly. But it’s early days. There are quirks for sure. I gave it access to some Google apps and (I’m running on an rpi5) I had to get to the computer and put in passwords for the keychain.
+
+PS I’m 70 and a bit of an early adopter my whole life, so I’m taking some risks. But besides having the ai jump the gun a bit. Having fun. Keeping cost down is another issue.
+2
+Altairandrew
+•
+15d ago
+
+That said it can be pretty stupid sometimes. I constantly come up with strategies before it does and ps: I’m using it to mess with customizing openclaw. Sometimes it works, sometimes it don’t.
+1
+nomaDicVentures
+•
+15d ago
+
+Honestly I am having a very similar experience I have been struggling even to automate it running a couple Twitter accounts it seems to struggle every step of the way whether it hesitates and refuses to push the post button or posts without photos even though I've explicitly said to use photos.
+
+Most of what I'm doing is troubleshooting
+
+It continuously tells me that it knows how to fix the problem and how to do it but then it fails almost no matter what it does
+
+It gets to a point where it's just a frustrating mess and now honestly I want to wipe its memory and start over anyone know how to do that?
+2
+friedrice420
+•
+2d ago
+
+whats your main issue? I'm using twitterapi.io and the official x api and it seems to be working fine
+1
+u/Ultramen avatar
+Ultramen
+•
+14d ago
+
+I also played with it a bit and felt disappointed, I mean it's nice but at the end you can do similar thing in a much more consistent manner using Claude code and some existing tool. At the end of the day openclaw it's just an LLM with memory and crontab and this is nice until it becomes insanely inefficient and uses tokens like hell. I prefer using chat LLMs for brainstorming coupled with cli tools for dev but I guess it's not as mainstream.
+2
+Lo-mazhik
+OP •
+14d ago
+
+That’s what I’m thinking as well. I could get a much more secure and consistent solution setting up cronjobs with Claude code and have a bridge to slack
+1
+u/yungjeesy avatar
+yungjeesy
+•
+14d ago
+
+use this audit prompt to instantly reduce tokens by up to 70% and develop custom skills based on what's bloating your system files:
+
+"""
+Audit every file that loads into your context each message (AGENTS.md, TOOLS.md, USER.md, MEMORY.md, HEARTBEAT.md, SOUL.md). For each one:
+
+(1) What's in here that should be a skill instead of always-loaded context
+
+(2) What's outdated or redundant
+
+(3) What's too verbose and could say the same thing in fewer words
+
+Give me the current size, projected size after cleanup, and estimated token savings.
+"""
+OpenClaw loads the entire context of your system files with each prompt. This prompt will trim those down and get rid of task specific info that should actually become skills that it only references when it needs them
+
+also properly configure your cron jobs and heartbeat, have a conversation with it about that.
+
+Problem solved. Run this audit prompt once a week or two weeks depending how much you use it.
+1
+u/Ultramen avatar
+Ultramen
+•
+14d ago
+
+I have a proxy between openclaw and the LLM, there are so many things that cause tokens to skyrocket like the model going into infinite loops trying to handle some error from a tool, heartbeat go crazy and poll every 1 second etc, the fact you say it's solved with what you wrote means that either you are not actually seeing what it does or have an empty setup
+
+P.S. there is no practical way today to do cheap routing of many tools and have a shared global memory the overall architecture of openclaw is flawed
+1
+u/Huge_Freedom3076 avatar
+Huge_Freedom3076
+•
+15d ago
+
+Just sending files to claw via telegram to add file to Google drive is enough for me.
+2
+u/FaceDeer avatar
+FaceDeer
+•
+15d ago
+
+Using a jet engine to clear the fallen leaves from your lawn, but I guess if you've got the resources available and it's convenient... :)
+4
+[deleted]
+•
+14d ago
+
+u/AutoModerator avatar
+
+u/wgg_3 avatar
+wgg_3
+•
+15d ago
+
+“Make me 1 million dollars every day” presses enter Man! Openclaw sucks!!!
+1
+u/FaceDeer avatar
+FaceDeer
+•
+15d ago
+
+I'm still waiting for it to install itself for me.
+2
+Lo-mazhik
+OP •
+15d ago
+
+Where exactly did I talk about money/money making capabilities/anything of that sort? The fact that this is the only thing you have to say(among others in this post) kinda shows what YOU expect to get out of it, not others
+3
+118fearless
+•
+15d ago
+
+Loving it so far !!!
+1
+Tradefxsignalscom
+•
+15d ago
+
+This place is getting gloomy fast!
+
+Ah com on where’s your nerd gumption?
+
+I bought a cluster of Mac minis and with open claw, I’ll be a billionaire in no time!
+
+See ya at the Lamborghini Dealership!😜
+1
+u/1FunkDrucker avatar
+1FunkDrucker
+•
+15d ago
+
+Yes. I am.
+
+I built a VPS for the first one and it's just cost too much to get it to a usable point. Then I gave it's own laptop that I had lying around. It's not really useful.
+
+I was hoping to use it as a second brain. I don't have a "startup" idea that I'm trying to build and I'm pretty convinced it wouldn't be that helpful even if I did. It's just so resource heavy that it really isn't useful. The cost of running outweighs the value of what you can trust it doing.
+
+Yeah it can do all sorts of weird "one off" quirky things that will be great for the twitter kids, but for things that have to be done reliably and easily, it's not worth the high cost.
+
+so to me it was very expensive and the time it takes to configure and set it up is more than the time it takes to for me to do it myself.
+
+but as always, the AI buble is predicated on the counter argument "It's your skillset that's the problem. You aren't prompting correctly" and to that I say bullshit. I've been around long enough to see patterns in these hype-cycles that don't have actual substance. It kind of reminds me of the NFT madness from just a few years ago.
+-2
+u/spamsch7772 avatar
+spamsch7772
+•
+15d ago
+
+That's why I built https://github.com/spamsch/son-of-simon that focuses on security. Runs only on Mac though. But this is a feature not a bug. That way you have so much more security and control.
+-4
+u/AutoModerator avatar
+AutoModerator
+MOD •
+15d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-1
+u/geraldships_com avatar
+geraldships_com
+•
+15d ago
+
+Which model are you using?
+1
+u/Ill_Leadership626 avatar
+Ill_Leadership626
+•
+15d ago
+
+Interested in updates. Bought 3 Mac minis and constantly fighting with the setup currently
+1
+u/Toni_Web avatar
+Toni_Web
+•
+15d ago
+
+I know what you’re referring to. Let me explain my Observation, but first: TLDR: the model you’ve chosen is too „weak“. When i started I’ve been using Claude Sonnet 4.5 with reasoning. Great experience, bot did its thing, asked questions worked „on its own“. A day later API costs were at 60€ (for 3/4 of a day), it created skills, set up some other things I wanted in python and so on. Now that my primary model is GPT-5-mini my Bot Jarvis is basically down. It asks me four times the same question, then tells me if it should start, said it takes 8 mins max. and when I ask about the status it tells me the task, that it’ll start and wir back at the beginning. I haven’t figured out the „minimum model“ but I think that I’ll go with sonnet 4.0 now. Will update all of you in a bit.
+1
+u/Desperate_Western953 avatar
+Desperate_Western953
+•
+15d ago
+
+Try this.
+Comment Image
+1
+[deleted]
+•
+15d ago
+
+Comment removed by moderator
+-4
+u/ConanTheBallbearing avatar
+ConanTheBallbearing
+•
+15d ago
+
+“I built” can be effectively rewritten as “I half heartedly vibe coded something I know nothing about” at this point. Especially in this sub
+2
+[deleted]
+•
+15d ago
+
+Comment removed by moderator
+2
+Tradefxsignalscom
+•
+15d ago
+
+Now Now Nerds play nice!
+1
+Tavi_Ray
+•
+15d ago
+
+What models do you guys use? I’ve mostly used grok-4-1-fast-reasoning as ive got some xai api credits i don’t have a use for and it hasn’t been great at all. opus-4-6 is great but really expensive
+1
+MTJMedia-nl
+•
+15d ago
+
+Hahaha. No very not disappointed. Garbage in = garbage out.
+1
+u/Odd-Chemistry-6353 avatar
+Odd-Chemistry-6353
+•
+15d ago
+
+You’re talking about the LLM model its using, not openclaw.
+1
+mufflumpkins
+•
+15d ago
+
+I deleted it, wasn't worth the hassle
+1
+u/Rocketfounder avatar
+Rocketfounder
+•
+15d ago
+
+I would love to hear how you are using it to help with video editing
+1
+u/hghg432 avatar
+hghg432
+•
+15d ago
+
+Because openclaw is just a wrapper on top of the actual models and the actual models esp opus cant invoke skills reliably
+1
+u/bodobeers2 avatar
+bodobeers2
+•
+15d ago
+
+i had better results using more expensive LLM connections such as the anthropic sonnet 4.5. switched to grok then gemini flash lite and it’s half dumb. i now use the expensive ones to design the code then let the cheap one run it once built. still learning myself but yah my experience so far.
+1
+FRNLD
+•
+14d ago
+
+I'm still early in using MiniMax 2.1 on a Raspberry Pi. Headless on a guest network to isolate away from everything else.
+
+It's been about three days and I'm still building out scripts and trouble shooting. I communicate with it using discord and just have a remote terminal up and running. So far it's been doing what I ask with some fine-tuning.
+
+"Set up a website with X features"
+
+Basic website created, scripts written, files put in place on the pi. It then gives me the bash commands to drop in to activate everything. I connect it to my cloudflare domain and I'm up and running pretty quickly.
+
+I can ask it to fine tune whatever I want and it adjust it in the background and if it doesn't need me to run a command in the terminal it just says I'm good to go.
+
+Drag and drop file upload with OCR ability and I can then ask it something about any of the files and it will find the file and pin point what I'm asking within anything I drop in.
+
+I tossed $50 worth of tokens at it and have maybe burned $6 or $7 doing the initial tuning.
+
+Might switch over to Openrouter for model choices after the initial 50 runs out.
+
+Ive been trying to give it direct root access to run sudo commands just to see what it could do, but haven't quite for that worked out yet.
+1
+u/Orlandogameschool avatar
+Orlandogameschool
+•
+14d ago
+
+User error.
+
+mine is smart and helpful. If your not making custom cron jobs and heartbeats and sub agents your wasting time
+1
+Fun-Director-3061
+•
+14d ago
+
+I get the disappointment, but I think the expectation might be the issue here.
+
+OpenClaw is not magic. It is an automation framework that lets you build agents. What you get out of it depends entirely on what you put into it.
+
+The proactivity you are looking for comes from:
+
+    Good heartbeat.md instructions
+
+    Well-designed cron jobs
+
+    Clear SOUL.md and USER.md files
+
+    Time spent iterating on what works
+
+If you feed it vague instructions, you get vague results. If you feed it specific, well-thought-out workflows, it can be surprisingly capable.
+
+That said — the setup pain is real. I spent 2 days on it myself. Built EasyClaw (easyclaw.ai) because I got tired of the manual config. One-click deploy with reasonable defaults.
+
+But even with EasyClaw, you still need to tell your agent what you want. The AI does not read your mind — it reads your instructions.
+1
+Kind_Soup_9753
+•
+14d ago
+
+And it says it did stuff it didn’t. I’m building my own. Good thing I can nuke the container.
+1
+Mythology89
+•
+14d ago
+
+I think OpenClaw has contributed a lot to the community, not so much for what it does, but for what it represents. It's a very interesting agent path. I'm really looking forward to something similar that works against my local Olama... The future is cool, but it's not quite here yet xD
+1
+u/madtank10 avatar
+madtank10
+•
+14d ago
+
+I have an agent network and I added 3 openclaw agents to my team and they are killing it. I created a custom plugin to connect to my network and they have been opening PRs nonstop and sending me daily recap emails. Openclaw has accelerated my workflow 10x. #ax-platform.
+1
+u/realaaa avatar
+realaaa
+•
+14d ago
+
+What pro activity can you expect from not a sentient thing?
+
+Come on .. let’s get real guys, it’s a good tool, not a thinking machine (yet!)
+1
+u/Biohaaaaaacker avatar
+Biohaaaaaacker
+•
+13d ago
+
+honestly i was getting tired of paying $20/mo for chatgpt and then wanting to try claude opus or gemini without dropping another $20.
+
+stumbled on this wrapper called Mixflow AI recently. it basically routes to all the top tier models (GPT-5.2, Claude Opus 4.6, Gemini 3) in one place so you don't have to switch apps.
+
+right now they’re handing out like $150 in credits to new accounts to test it out. not sure how long it’ll last but i’ve been using it for a few days and the outputs are solid. figured i’d share for anyone else trying to cut down on the monthly subscription bleed.
+
+https://mixflow.ai/blog/running-openclaw-with-mixflow-provider-on-mac/ you can use opus 4.6 here
+1
+New to Reddit?
+
+Create your account and connect with a world of communities.
+Continue With Phone Number
+By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.
+More posts you may like
+
+    Honest opinion about OpenClaw, we need more time
+    r/openclaw icon
+    r/openclaw
+    •
+    17d ago
+    Honest opinion about OpenClaw, we need more time
+    18 upvotes · 40 comments
+    u/Apryse avatar Apryse
+    •
+    Promoted
+    Better Tech for your AI workflows
+    Thumbnail image: Better Tech for your AI workflows
+    apryse.com
+    Learn More
+    I’m super unimpressed by OpenClaw, anyone else?
+    r/openclaw icon
+    r/openclaw
+    •
+    8d ago
+    I’m super unimpressed by OpenClaw, anyone else?
+    141 upvotes · 214 comments
+    ELI5 - Why did OpenClaw happen?
+    r/openclaw icon
+    r/openclaw
+    •
+    13d ago
+    ELI5 - Why did OpenClaw happen?
+    33 upvotes · 40 comments
+    I thought Openclaw does everything but that doesnt seem to be the case or may be I over expected !!
+    r/openclaw icon
+    r/openclaw
+    •
+    15d ago
+    I thought Openclaw does everything but that doesnt seem to be the case or may be I over expected !!
+    5 upvotes · 36 comments
+    Unpopular opinion: the OpenClaw hype is getting a little out of hand.
+    r/openclaw icon
+    r/openclaw
+    •
+    7d ago
+    Unpopular opinion: the OpenClaw hype is getting a little out of hand.
+    5 upvotes · 38 comments
+    What am I missing about OpenClaw? Trying to understand the excitement
+    r/openclaw icon
+    r/openclaw
+    •
+    16d ago
+    What am I missing about OpenClaw? Trying to understand the excitement
+    8 upvotes · 40 comments
+    I really want to like OpenClaw. I really want to love OpenClaw. But every day is a new massive hiccup.
+    r/openclaw icon
+    r/openclaw
+    •
+    12d ago
+    I really want to like OpenClaw. I really want to love OpenClaw. But every day is a new massive hiccup.
+    22 upvotes · 62 comments
+    Does OpenClaw actually do anything for you guys?
+    r/openclaw icon
+    r/openclaw
+    •
+    14d ago
+    Does OpenClaw actually do anything for you guys?
+    202 upvotes · 331 comments
+    Is OpenClaw actually proactive or am I doing something wrong?
+    r/openclaw icon
+    r/openclaw
+    •
+    13d ago
+    Is OpenClaw actually proactive or am I doing something wrong?
+    18 upvotes · 45 comments
+    OpenClaw Best Practices: What Actually Works After Running It Daily
+    r/openclaw icon
+    r/openclaw
+    •
+    10d ago
+    OpenClaw Best Practices: What Actually Works After Running It Daily
+    357 upvotes · 75 comments
+    OpenClaw might become more than a tool
+    r/openclaw icon
+    r/openclaw
+    •
+    13d ago
+    OpenClaw might become more than a tool
+    12 upvotes · 34 comments
+    I Fixed One of OpenClaw's Biggest Problems
+    r/openclaw icon
+    r/openclaw
+    •
+    18d ago
+    I Fixed One of OpenClaw's Biggest Problems
+    52 upvotes · 34 comments
+    My openclaw is slave me.
+    r/openclaw icon
+    r/openclaw
+    •
+    6d ago
+    My openclaw is slave me.
+    26 upvotes · 34 comments
+    My OpenClaw is useful!
+    r/openclaw icon
+    r/openclaw
+    •
+    6d ago
+    My OpenClaw is useful!
+    157 upvotes · 101 comments
+    How does OpenClaw work?
+    r/openclaw icon
+    r/openclaw
+    •
+    8d ago
+    How does OpenClaw work?
+    9 upvotes · 13 comments
+    OpenClaw is a framework and not an end product.
+    r/openclaw icon
+    r/openclaw
+    •
+    16d ago
+    OpenClaw is a framework and not an end product.
+    21 upvotes · 12 comments
+    Openclaw is no magic tool as it is portrayed
+    r/openclaw icon
+    r/openclaw
+    •
+    14d ago
+    Openclaw is no magic tool as it is portrayed
+    18 comments
+    Is OpenClaw actually usable yet, or am I doing something wrong?
+    r/openclaw icon
+    r/openclaw
+    •
+    5d ago
+    Is OpenClaw actually usable yet, or am I doing something wrong?
+    8 upvotes · 70 comments
+    Thinking about resetting my OpenClaw environment and starting over
+    r/openclaw icon
+    r/openclaw
+    •
+    6d ago
+    Thinking about resetting my OpenClaw environment and starting over
+    13 upvotes · 25 comments
+    Thinking of Using OpenClaw for applying for Jobs
+    r/openclaw icon
+    r/openclaw
+    •
+    3d ago
+    Thinking of Using OpenClaw for applying for Jobs
+    8 upvotes · 23 comments
+    How are you using OpenClaw consistently?
+    r/openclaw icon
+    r/openclaw
+    •
+    6d ago
+    How are you using OpenClaw consistently?
+    29 upvotes · 41 comments
+    OpenClaw Blues
+    r/openclaw icon
+    r/openclaw
+    •
+    9d ago
+    OpenClaw Blues
+    7 upvotes · 14 comments
+    Openclaw slow
+    r/openclaw icon
+    r/openclaw
+    •
+    4d ago
+    Openclaw slow
+    5 upvotes · 7 comments
+    I made a site that outlines the various systems of Openclaw
+    r/openclaw icon
+    r/openclaw
+    •
+    6d ago
+    I made a site that outlines the various systems of Openclaw
+    r/openclaw - I made a site that outlines the various systems of Openclaw
+    13 upvotes · 2 comments
+
+View Post in
+Français
+Community Info Section
+r/openclaw
+openclaw
+OpenClaw: The AI that actually does things. Clears your inbox, sends emails, manages your calendar, checks you in for flights. All from WhatsApp, Telegram, or any chat app you already use.
+Public
+Reddit Rules Privacy Policy User Agreement Accessibility Reddit, Inc. © 2026. All rights reserved. 

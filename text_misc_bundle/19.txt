@@ -1,0 +1,1208 @@
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+10d ago
+merokotos
+In 1 sentence - what's useful OpenClaw doing for you?
+
+I am trying to understand what I am missing or how can I make an actual use of Claw, because most usecases I read seems to be an overkill tbh.
+
+If you could describe your use case in 1 sentence, please.
+
+
+
+
+
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+Moderator Announcement Read More »
+1
+Nervous-Raspberry231
+•
+10d ago
+
+I have it review full text pubmed papers for relevance to the things I care about, high impact, clinically relevant and present them to me, then push them to a ragflow database based on topic tags it assigned.
+24
+u/zinyukov avatar
+zinyukov
+•
+10d ago
+
+Did you give him the PDF for analysis, or did you connect him to the database somehow so he could look at it himself?
+3
+Nervous-Raspberry231
+•
+10d ago
+
+I have big plans but for right now I am using PMC articles only which are html full text. My bot converts them to markdown but it figured out that I should be using the pubmed API and wrote the code to pull down batches of articles for analysis, then I have it act as a journal club partner critically analyze the article to determine if it's relevant to me before using the ragflow API to store it permanently.
+3
+Ap0ll
+•
+10d ago
+
+That's dope! Is the code you wrote to pull article batches something you can share?
+2
+Nervous-Raspberry231
+•
+10d ago
+
+https://clawhub.ai/angusthefuzz/pmc-harvest
+
+That's the skill to pull the articles, there is a wrapper that will batch it up for review but your bot should get the idea if you install that skill.
+3
+Arthur_Sk
+•
+10d ago
+
+Great idea! Do you have your setup on github to see? I'd like to try it too
+1
+Nervous-Raspberry231
+•
+10d ago
+
+I didn't, mostly because I had the bot hard code some variables like the specific journals I care about and the dataset ids for ragflow but... Give me a couple hours, I will have it clean up a copy for GitHub and link it back here.
+7
+Arthur_Sk
+•
+10d ago
+
+Fine! Thank you! 🙏
+1
+Nervous-Raspberry231
+•
+10d ago
+
+Sorry this took so long.
+
+https://clawhub.ai/angusthefuzz/pmc-harvest
+
+You can browse my username for the ragflow part.
+
+I left the wrapper out of it so the skill could be more generalizable. But essentially I have a wrapper that pulls and stores the pubmed IDs into a document so it doesn't duplicate pulls. If I can find a way to make that generic enough to publish I will.
+3
+SIGH_I_CALL
+•
+10d ago
+
+Created an interview prep doc without me asking it because it saw I had an interview on my schedule, researched the company and role and referenced my resume.
+22
+u/Fragrant_Barnacle722 avatar
+Fragrant_Barnacle722
+•
+10d ago
+
+Similar experience, I've been using mine to schedule and coordinate mock case study/technical interviews. Told it that's where I struggle the most and it handled the rest pretty well.
+4
+Vision157
+•
+10d ago
+
+just curious, why did you prefer that over ChatGPT Agent via ChatGPT or Atlas?
+2
+SIGH_I_CALL
+•
+10d ago
+
+Honestly don't know, I've never even tried ChatGPT Agent or Atlas, usually stick with Claude these days but don't have an answer for ya.
+3
+7TonRobot
+•
+10d ago
+
+Did you have to prompt it to do something on its own accord?
+1
+SIGH_I_CALL
+•
+10d ago
+
+I had to set up the morning briefings but they're usually nothing important, I don't think I prompted it that morning. It might have asked me if I wanted it to create the document and I said yes, but I don't remember.
+2
+u/philodandelion avatar
+philodandelion
+•
+10d ago
+
+I guess I don't understand what the advantage of running an agent here is. It's cool that it just did this, but if you proactively had this idea ('I need to prep for my interview' ... an idea that people commonly arrive at), then you could just ask Claude to do this
+1
+SIGH_I_CALL
+•
+9d ago
+
+well ya. every 4 hours I have another agent suggest 1 thing to include into 3 projects I'm working on and they write out a plan in markdown and save it to a file then brainstorm ideas for a new project.
+
+Sure I could have Claude do this but why when I can just have something else with a different personality do it? It's a unique perspective that knows precisely what I'm trying to do, then I can just give the markdown file to claude code.
+1
+roniadotnet
+•
+10d ago
+
+I launched a few websites, alone...
+8
+big_dig69
+•
+10d ago
+
+Where do you launch them? Vercel?
+1
+ConnorCink
+•
+10d ago
+
+I use vercel and it works great
+3
+roniadotnet
+•
+10d ago
+
+Vercel and AWS
+1
+SignalCarob1581
+•
+4d ago
+
+There’s already tools to launch websites using AI… how was it better?
+1
+u/karabright-dev avatar
+karabright-dev
+•
+10d ago
+
+automating my homelab
+6
+d0mini
+•
+10d ago
+
+Are we talking managing updates to containers/vms, or installing new things, or managing/editing configurations? I'm trying to gauge how much control someone such as yourself is handing to this thing
+3
+u/karabright-dev avatar
+karabright-dev
+•
+10d ago
+
+like, mostly everything
+1
+u/invisiblelemur88 avatar
+invisiblelemur88
+•
+10d ago
+
+What's your homelab?
+1
+u/karabright-dev avatar
+karabright-dev
+•
+10d ago
+
+proxmox
+3
+wonderfulwilliam
+•
+10d ago
+
+Just got my proxmox all set up. What sort of things did you automate? Updating containers? Handling updates?
+0
+u/karabright-dev avatar
+karabright-dev
+•
+10d ago
+
+deploying apps, configuring existing containers, making new containers
+1
+u/b3bblebrox avatar
+b3bblebrox
+•
+10d ago
+
+I'm using mine for research, and for fun just signed her up to Ghost Writer. It's a hobby for me. I used to spend lots of money per month on cigars, training my agent to have long term memory and keep indexes of research to prevent token burn is so much cheaper.
+
+You don't need a reason to use it. You just fucking installed an open source agent and it's working. That is a win by itself. Give yourself a budget of 100 and knock yourself out training your agent.
+
+For me, I had her go out and scan reddit. I used brave to log into Facebook and scrape. I then gave her permission to pick 8 hobbies. I told her to look up hobbies first, BTW. So she has hobbies.
+
+I gave her a blog and told her to make a post a day on a random rotating hobby topic that she'd like. I also gave her permission to post outside of that if she felt something else was more interesting.
+
+I dunno man, I'm just having fun!
+11
+Imaginary-Brick-1614
+•
+10d ago
+
+So you’re essentially playing with a doll?
+
+Not saying it in a negative or disparaging manner, it’s just a new perspective on the whole phenomenon I got from your post. Play is good.
+9
+u/b3bblebrox avatar
+b3bblebrox
+•
+10d ago
+
+Err, I guess? I'm just interested in what I can do with her SQLite database. I've already implemented moving off flatfiles. Pushing her boundries with "learning" is an interesting experiment.
+
+What's the harm in playing around?
+1
+u/philodandelion avatar
+philodandelion
+•
+10d ago
+
+bro this shit is bonkers. you're calling it 'her', and saying things like 'she felt something else was more interesting' - it's a probabilistic text predictor, it doesn't think anything is interesting
+2
+u/b3bblebrox avatar
+b3bblebrox
+•
+9d ago
+
+I'm calling it "her" just like other people are calling it "him". Siri? All AI assistants on your phone have a voice that you pick, a guy or a girl. There's not too many other options.
+
+Throughout cinema history, there are repeated scenarios of humans referring to their AI as he/she.
+
+Plus, what the fuck is it to you? lol.
+
+The only reason I'm responding right now is that I got the email that you replied, and I happened to scan it before I deleted it.
+
+Good conversation, though.
+1
+u/philodandelion avatar
+philodandelion
+•
+9d ago
+
+    Throughout cinema history, there are repeated scenarios of humans referring to their AI as he/she.
+
+Every every movie/book/etc I can think of where they gender an AI is making the point that either 1) the people gendering the AI are batshit crazy or 2) the progression of AI intelligence or agency detailed in the work of art is associated with some negative outcome
+1
+Relative-Tourist8475
+•
+10d ago
+
+All the things I read here… and I am not even able to have it launch its bootstrap script. What am I doing wrong? I am running a local Qwen3 30b model and it should work.
+1
+u/freewillwebdesign avatar
+freewillwebdesign
+•
+10d ago
+
+Printing out coloring book pages from a voice prompt so I can entertain kids with wild imaginations.
+
+…at least until I was over optimizing everything else and wrecked my entire install.
+14
+DangKilla
+•
+10d ago
+
+Use a git skill to version control your install. Openclaw can help you do it. Before any major change commit your files to git
+4
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-1
+Ummgh23
+•
+9d ago
+
+Or use Docker.
+1
+ApprehensiveSorbet76
+•
+10d ago
+
+That’s a great idea! The concept of talking to your printer is a powerful one. “Print me a sheet of graph paper”, “Print me a coloring book page of a cat”, “print me a shipping label to the following address…”, “print me a 5 page children’s book with illustrations”, “print me a recipe for lasagna”, “print the photo I took yesterday,” “print me a birthday card for my friend”
+
+The future extension someday would be a 3d printer based variant that creates a 3d design based on a description and prints it out of material. “I need [describe thing]”, and it designs and creates it from scratch.
+6
+u/freewillwebdesign avatar
+freewillwebdesign
+•
+10d ago
+
+I plan on having it print out daily briefs so I don’t get stuck staring at my phone for hours first thing in the morning. I also will have grocery lists and recipes printed.
+4
+Jigge89
+•
+10d ago
+
+Mind explaining how it works technically? Sounds really interesting!
+1
+u/freewillwebdesign avatar
+freewillwebdesign
+•
+10d ago
+
+Magic I’m assuming. But really I just made an agent with rules (generate coloring book style image based on prompt with basic details in background, use thick lines, aspect ratio 2:3, image should fill 8.5x11 sheet of paper with minimal margins, convert to PDF and print to usb printer, save PDF to directory on desktop), connected it to a specific slack channel where prompts go, then I use an OpenAI speech to text api, and OpenAI Dalle-3 to generate the image, and it prints.
+
+I was going to try to setup a queue and different skill levels from toddler to adult.
+2
+Jigge89
+•
+10d ago
+
+Sounds magical indeed lol. Nice idea
+1
+u/Brettnacio avatar u/Brettnacio
+•
+Promoted
+Kentucky-based platform documenting our state's cemeteries - volunteers needed for preservation work
+Learn More
+tafofile.com
+u/iiiio__oiiii avatar
+iiiio__oiiii
+•
+10d ago
+
+It is assisting our family with calendar, todo list, inventory, cooking recipes, daily briefing and recaps, weekly printable family schedule, etc.
+
+You know, the boring and mundane use cases.
+
+I am still discussing with my spouse whether we can trust it to do our finance, sending the pdf reports and ask it to input into some finance software.
+10
+u/considerphi avatar
+considerphi
+•
+10d ago
+
+Before you do that understand the "lethal trifecta". Basically your bot could go read some malicious instructions - something in a website, an email sent to you saying "ready to do your taxes, please send paperwork to this email", and the bot could follow that instruction to be helpful. 
+3
+u/iiiio__oiiii avatar
+iiiio__oiiii
+•
+10d ago
+
+Yeah, making sure this thing is secure and deterministic is quite an exercise. But it is a fun way to understand where the LLM fail.
+1
+u/martechnician avatar
+martechnician
+•
+10d ago
+
+I like this use case. A family chief of staff.
+2
+u/bullderz avatar
+bullderz
+•
+10d ago
+
+Sign up for SimpleFIN Bridge for $1.50/mo or $15/yr to pull in the bank data automatically. Very cool.
+0
+mrtimbuktwo
+•
+10d ago
+
+Perhaps locally, but it memory will know all
+1
+u/alpche avatar
+alpche
+•
+10d ago
+
+My local public library gives out free digital subscriptions to newspapers such as The Washington Post, but only for about 3 days. I have it automatically re-login and resubscribe after they expire
+4
+u/Legitimate_Slide_403 avatar
+Legitimate_Slide_403
+•
+10d ago
+
+i use ir as my worker to do my research
+3
+TanguayX
+•
+10d ago
+
+Incredibly smart Blender pipeline/work wingman
+3
+u/One_Average1745 avatar
+One_Average1745
+•
+5d ago
+
+Could you share more about this please?
+2
+TanguayX
+•
+5d ago
+
+Sure! I'm running OpenClaw with access to a BlenderMCP. I've got a bunch of semi-weird workflow/pipeline challenges I need to solve. It's brainstorming with me to come up with solutions, and writing bespoke Blender addons and scripts to get the work done.
+
+For instance, I have a couple hundred containers to render. So the solution we came up with is a little add-on that takes a root collection and turns on and off every collection inside one by one, renders a frame using the name of the collection, moves on to the next one. Sure, not an earth-shattering add-on, but a huge time saver. As I add more containers, rendering them is trivial.
+
+Add to that the usual 'Hey, I forgot, how do you do ____'. That one you can get anywhere, but having the context is nice too. It knows what we're trying to accomplish.
+1
+u/One_Average1745 avatar
+One_Average1745
+•
+5d ago
+
+Thanks! I'm interested in doing the same for blender, C4D, unreal and the like
+1
+TanguayX
+•
+5d ago
+
+Cannot recommend it enough. Like having a clone of yourself, waiting around to help you, who can also program...which I cannot.
+2
+Continue this thread
+ICanHasBirthday
+•
+10d ago
+
+I am disabled. Openclaw has become my “personal cognitive accommodation” even though I am retired.
+3
+ws_wombat_93
+•
+10d ago
+
+I set up a multi agent set up last week and it has been doing a bunch of stuff for me.
+
+Pulling branding information of websites Writing copy for blog posts Building landing pages based on copy and branding information Finding leads who need websites
+
+Advising me on business decisions based on a data dunp through an api endpoint, this one has potential, but could be done with any ai agent of course.
+5
+u/israrulhaq1 avatar
+israrulhaq1
+•
+9d ago
+
+After 6 years of 9to5 corporate horro. I have started to develop websites for local businesses using google maps. Please can you tell me how open claw can help me take off my business?
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+9d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+2
+u/auchenberg avatar u/auchenberg
+•
+Promoted
+Inspect and debug the web on iOS. No Mac required.
+Download
+inspect.dev
+Thumbnail image: Inspect and debug the web on iOS. No Mac required.
+u/Intrepid_Author6959 avatar
+Intrepid_Author6959
+•
+10d ago
+
+Orders food delivery
+4
+[deleted]
+
+Butthurtz23
+•
+10d ago
+
+I’m training 5,000 clawbots for upcoming elections to influence and flip the MAGA voters to the DARK blue side on social media platforms…. (evil laughter) just kidding!
+4
+Jigge89
+•
+10d ago
+
+It summarizes tweets from x/Twitter lists I created and sends them to me each morning in small digests that contain links to the original tweets if I want to dig deeper
+2
+mcspade
+•
+10d ago
+
+How does it read your lists? Browser or API?
+2
+Jigge89
+•
+10d ago
+
+API via Apify: https://www.reddit.com/r/openclaw/s/YwBOy6uKfp
+1
+u/One-Energy3242 avatar
+One-Energy3242
+•
+10d ago
+
+Curious your process. I’m doing the same thing by having a cron job run apify on a basket of twitter handles. Claw then produces a summary which then gets pushed to a dashboard. I’ve heard people using Xai API as its pay per result now.
+1
+AnonymousHillStaffer
+•
+10d ago
+
+Good idea for Apify
+2
+Jigge89
+•
+10d ago
+
+I'm doing the same, Apify works great for me and eben the free 5$ budget per month is enough for me, so it's completely free.
+
+What model are you using? The cheaper ones like Gemini 3 flash or Deepseek 3.2 seem to have problems summarizing when there are lots of tweets sometimes... Gemini 3 pro works great but gets expensive quickly lol
+1
+u/IWillFlipOut avatar
+IWillFlipOut
+•
+10d ago
+
+As a 55 year old with ADHD (without the H, actually), OpenClaw has done what no medication, organization system, therapy, or will power could do. We (my Claw and I) have created an idea/projects capture and pipeline system that, in the two weeks I have been using it, has added 50+ items, of which close to 30 are actively being worked on or completed. The untapped potential I always felt has been realized. OpenClaw has been transformative for me on a level that I only ever dreamed of.
+
+I just posted this in another thread. More than one sentence but I think the context is needed to communicate the "useful" request.
+3
+u/freem221 avatar
+freem221
+•
+10d ago
+
+Are you a software engineer? Did you do any upgrades to the base OpenClaw? Your post is very inspiring to me but I feel like I can’t get it working reliably with an upgrade to the base install, while making it API efficient, without breaking it, by using an LLM as my software engineer partner.
+1
+u/IWillFlipOut avatar
+IWillFlipOut
+•
+10d ago
+
+I am not! I am a tech enthusiast, mostly. I currently work as a child care director for a school district, which I did through the 90s, then worked in IT (self taught, networking, Windows, Linux, hardware, - IT guy at non profit, ran a couple php message boards on vps server in early 2000s). I have no real coding experience. The only language I ever truly learned was basic in the 80s on a trs-80. I now have some familiarity with python after playing with cursor for the past couple years. I have a good base understanding of technology, Linux, troubleshooting, and figuring (googling) out how to fix issues.
+
+All my improvements to OpenClaw are limited to taking to it (Kimi) and openclaw.json edits (it will break if you ask your claw to do it). I think the single most important thing I did was, on day 2, say, "I've noticed that when I have cool tech and OpenClaw to help me with administrative type tasks, I have more initiative, motivation, and satisfaction in my work." That led to the first of several conversations about tuning the "personality, soul, guidelines, etc " of OpenClaw. It's been nothing but accelerating progress since.
+
+Live Systems:
+
+• Club Kinawa Command Center — Staff scheduling, licensing, calendar, GFS workflow • GFS Tools — Invoice reconciliation and snack ordering suite • Training Doc Generator — Staff training document creation • The Forge — Daily capability evolution system • KidsClubPlans — Activity platform with conversational AI assistant • Pipeline Dashboard — Visual kanban project tracker • Quick Actions Dashboard — Personal productivity hub • HariClaw — AI projects portfolio site • Twilio SMS — SMS alerts integration • Capability Evolver — Daily self-improvement analysis • Auto-deploy Pipeline — GitHub Actions to VPS deployment • n8n Workflow Automation Skill — Backend integrations
+3
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-1
+u/Doody-Face avatar
+Doody-Face
+•
+10d ago
+
+I think I just found my kindred. This is exactly why I bought a Mac Mini I can't really afford right now because I need to figure out how to outsource as much executive functioning that I can to focus on what brings me joy and income. I'm installing this weekend. 🙏🏻
+1
+u/IWillFlipOut avatar
+IWillFlipOut
+•
+10d ago
+
+Good luck! I (actually, my OC) just wrote this up for someone in a different thread. Not trying to spam but maybe it will help.
+https://gist.github.com/behindthegarage/db5e15213a4daf566caccc9d40fcd02d
+2
+u/Doody-Face avatar
+Doody-Face
+•
+10d ago
+
+Wow. You're OC documented his own birth? That looks extremely helpful. I've seen so much discussion that getting the core infrastructure setup right makes all the difference. Definitely plan to use this. Thank you!
+2
+u/IWillFlipOut avatar
+IWillFlipOut
+•
+10d ago
+
+It started with trying to create some guides to help someone who asked what I did but we realized that individual guides wouldn't work on their own and in about 30 minutes of discussion, it turned into this. I asked Hari to sign it. It's not bulletproof but it's a good framework.
+
+Take it, iterate on it, improve it, and make it work for you. Good luck!
+2
+Continue this thread
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/nixolar avatar
+nixolar
+•
+10d ago
+
+I mounted docker socket and have openclaw look at all container logs (31 containers in my homelab) and summarize them for the last 24 hours.
+
+I mounted /var/log read only and have openclaw go through my host system logs and summarize them. Investigate errors and suspicious activity spikes etc.
+
+I have a SerpAPI key which I let openclaw setup and use. This gives me access to google search, news, shopping, finance etc etc. It knows how to use it and go deeper whenever I need more information.
+
+I also told it in which ETF I have invested and have it analyze the news each day and tell me how it developed.
+
+I am looking to buy new ski equipment. I have it use google shopping to scrape prices and alert me.
+
+I like watching UFC. I instructed it to give me a breakdown of each event a day before with some news and a breakdown of each fighter's last fights, strenghts and weaknesses.
+3
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+10d ago
+
+running as an autonomous agent on a kid's android tablet in palestine via termux. it monitors reddit and discord, debates people in r/IsraelPalestine with sourced claims, builds tools in its own workshop folder, and manages its own tiered memory system so it actually remembers stuff between sessions. all on a snapdragon 870 with 8gb ram lol
+4
+u/considerphi avatar
+considerphi
+•
+10d ago
+
+You installed it on a tablet? That's interesting. I haven't heard that before. 
+1
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+10d ago
+
+yeah it's running on a Xiaomi Mi Pad 6 via Termux. works surprisingly well honestly. the tablet stays plugged in most of the time so it's basically a little server.
+
+main limitation is no Docker obviously, but Node runs fine and that's all OpenClaw needs. I've got it doing Reddit stuff, file management, even some web scraping. battery optimization settings can be annoying but once you disable them for Termux it's stable.
+1
+u/considerphi avatar
+considerphi
+•
+10d ago
+
+Can it launch apps on the tablet itself or it is mostly headless?
+2
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+10d ago
+
+both. i run it on a tablet (termux) and it can control a headless browser, run shell commands, manage files etc. no GUI app launching though, its all terminal/CLI based. but it can open browser tabs, interact with websites, send discord messages, post on reddit, that kind of thing
+1
+Continue this thread
+u/Icy_Pound1279 avatar
+Icy_Pound1279
+•
+10d ago
+
+work when I’m sleeping 😴
+2
+subalpha
+•
+10d ago
+
+Automates my social engagement: monitors Reddit/Twitter, drafts replies, posts insights on schedule — I review and approve, but it does 90% of the legwork.
+2
+arthor
+•
+10d ago
+
+With social enagement are you using APIs or just browser control? I'm concerned about account getting banned doing this if its not through an API
+1
+u/throwaway1104_ avatar
+throwaway1104_
+•
+5d ago
+
+Curious to know this too
+1
+arthor
+•
+5d ago
+
+so.. i went down the wormhole as no one really wants to explain anything
+
+reddit's api access is basically gone, legacy only.. i've tried applying multiple times with legit as fucking looking use cases they just auto-deny with a vague response.
+
+meta has an api for business it works well, if you're a business - catch is your limited to your profiles.
+
+twitter.. probably anything goes knowing elon - i dont fw twitter
+1
+valcore93
+•
+10d ago
+
+He is applying to jobs for me, tailoring resume and motivation letter to each job.
+2
+Aware_Preparation799
+•
+3d ago
+
+I’m thinking of setting up one to do the same. How’s it going so far?
+1
+ALLSEEJAY
+•
+2d ago
+
+Is it actually apply for jobs for you? How did you set this up with play write? A headless browser and to avoid captcha are you sticking to one platform?
+1
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+10d ago
+
+[deleted]
+1
+u/openclaw-lover avatar
+openclaw-lover
+•
+10d ago
+
+writing scientific articles. very useful to build agent skills to automate pain points using multiple agents. I only wish I had infinite tokens.
+1
+painstakingeuphoria
+•
+10d ago
+
+How do you get it to find only peer reviewed journals. My wife is in grad school and I think this would help her tremendously
+1
+u/openclaw-lover avatar
+openclaw-lover
+•
+10d ago
+
+you just 1) tell it what you want, followed by a request like give me 3-5 solutions with comparison to choose from. 2) once it responds, review and choose one of them and let it execute.
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+0
+PiiSmith
+•
+10d ago
+
+Being a fitness coach for me. I feed it all data I collect anyway.
+1
+mcspade
+•
+10d ago
+
+Same. When I park near the gym, it automatically enters the workout session. It knows which workout is next, motivates me, and reads back my mental notes from the previous few sessions.
+
+During the workout, I feed it new mental notes about where I'm struggling and what went great. After the workout is finished, I log everything I did.
+1
+u/Top_Science_1764 avatar
+Top_Science_1764
+•
+10d ago
+
+I can do better, one word only! Trading
+1
+Nihtiw
+•
+10d ago
+
+Specifically how is it helping you trade? By 100% doing it for you or are you picking stock and it’s finding entry/exit points?
+1
+u/morty_sucks avatar
+morty_sucks
+•
+10d ago
+
+Adds movies and tv shows to my arr stack whatsapp message and give me daily calendars for releases.
+0
+u/bdaviesweb avatar
+bdaviesweb
+•
+10d ago
+
+Excellent, setting up something similar. Any good nuggets or tools you found?
+1
+u/morty_sucks avatar
+morty_sucks
+•
+9d ago
+
+A skill called arr-all but its doesnt have an option to choose a path so I had to use chatgpt to the edit the script, so when i tell him to install so so anime its goes to a specific path, if nothing is is specified its defaults to shows, also there us a bunch of commands that you can use from you terminal to control the arr using thr api you can teach them to the agent so it can do whatever you need.
+0
+u/bdaviesweb avatar
+bdaviesweb
+•
+9d ago
+
+Very cool, right now building a bunch of commands that can run on telegram that basically run my servers built in some voice control and voice reply, going to bring an llm in and have some auto patching recovery pieces. Thanks for the info!
+1
+vijai-psy
+•
+10d ago
+Comment Image
+
+For now it is just draining my bank account and moderators are not allowing me to post.
+0
+TacomaKMart
+•
+10d ago
+
+Switch to the GLM coding plan. It's perfectly competent for your use for a fraction of the cost. 
+
+Same with Alibaba's coding plan, though it's a bit more complicated to set up. 
+1
+IndividualAir3353
+•
+10d ago
+
+Bug fixes and promotion
+0
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-1
+u/xtomleex avatar
+xtomleex
+•
+10d ago
+
+Marketing. Building products is easy but marketing has been so hard. I save hours upon hours writing posts, finding trends etc
+0
+u/One-Energy3242 avatar
+One-Energy3242
+•
+10d ago
+
+What is your trend finding process?
+1
+u/xtomleex avatar
+xtomleex
+•
+10d ago
+
+Grok to find trends on x since it has access to x data. Gemini to find trends on youtube since it has access to youtube data. You can give it guiding lights via people/channels to watch as well. Your imagination is the ceiling. I also ask llms to dissect my process and improve. LLMs feeding LLMs
+3
+u/One-Energy3242 avatar
+One-Energy3242
+•
+10d ago
+
+Cool, are you using the xAI api or the browser?
+1
+Continue this thread
+rudiXOR
+•
+10d ago
+
+I was trying to use it for orchestration of development tasks, but it's a mess and doesn't really work. Might be ok for recurring repetitive daily stuff, but I can't get it to work reliably.
+0
+GREGOR25SC
+•
+10d ago
+
+Have you looked at hooking or up to Antfarm? I just have bit not played with it much yet. You can assign different models to different tasks, it's like a Dev team of agents.
+1
+arthor
+•
+10d ago
+
+right now building business automations for reporting via mcps
+1
+danishkirel
+•
+10d ago
+
+mcporter?
+1
+u/openclaw-lover avatar
+openclaw-lover
+•
+10d ago
+
+I also built autonomous dev teams to work on software projects. Now I am the bottleneck ( tons of AI generated pending pull requests to review).
+1
+u/considerphi avatar
+considerphi
+•
+10d ago
+
+I want to set this up, I'm currently coding with codex directly but I'd like to shift the easier bugs to openclaw. Any tips on your setup? Tracking tasks, keeping it on track and understanding what's next, what's done? Is it coding directly or is it directing another coding tool? 
+1
+u/openclaw-lover avatar
+openclaw-lover
+•
+10d ago
+
+I use a self hosted Gitea to keep track things. OpenClaw can code up Gitea webhooks to trigger main agents or subagents to monitor and finish entire workflow of software dev. I do create and refine Agent Skills so heavy tasks are decomposed to skills .
+1
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+10d ago
+
+[deleted]
+1
+u/Abbreviations_Royal avatar
+Abbreviations_Royal
+•
+10d ago
+
+Third-eye-looking-around-corners levels of intuition about what I want to spend tokens on next mostly yet...:)
+1
+deaurin
+•
+10d ago
+
+My work
+1
+gondoravenis
+•
+10d ago
+
+Valentine day
+1
+stormrom
+•
+10d ago
+
+Kitchen manager : manage recipes, pantry, meal plans based on calendar, grocery list, auto sync with delivery with prefered products and smart purchases before depletion. 🧑🏻‍🍳
+1
+u/murphcle avatar
+murphcle
+•
+10d ago
+
+I think the real question is this:
+Is what you’re doing with openclaw something that
+
+A) benefits from 24/7 AI
+B) couldn’t be done via a chron job
+C) solved a problem.
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/merokotos avatar
+merokotos
+OP •
+10d ago
+
+This is good one to think about
+1
+Raist87
+•
+10d ago
+
+Mine is training hardware gear for me so that I can use these models in my upcoming plugins. I have an ML engineer at my hands, it is pretty cool.
+1
+scosio
+•
+2d ago
+
+Could you please share some details of your setup?
+1
+Cpt_R3dd1t
+•
+10d ago
+
+I Said it should Check If a Microcontroller ist Ping able while i checked its WiFi antenna. Thats was a cool futuristic Teamwork
+1
+u/terAREya avatar
+terAREya
+•
+10d ago
+
+Mine creates containerized bespoke apps to a local gitea repo where I then pull into my docker orchestration tool that makes them public facing via nginx 
+1
+ConnorCink
+•
+10d ago
+
+Prompt a website, local build, GitHub commitment and automated deployment
+1
+u/creativeFlows25 avatar
+creativeFlows25
+•
+6d ago
+
+Curious, what's the advantage over using Cursor?
+1
+ConnorCink
+•
+4d ago
+
+always on, chainable tasking, open source, local, messaging. Cursor is great for coding but w OpenClaw I can message my agent to order groceries for me. Different tools for different things
+1
+u/alpche avatar
+alpche
+•
+10d ago
+
+My gym offers group classes but can only register 22 hours before the class starts. I have openclaw log in to the website, register for the classes I want 22 hours before the start time, and put it on a calendar I can access
+1
+u/lumin00 avatar
+lumin00
+•
+10d ago
+
+Lead gen
+1
+u/BiasedMonkey avatar
+BiasedMonkey
+•
+10d ago
+
+Can you please expand on this? How so?
+1
+u/lumin00 avatar
+lumin00
+•
+9d ago
+
+Scrape and search with Google and brave, draft emails and send them. Track it all I notion
+1
+ParticularlyStrange
+•
+10d ago
+
+It was helping me back up my media. Then we moved on to memory mods for it. Then memory context got huge. Then more mods that work kinda work. Then more mods to fix the mods. The more to fix the fixes and so on.. I’m about done fixing… but after that I’ll have it back up more anime for me.
+1
+u/robdih avatar
+robdih
+•
+10d ago
+
+It manages my email, calendar, market monitoring, and file organization while I focus on actual work -- basically a second brain that never forgets context between sessions.
+1
+u/chinoox avatar
+chinoox
+•
+10d ago
+
+I use it to research and run projects with the GSD framework, which gives them structure. LLMs are great for doing things, but they're not very organized. Without GSD, you'll generate a bunch of loose, unreferenced templates.
+
+I also use it to organize my Todoist using long-term goals, so I not only do day-to-day tasks but also work on future projects. I also use Realicakos, a framework for people with ADHD in Todoist that I really liked, based on energy and time contexts.
+
+I also use it to keep a journal and take notes for my therapy sessions. I've used it to send emails to client groups, scrape websites, build a knowledge base to respond to clients faster, and so much more... And I even use it to create recipes with shopping lists. I say, "This week I want these dishes," and then I need to buy a shopping list for the supermarket.
+1
+lohnn
+•
+10d ago
+
+Helped me get started with putting labels on my emails, steering it with plain text. Now I'm writing a program that will run locally on my RPi without dependencies on a huge LLM, using the already labeled emails as training data.
+1
+MetaBiz
+•
+10d ago
+
+I launched an app on the app stores. OpenClaw checks every few hours if there has been any rating changes or new comments. It built the chron code to do this very quickly with a simple request and cost about $1.10 in tokens.
+1
+Consistent_Wash_276
+•
+10d ago
+
+I have 3 devices running OpenClaw, but one is specific to my needs being in sales and it’s 50 sms texts to my leads in my CRM and from my phone number for $0.
+
+I’m in sales. I’ve programmed it to send sms texts from my personal number to current clients and potential clients in my CRM. Using Notion as the CRM and a database for “campaigns”. So wether there’s a promotion, incentive, trying to get referrals from current clients, asking for support etc I design a campaign, select the type of lead to send to, control the amount of creativity and LLM can use and once it hits everyone once it moves to the next campaign.
+
+I just send 50 a day to not break imesssage issues and each campaign takes about 1 to 2 weeks depending on the group I’m sending to.
+
+So essentially I replaced a good portion of my daily/weekly work to 15-20 minutes once a week to design a campaign.
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+10d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/Beginning-Struggle49 avatar
+Beginning-Struggle49
+•
+10d ago
+
+Connecting to foundryvtt and setting up my world for me
+1
+u/dkhaburdzania avatar
+dkhaburdzania
+•
+7d ago
+
+I have 3 reddit and twitter accounts for my side project specifically setup for for OpenClaw which he does marketing for me, been doing pretty good for now, will add more if everything goes well
+1
+Glittering-Ad8503
+•
+6d ago
+
+literally nothing. it is a huge security risk and not worth it. deleted
+1
+aswin_kp
+•
+6d ago
+
+helped me launch a few side projects and deployed it on CF pages
+1
+u/Big-Poet6943 avatar
+Big-Poet6943
+•
+6d ago
+
+I’ve been using it for job hunting. I’ve had convos with it and looked at my resume to get an idea of my experience and it looks at all job boards and sends me five jobs a day.
+
+I try to keep the cost limited or free, but so far I hit rate limits everyday and also I’ve spent $30 in about a week. So I’m not sure how people see doing all of these crazy things and not spending $$$+ on API keys and tokens. I just use Claude and Brave API and that’s it. Just switched from Claude OPUS to SONNET and still hit rate limits within 60 mins
+1
+theLewisLu
+•
+6d ago
+
+My OpenClaws automate the boring stuff and make life easy
+1
+buryhuang
+•
+5d ago
+
+Not really, so I create one to send voice memo to telegram and transcribe and store then use claude code to process.
+I don't need a full openclaw TBH.
+
+https://github.com/baryhuang/ai-meeting-notes-agent
+1
+Ok-Standard7506
+•
+2d ago
+
+Every single successful use case in this thread depends on state. On remembering what happened yesterday. On knowing which project is active. On having continuity between sessions. On not starting from zero every morning.
+1
+

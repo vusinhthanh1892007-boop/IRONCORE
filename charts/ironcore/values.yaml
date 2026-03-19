@@ -1,0 +1,206 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  IronCore Enterprise — Default Helm Values
+#  Override per-environment: helm install ironcore ./charts/ironcore -f values-prod.yaml
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ── Image ────────────────────────────────────────────────────────────────
+image:
+  repository: ironcore
+  tag: "2.0.0"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# ── Replicas & Scaling ────────────────────────────────────────────────────
+replicaCount: 1
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10000
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# ── KEDA ScaledObject — Redis queue-driven scale-to-zero ─────────────────
+keda:
+  enabled: false          # Set true when KEDA operator is installed
+  redisAddress: ""        # e.g. redis://redis-cluster:6379
+  redisQueueName: ironcore:tasks
+  minReplicaCount: 0      # 0 = scale to zero when queue empty
+  maxReplicaCount: 10000
+  targetQueueLength: "1"  # 1 pod per 1 queue item
+
+# ── Edition ───────────────────────────────────────────────────────────────
+edition:
+  value: enterprise       # community | enterprise
+
+# ── Air-Gap Mode ──────────────────────────────────────────────────────────
+airgap:
+  enabled: false
+  vllmBaseUrl: "http://vllm-service:8080/v1"
+  internalCACert:
+    secretName: ""        # K8s Secret containing ca.crt
+
+# ── Network Policy (Air-Gapped Deployments) ───────────────────────────────
+networkPolicy:
+  enabled: false
+  blockEgress: false      # true = deny all egress except intra-cluster + DNS
+
+# ── External Secrets (HashiCorp Vault / AWS SM / GCP SM) ─────────────────
+externalSecrets:
+  enabled: false
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  vaultMountPath: secret/ironcore
+  refreshInterval: 1h
+
+# ── Worker (Batch Mode — 10,000-agent scenario) ───────────────────────────
+worker:
+  enabled: true
+  replicaCount: 1
+  batchMode: false        # true = mode for large batch workloads
+  maxIterations: 10
+  queueUrl: ""            # e.g. redis://redis:6379/0
+  heartbeatSeconds: "30"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "4"
+      memory: "8Gi"
+
+# ── API Server ────────────────────────────────────────────────────────────
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "4"
+    memory: "8Gi"
+
+# ── Ingress ───────────────────────────────────────────────────────────────
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+  hosts:
+    - host: ironcore.bank.internal
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ironcore-tls
+      hosts:
+        - ironcore.bank.internal
+
+# ── SIEM ──────────────────────────────────────────────────────────────────
+siem:
+  enabled: false
+  transports: "splunk"    # comma-sep: splunk | syslog | datadog
+  splunkHecUrl: ""
+  splunkIndex: ironcore
+  splunkHecToken:
+    secretName: ironcore-siem-secrets
+    key: splunk-hec-token
+  datadogApiKey:
+    secretName: ironcore-siem-secrets
+    key: datadog-api-key
+  syslogHost: ""
+  syslogPort: "6514"
+  bufferSize: "10000"
+  flushInterval: "2.0"
+
+# ── SSO / IAM ─────────────────────────────────────────────────────────────
+sso:
+  enabled: false
+  provider: azure_entra   # azure_entra | okta | keycloak
+  clientId: ""
+  tenantId: ""
+  redirectUri: ""
+  clientSecret:
+    secretName: ironcore-sso-secrets
+    key: client-secret
+
+# ── Redis (bundled via Bitnami dependency) ────────────────────────────────
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+# ── LLM Credentials ───────────────────────────────────────────────────────
+llm:
+  apiKeysSecret: ironcore-llm-secrets  # K8s Secret name
+  simpleModel: ""
+  mediumModel: ""
+  complexModel: ""
+  criticalModel: ""
+
+# ── Service Account & RBAC ────────────────────────────────────────────────
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+rbac:
+  create: true
+
+# ── Pod Security ──────────────────────────────────────────────────────────
+podAnnotations: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+# ── Probe Configuration ───────────────────────────────────────────────────
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  initialDelaySeconds: 20
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+# ── Persistence ───────────────────────────────────────────────────────────
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  dataSize: 10Gi
+  logsSize: 5Gi
+
+# ── Node Scheduling ───────────────────────────────────────────────────────
+nodeSelector: {}
+tolerations: []
+affinity: {}

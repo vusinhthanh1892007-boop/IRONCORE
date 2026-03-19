@@ -1,0 +1,24 @@
+{{- if .Values.keda.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "ironcore.workerFullname" . }}
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "ironcore.workerFullname" . }}
+  pollingInterval: 5
+  cooldownPeriod: 30
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  triggers:
+    - type: redis
+      metadata:
+        address: {{ .Values.keda.redisAddress | default (printf "%s-redis-master:6379" (include "ironcore.fullname" .)) | quote }}
+        listName: {{ .Values.keda.redisQueueName | quote }}
+        listLength: {{ .Values.keda.targetQueueLength | quote }}
+{{- end }}

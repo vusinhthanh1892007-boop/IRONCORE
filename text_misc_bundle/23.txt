@@ -1,0 +1,322 @@
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+5d ago
+Successful_Boat_3099
+Best openclaw projects built by the community lately
+
+I’ve gathered some of the best community-built projects I've come across recently:
+
+🔒 Threat Dashboard — Web dashboard for monitoring suspicious skills in the ecosystem. Essential if you're running community skills.
+
+🤖 Xiaomo Starter Kit — Pre-configured AI assistant template. Want your own personalized AI running in minutes? This is it.
+
+🔌 ClawFlow — Multi-tenant SaaS platform for provisioning and scaling AI agents on Cloudflare. Serious infrastructure play.
+
+📱 OpenClaw Termux — Run OpenClaw on Android and control it via WhatsApp. Yes, really.
+
+💾 MimiClaw — OpenClaw on a $5 ESP32 chip. No OS, no Node.js. Local-first and privacy-first.
+
+🧠 Memory Viewer — Beautiful web UI for browsing and editing your agent's memory files.
+
+📊 Weekly Reports Skill — Auto-generates weekly status reports from ClickUp + GitHub. Perfect for teams.
+
+🔀 ClawRouter — Agent-native LLM router for intelligent model routing across providers.
+
+📰 OpenClaw Briefing — AI news briefing pipeline. Collects from X/Twitter + RSS, analyzes, and displays on a Next.js dashboard.
+
+💬 KakaoTalk Plugin — Chat with your AI via Korea's #1 messaging app.
+
+I have put all of these projects on this directory: clawprojects.io
+
+Plus, I’d love to hear your ideas on how to make this directly as much useful to the community as possible. So please share your thoughts on what you’d like to see in this directory.
+
+
+Arthur_Sk
+•
+5d ago
+
+Am I the only one reading all this nonsense and don't see any usage cases for them?
+32
+jluc21
+•
+5d ago
+
+clawdlow sounds interesting
+2
+Adorable-Honeydew306
+•
+5d ago
+
+A lot of us are still learning how to set up and use all this. Beginning with building tools is a great place to start. From great tools, great projects can be built. It's like the very early days of the internet, pre www. Peter Steinberger is the modern day Tim Burners-Lee.
+-3
+u/North_Technology_68 avatar
+North_Technology_68
+•
+5d ago
+
+Salut , je travail sur cela , un app simple pour utiliser Openclaw de manière sécurisée 👍.
+1
+billychaics
+•
+4d ago
+
+Same here
+1
+one-escape-left
+•
+4d ago
+
+Hostedshell.com was also recently launched for openclaw hosting
+2
+Successful_Boat_3099
+OP •
+4d ago
+
+Would love to have it on clawprojects.io. Do you know built it?
+1
+u/sokenny avatar u/sokenny
+•
+Promoted
+How I got from 0 to 1k MRR for those who are still in early stages like myself
+View More
+gostellar.app
+micupa
+•
+4d ago
+
+This my humble contribution to the openclaw community. A gate keeper MCP secure layer. This is how I let openclaw handle my private stuff. It handles 2FA + data anonymization
+3
+u/Optimal-Task-923 avatar
+Optimal-Task-923
+•
+5d ago
+
+Which of them have direct support for MCP servers?
+2
+Successful_Boat_3099
+OP •
+5d ago
+
+From the projects listed, ClawRouter handles model routing which can work alongside MCP, and BaseAgent has an extensible tool system that can integrate MCP servers.
+
+The full directory at clawprojects.io has a search/filter. you can look for "MCP" or "Plugin" type projects specifically.
+2
+u/Optimal-Task-923 avatar
+Optimal-Task-923
+•
+5d ago
+
+Are you sure? Because from what I have just perplexity-ed it is not listed, nanobot and tuskbot are. I tested the last one, but failed, the developer promised to fix it. I will try nanobot tomorrow.
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+5d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+0
+newsknowswhy
+•
+5d ago
+
+Connect your open claw to anti-gravity IDE not only will you unlock your MCP servers, but you’ll also unlock a lot of other abilities that anti-gravity does really well that open clause still has some rough edges
+1
+ALCATRAZX47
+•
+5d ago
+
+How to connect openclaw to antigravity IDE ? via oauth bundle ?
+2
+u/Optimal-Task-923 avatar
+Optimal-Task-923
+•
+5d ago
+
+I think that connects just to LLMs through Google provider, but if it really opens that MCP direct usage by models, then thanks for your tip. I will test it.
+1
+fragrant_ginger
+•
+5d ago
+
+No links
+2
+u/GameSixSteph avatar
+GameSixSteph
+•
+5d ago
+
+He didn't prompt his agent well enough, tsk tsk
+7
+MikeID
+•
+4d ago
+
+He wants to drive traffic to his site
+2
+u/Quangholio avatar
+Quangholio
+•
+5d ago
+
+Anyone tried Termux for Android that can give some feedbacks?
+2
+HeightApprehensive38
+•
+4d ago
+
+I just posted about mine. https://theclawnews.ai it’s similar to OpenClaw Briefing. Does anyone have a link to that tool?
+1
+
+
+r/openclaw
+•
+14d ago
+Nefariouso743
+Legit, what are you guys using OpenClaw for? What are you automating? What is actually bringing you value?
+
+Legit, what are you guys using OpenClaw for? What are you automating? What is actually bringing you value?
+
+u/AutoModerator avatar
+AutoModerator
+MOD •
+14d ago
+Moderator Announcement Read More »
+1
+Defualt
+•
+14d ago
+
+I use openclaw for configuring openclaw
+18
+u/Literature_Left avatar
+Literature_Left
+•
+14d ago
+
+To me, the hardest part is coming up with a great idea of a task for it to automate. My best idea so far: I’m in the medical field and right now. I’m having it pull 100-200 pubMed articles on a particular medical topic each night and bring to my attention the top four or five that are of practical significance, and email me that summary.
+4
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+14d ago
+
+Are you having it look through chrome/chromium to get the articles, download them, and get a summary?
+2
+u/Literature_Left avatar
+Literature_Left
+•
+14d ago
+
+Actually I found out that pubmed has a free API so I just registered for a key and asked codex to create a skill to use it; I just gave it the URL of the documentation and it figured it all out!
+3
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+14d ago
+
+Awesome
+1
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+14d ago
+
+Any other websites that have generous free apis?
+1
+p1zd3ts
+•
+13d ago
+
+This by far is the best use cade i have seen. Well done!
+2
+SIGH_I_CALL
+•
+14d ago
+
+daily brief at 8 am, daily debrief at 8 pm, prep for interviews based on my calendar, look through old projects I abandoned, write articles for my website, draft LinkedIn posts, update my resume based on job descriptions. I just treat it as a digital assistant. Next I'm going to have it do research in the middle of the night through heartbeats. Try asking it directly what should I use you for to improve my life. I bet you could set up a cron job to operate some of your smart devices in your house if you have any, "at 10pm dim the lights in my bedroom and remind me to read a chapter before bed"
+3
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+14d ago
+
+And this is mostly through using email and calendar integration? Does it save those drafts to Google Drive or on your computer?
+1
+SIGH_I_CALL
+•
+14d ago
+
+ya email and calendar integration, it puts the interview prep in the chat and saves it on my computer, resume it saves on my computer. This is all a double edged sword because the more access it has the better it is but the more damage it can do with a bad prompt or a less capable model. The more serious the task the better the model I use.
+2
+u/Nir777 avatar u/Nir777
+•
+Promoted
+A free GitHub guide to the full AI agent stack — tools, data, memory, deployment, and more. 15K+ stars. Build real production agents.
+Learn More
+github.com
+Thumbnail image: A free GitHub guide to the full AI agent stack — tools, data, memory, deployment, and more. 15K+ stars. Build real production agents.
+_nattle_
+•
+14d ago
+
+https://www.reddit.com/r/openclaw/comments/1r1576u/this_morning_my_claw_amazed_with_an_idea_it/
+
+My claw's goal is to help me do the things I want (anti doom scrolling). It's been great so far at that. I recently added the ability for it to "think" about new topics and propose new tools for me, this morning it blew me out of the water after a couple nights of thinking.
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+14d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+2
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+14d ago
+
+Anti doom scrolling on your computer? Or phone?
+2
+_nattle_
+•
+14d ago
+
+Overall. Since I started tinkering with my bot I basically haven't touched reddit or youtube garbage. Mostly because we are building stuff but also because the stuff we build is helping me stay on task.
+1
+u/Laurel_Oak_Services avatar
+Laurel_Oak_Services
+•
+14d ago
+
+Im working on connecting it with Tasker and Traccar, to have it cross referencing our destinations with our appointment addresses on Google calendar. If it's a weekday but we're going somewhere that's not on the calendar, it messages us asking about whether or not it's business or personal mileage. Then it calculates hours worked based on the time we arrive at our first client and the time we leave our last client, subtracting 30 minutes for lunch. That's the idea anyways.
+2
+u/Nefariouso743 avatar
+Nefariouso743
+OP •
+13d ago
+
+How are you getting the location data into open claw? Is it though those third party apps you mentioned? (Tasker and traccer)
+1
+u/Laurel_Oak_Services avatar
+Laurel_Oak_Services
+•
+7d ago
+
+Yep. Tasker automatically starts Traccar, Traccar sends the data to Openclaw, then Openclaw puts it all together on Google Sheets.
+1
+

@@ -1,0 +1,78 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  IronCore Enterprise — Production Override Values
+#  Usage: helm upgrade --install ironcore charts/ironcore -f charts/ironcore/values-prod.yaml
+# ═══════════════════════════════════════════════════════════════════════════
+
+replicaCount: 3
+
+edition:
+  value: enterprise
+
+airgap:
+  enabled: true
+  vllmBaseUrl: "http://vllm-service.ai-platform.svc.cluster.local:8080/v1"
+
+networkPolicy:
+  enabled: true
+  blockEgress: true
+
+externalSecrets:
+  enabled: true
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  vaultMountPath: secret/ironcore/prod
+  refreshInterval: 30m
+
+siem:
+  enabled: true
+  transports: "splunk,datadog"
+  bufferSize: "50000"
+  flushInterval: "1.0"
+
+sso:
+  enabled: true
+  provider: azure_entra
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 50
+
+worker:
+  enabled: true
+  replicaCount: 2
+  batchMode: false
+  resources:
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+    limits:
+      cpu: "8"
+      memory: "16Gi"
+
+resources:
+  requests:
+    cpu: "1"
+    memory: "2Gi"
+  limits:
+    cpu: "8"
+    memory: "16Gi"
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: ironcore.bank.internal
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ironcore-tls-prod
+      hosts:
+        - ironcore.bank.internal

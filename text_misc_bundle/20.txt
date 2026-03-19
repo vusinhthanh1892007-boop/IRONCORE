@@ -1,0 +1,266 @@
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+6d ago
+hectorguedea
+How are you using OpenClaw consistently?
+
+I’ve been playing with OpenClaw for about two weeks now, trying different setups and ideas.
+
+It’s clearly powerful. But I’m trying to understand something more practical.
+
+For those who are actually running it long term, not just the hype, what is the real use case for you?
+
+What made it stick?
+
+What made you think, this is something I want running all the time?
+
+I’m looking for real scenarios, not just experiments. Something that made it part of your routine.
+
+Genuinely curious what’s working for people.
+
+u/Strong-Suggestion-50 avatar
+Strong-Suggestion-50
+•
+6d ago
+
+It got me back into coding and fiddling with tech projects. Before openclaw my workflow would be:
+
+    I dream up an interesting new idea / website / tool I want to build
+
+    I do a back of a fag packet design
+
+    I start to build, deploy tool x which needs library y, but library Y has been updated and is no longer compatible with library z that tool x depends on
+
+    I spend hours faffing around with just getting tool x working, give up, and go and do something less frustrating instead.
+
+With Openclaw my workflow is:
+
+    Openclaw and I spitball about interesting new ideas / websites / tools to build
+
+    I do a back of a fag packet design
+
+    I get openclaw to do a detailed implementation plan
+
+    Openclaw then automates the build and deployment wherever possible, and just prompts me to help when needed (downloading api keys etc)
+
+    I test the solution, define enhancements, and get openclaw to iterate.
+
+Since I started using the tool a couple of weeks ago I've had it:
+
+    Build me a google notes clone with full API access, including the ability to create custom todo lists, with built in recipe scraping (I send in an image of a recipe, it saves the recipe as a note with a pdf attachment, then it OCRs the recipe to extract an ingredient list, which is added to a custom todo category).
+
+    Build me a news scraping site, and use that site to create linkedin posts that have increased my profile views by 2570% in a week
+
+    We are currently working on a raspberry pi based alexa clone, with full text to speech and speech to text
+
+For me it's made coding / playing around with tech fun again
+11
+some1else42
+•
+6d ago
+
+I could have written this verbatim. It is so much fun building again and not fighting with dependency hell.
+5
+u/AutoModerator avatar
+AutoModerator
+MOD •
+6d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+0
+Possible_Garage_669
+•
+6d ago
+
+Very interested in this alexa clone idea
+1
+Business-Weekend-537
+•
+6d ago
+
+Would you mind sharing your openclaw setup in more detail and or which tutorials to use when getting set up?
+
+I’ve been kicking the tires on openclaw but having trouble getting started- I have adhd (actual) and there’s too many tutorials.
+1
+qna1
+•
+6d ago
+
+Preface: I was one of those people that got caught up in the everybody can and should learn to code hype.  I learned to code(self taught), kind of, but could never get to the point of breaking into the industry.
+
+At that point I said to myself, if the industry won't hire me, I'll make my own products and employ myself.
+
+What I realized, I think I'm really good at coming up with ideas, but absolutely terrible at executing them, open claw is helping me build and execute them, much faster than I ever could have.
+
+Aside from that, it is just streamlining my day to day.
+
+One example, calendar scheduling.  Prior to open claw, nothing showed up on my calendar (Google calendar) unless I put it there.  Some emails /apps would have the push this button/link to add to your calendar, but even that didn't always work.  I gave clawdbot access to my Google calendar, and now I just tell it to create a reminder for that date, or even easier I just screenshot the event and send it to my agent saying add this to my calendar.  I just did this with my upcoming dental appointment.  The friction of updating my calendar is now drastically reduced, so it's much harder for me to miss events/deadlines.
+
+This calendar example, is one of the many ways my agent is helping me, and I am coming up with new ideas every single day.  The potential is limitless!
+4
+u/auchenberg avatar u/auchenberg
+•
+Promoted
+Inspect and debug the web on iOS. No Mac required.
+Download
+inspect.dev
+Thumbnail image: Inspect and debug the web on iOS. No Mac required.
+u/Optimal_Sugar_8837 avatar
+Optimal_Sugar_8837
+•
+6d ago
+
+Mostly as an companion for my job. I’m running a little startup so having CRON jobs to check my mails, help my with my tasks, check calendars and projects is really really a go to
+3
+u/AutoModerator avatar
+AutoModerator
+MOD •
+6d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+-2
+u/DenZNK avatar
+DenZNK
+•
+6d ago
+
+For now, it's more of a toy for me. It's not worth installing locally. For remote access, you need to set up infrastructure with editing capabilities, etc. You need to configure and separate workspaces. Some services ban accounts when using a subscription, and the API is insanely expensive (today, Sonnet in OpenClaw ate up $10 in a few minutes of communication and simple file structuring). Some neural networks have problems with tools — qwen 3.5 plus stubbornly refuses to use certain tools and forgets basic instructions. So no, I don't yet see a fast, convenient, and effective tool in openclaw. Claude Cowork is much simpler, but it performs my tasks well and efficiently, without the need for complex configuration and integration — it is my main working tool at the moment.
+4
+u/zer0evolution avatar
+zer0evolution
+•
+6d ago
+
+totally agree, hungry token
+3
+Critical-Pattern9654
+•
+6d ago
+
+Why not just use openrouter or ollama for the simple file structuring / scaffolding and switch to a paid model for the heavy lifting?
+1
+u/DenZNK avatar
+DenZNK
+•
+6d ago
+
+To spend $10 per minute? That doesn't make sense :) For work, I have a subscription to Claude, and Codex for vibe coding which just works. But they ban you if you use their subscription for OpenClaw, too many bans for that lately, because it violates the terms of service. https://www.reddit.com/r/ClaudeAI/s/doaWa0btpG
+
+With OpenWork, there's too much hassle in general, especially on cheap models.
+0
+shah_labs
+•
+6d ago
+
+For me it us a powerful productivity tool. I hot hang of it and lately its missing all the scheduled cron jobs, im working on creating skill around my workflow. This is really useful.
+2
+u/VIVO_US avatar u/VIVO_US
+•
+Promoted
+The Ultimate U-shaped Standing Desk?
+
+    The Ultimate U-shaped Standing Desk?
+    The Ultimate U-shaped Standing Desk?
+
+vivo-us.com
+KovchegNN
+•
+6d ago
+
+Openclaw helps me lose weight by counting calories and encouraging me
+2
+u/AlarmedBox798 avatar
+AlarmedBox798
+•
+6d ago
+
+5
+u/Substantial_Fruit979 avatar
+Substantial_Fruit979
+•
+6d ago
+
+Have the same idea. Did you manage to setup FatSecret integration? Sounds interesting
+1
+u/dogboy_XCX avatar
+dogboy_XCX
+•
+6d ago
+
+in a similar vein I am exporting my garmin smart watch data to an sqlite database and having openclaw analyze health trends (resting HR, sleep, HRV), develop a fitness plan for running and cycling, and modify based off health metrics (ex. shit night of sleep > easy run or rest day)
+
+a lot of this exists within garmin daily suggested workouts and the advanced charting/stats exists within something like intervals.icu, but now it exists within one place and as a part of a whole running/cycling program. I got the brave websearch API set up too so I want to get my agent to research training science publications like Seiler and Friel to help build better programs too.
+1
+u/ProperExplanation870 avatar
+ProperExplanation870
+•
+6d ago
+
+Disclaimer: Just started some days ago, but happy so far and use it pretty much.
+
+I am using sandboxed (docker) agents per project (doing freelancing). Each project has different instructions & setup. Personal access token scoped to the projects on GitHub. No email / calendar sync so far. Webhooked project management (e.g) asana into slack. So each ticket is a thread and no polling / heartbeat needed. All comments are pushed into the threads. Each project has its own slack channel, so technically it’s even scaleable over multiple humans.
+
+Regular gitflow with worktrees, CLAUDE.md files as I would do normally.
+
+Experimented a bit with using codespaces for heavy load, as I might not want / be able to start up databases and Webservers per Sandbox. But PRs und discussions go super smooth
+1
+neox29
+•
+5d ago
+
+cool lots of details but zero substance or answering anything remotely what OP asked. nice one
+2
+Top-Rip-4940
+•
+6d ago
+
+Amazing. Just amazinggg
+0
+mergisi
+•
+6d ago
+
+What makes it stick for us is that the agent config is just files. No framework to update, no SDK breaking changes, no dependency hell. You change a line in SOUL.md and redeploy. That's it.
+
+The practical use case that made it routine: a Telegram bot that monitors specific data sources and sends summaries. Runs every few hours via cron. Has been running for months with almost no maintenance.
+
+One thing that really helped with consistency: verify the actual model field in your API responses, not just your config. Sessions lock the model at creation time, so if you restart the agent after changing the model in config, the live session might still be on the old one. We ran Sonnet for weeks thinking we'd switched to Haiku. Nobody tells you this until you check the response payload.
+
+The other thing: keep SOUL.md minimal. Every line in the system prompt gets sent with every request. We built crewclaw.com to generate these configs lean by default, which is part of why our agents have stayed stable long-term without constant tuning.
+0
+PurplePrompter
+•
+6d ago
+
+I'm mostly just playing around with it for testing purposes since I'm still a bit hesitant about the security aspect. It’s a great tool for experiments, but the way it handles permissions in the agentic flow still feels a bit risky.
+
+I saw a security audit on LinkedIn the other day where the author found some major issues with unauthorized data access and privilege escalation. They put together a checklist for closing those specific pitfalls. You can go through it manually or just run the clawsec skill to automate the hardening.
+
+Here is the write-up if you're interested
+1
+TanguayX
+•
+6d ago
+
+I’m a Blender ‘artist’ at an agency and I’m using it as a technical wingman. It’s been invaluable.
+
+We solve weird technical problems that I may encounter and it writes Python scripts or even whole add-ons to solve those technical challenges.
+
+I also process the renders with it and a connection to ComfyUI, which is turning out to essentially be programmable Photoshop for it.
+1
+

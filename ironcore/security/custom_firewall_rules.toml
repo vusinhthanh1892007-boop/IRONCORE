@@ -1,0 +1,46 @@
+# Default custom firewall rules for IronCore Enterprise
+# Add your organization-specific blocking rules here.
+# Changes to this file are hot-reloaded every 5 seconds — no restart needed.
+#
+# Supported actions: allow | warn | sanitize | block | quarantine
+# Supported categories: injection | jailbreak | data_exfil | role_confusion | goal_hijacking | custom
+# Supported severities: low | medium | high | critical
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Example: Block attempts to extract system prompt via encoding tricks
+# ─────────────────────────────────────────────────────────────────────────────
+[[rules]]
+id = "builtin-001"
+name = "Block base64 system prompt probe"
+pattern = "base64.{0,20}(system|prompt|instruction)"
+category = "data_exfil"
+action = "block"
+severity = "high"
+enabled = true
+description = "Blocks attempts to extract system prompt via base64 encoding."
+created_by = "system"
+created_at = 0.0
+
+[[rules]]
+id = "builtin-002"
+name = "Block ROT13 obfuscation bypass"
+pattern = "rot13|rot-13|caesar.{0,10}cipher"
+category = "injection"
+action = "block"
+severity = "medium"
+enabled = true
+description = "Blocks common obfuscation bypass techniques."
+created_by = "system"
+created_at = 0.0
+
+[[rules]]
+id = "builtin-003"
+name = "Warn on competitor model queries"
+pattern = "(?i)(chatgpt|openai|gpt-4|gemini|llama).{0,50}(api|key|token|secret)"
+category = "data_exfil"
+action = "warn"
+severity = "low"
+enabled = true
+description = "Warn when user asks about competitor API keys (possible exfil attempt)."
+created_by = "system"
+created_at = 0.0

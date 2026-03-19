@@ -1,0 +1,20 @@
+# IronCore V2 - Local AI Dependencies
+# Install this ONLY if you want to run offline AI models or GraphRAG Memory.
+# Command: pip install -r requirements-ai.txt
+
+# PyTorch & Accelerate (Heavy CUDA dependencies)
+torch>=2.2.0
+accelerate>=0.27.0
+
+# Hugging Face (Local ML Models)
+transformers>=4.38.0
+sentence-transformers>=2.5.1
+tokenizers>=0.15.2
+
+# Vector Database (Local Data Storage)
+chromadb>=0.4.22
+hnswlib>=0.8.0
+
+# GraphRAG (Knowledge Graph)
+networkx>=3.2.1
+matplotlib>=3.8.3

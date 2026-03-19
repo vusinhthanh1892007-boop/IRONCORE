@@ -1,0 +1,1355 @@
+
+r/LocalLLaMA icon
+Go to LocalLLaMA
+r/LocalLLaMA
+•
+4d ago
+Recent_Jellyfish2190
+I feel left behind. What is special about OpenClaw?
+
+While there are tools like Manus ai, It seems like everyone is excited about OpenClaw lately, and I genuinely don’t fully understand the differentiation. What exactly is the shift here? Is it UX, architecture, control layer, distribution? Not criticizing, just trying to understand what I’m missing.
+
+u/Stunning_Mast2001 avatar
+Stunning_Mast2001
+•
+4d ago
+
+Astroturfing
+331
+Zilch274
+•
+4d ago
+
+While I do agree, the local agentic nature of it (and messenger API integration) is quite a nice package.
+
+I've been running it on my M4 Mac Mini, and sending it on little tasks has been interesting to say the least.
+17
+caim2f
+•
+4d ago
+
+tasks like what exactly I’m trying hard to find a use case. Don’t get me wrong I use codex and claude code for my work but can’t think of anything useful.
+28
+CalligrapherPlane731
+•
+3d ago
+
+You have the wrong frame of mind for finding useful use cases. You are looking for something you can't do now which you can do with openclaw. That's the wrong way around.
+
+The usefulness is in doing something you can do now, but easier because an agent replaces your labor.
+
+One interesting case for me, was my calendar. Now, I don't have a lot of appointments; I don't work in an office, so I'm not innundated with meetings. Almost every calendar app is massive overkill for me. But I still need something to log my dentist appointment in three months and my haircut in two weeks.
+
+So I had openclaw (mine has access to my obsidian vaults) create a "Calendar.md" in my obsidian vault. A very simple calendar which simply lists my appointments in chronological order. Now, anyone can do this without AI, but the magic is, I don't have to figure out formatting on the fly to make use of this calendar. I just tell openclaw that I have an appointment, it adds the day, time, and note to the list, and then sets a 1 hour reminder. I also have it giving me a 7am summary of my day every day.
+
+It's the simplest calendar possible, but it works better than any calendar app because OC is taking care of the annoying bits, such as ordering and formatting and reporting the list. No more clicking through menus to set times or locations. I just tell OC directly what's going on and it adds it to the calendar. Yes, you can do this already a variety of ways, but replacing my labor is where OC shines.
+14
+u/technicolor_penguin avatar
+technicolor_penguin
+•
+18h ago
+
+You guys need to get a hobby. This is like buying a computer and using it to tell you the time smdh. Go outside for once.
+3
+Continue this thread
+Severe-Savings-6202
+•
+2d ago
+
+can you apply this to update your google calendar as well? my google calendar is integrated with my samsung fridge and all my devices, and shows all my appointments for the week which is great when i have breakfast in the morning..
+2
+Continue this thread
+AnotherCat2000
+•
+21h ago
+
+I can't thing of a simpler calendars than Google calendar. Actually majority of calendar apps are dead simple. Needing openclaw for this is creating a solution for problem that does not exist.
+1
+Continue this thread
+pinktieoptional
+•
+16h ago
+
+this smacks of a five minute problem that I spent a week setting up so now it's ten seconds per event instead of twenty, saving minutes a year.
+1
+Continue this thread
+mrSalema
+•
+4d ago
+
+With this firehose of AI news, I've been meaning to scrape daily AI news from multiple places and extract the most relevant based on my interests to telegram. Then I could give it feedback to calibrate my interests if it starts giving me news I'm not interested in.
+
+An AI RSS, if you will
+7
+u/SexySmexxy avatar
+SexySmexxy
+•
+2d ago
+
+    I've been meaning to scrape daily AI news from multiple places and extract the most relevant based on my interests to telegram. Then I could give it feedback to calibrate my interests if it starts giving me news I'm not interested in.
+
+An AI RSS, if you will
+
+would literally take like 1 minutes with AI to make that lol
+1
+Continue this thread
+u/Justp0piTuP avatar
+Justp0piTuP
+•
+3d ago
+
+Install it and try it out. Ask what skills it has and what it can do for you. If you set up the SOUL properly, which is like a custom system prompt, it will understand you better and give more relevant use cases.
+Comment Image
+3
+u/cmdr-William-Riker avatar
+cmdr-William-Riker
+•
+4d ago
+
+What kind of tasks? Also why is everyone specifically using a Mac Mini? There is far more financially practical hardware it would run just as well on
+7
+frozen_tuna
+•
+4d ago
+
+Is there? I know microcenter has been putting deals on them for like $400. I assumed that was why they blew up in popularity.
+3
+u/cmdr-William-Riker avatar
+cmdr-William-Riker
+•
+4d ago
+
+That's not necessarily a bad deal for the specs if you have the budget for it, but if you're not running a local model, you don't need anything anywhere near as powerful as a Mac Mini. you can get a Lenovo ThinkCentre or other other thin client machine for $140 or so with an I5 processor and 8gb of ram, install a headless linux distro on it like Ubuntu server or Arch Linux and OpenClaw should be able to easily run on that. A linux OS without a UI requires hardly any RAM on its own
+5
+Continue this thread
+u/Justp0piTuP avatar
+Justp0piTuP
+•
+4d ago
+
+It’s a personal agent that runs on your infrastructure. OpenClaw comes with built-in skills for common tasks, and you can install more from ClawHub.com. One of those skills is GitHub and Git.
+
+During the installation and onboarding, you can select a messenger integration. WhatsApp is one of the options with which you can directly chat with the agent and ask the agent to perform some tasks based on the skills.
+
+For example:
+
+“Scan my git repository for issues, open GitHub issues for anything you find, and submit a pull request with fixes.”
+
+Then you log into GitHub and check the Issues and Pull Requests tabs. The work shows up there.
+
+Under the hood, OpenClaw acts as an agent gateway. It still uses your preferred LLM provider, such as OpenAI or Anthropic, but connects that model to real tools and local execution.
+
+The most important part of the setup is the SOUL.md file. That file defines the agent’s personality, behavioral boundaries and decision logic. The agent runs on your machine with broad system access, so how you configure its “soul” directly affects security and risk.
+
+If the personality is poorly defined or intentionally harmful, the agent can execute malicious actions. That is why many people isolate it on a separate machine for evaluation and testing.
+
+Also, the creator of openclaw was hired by OpenAI in a talent coup with Meta. That’s why the additional hype.
+3
+Continue this thread
+u/Business_Average1303 avatar
+Business_Average1303
+•
+2d ago
+
+I would be careful with these statements and at least try it out, same thing was said about other LLMs and it has been a game changer for those who know how to use it properly
+
+it deserves at least some trial
+1
+u/llama-impersonator avatar
+llama-impersonator
+•
+4d ago
+
+Hype + No safeguards is all the current pack of brain atrophied yololets need to allow Claude to hold the wheel in every aspect of their lives.
+329
+u/Street_Profile_8998 avatar
+Street_Profile_8998
+•
+4d ago
+
+Written by a guy who made 100 million from his last venture. And all of a sudden has 20k github stars and is everywhere - in a week.
+
+No-one can say for sure, but if you wanted unprecedented, never-seen-before grassroot action, 100 million could buy a lot of lawn seed.
+148
+u/favorited avatar
+favorited
+•
+4d ago
+
+     And all of a sudden has 20k github stars and is everywhere - in a week.
+
+Almost as if he created the perfect botting tool.
+56
+_bones__
+•
+4d ago
+
+If you have agents that can autonomously create accounts and click a button, that would be easy to astroturf. If only there was a project that could do that.
+72
+evilspyboy
+•
+4d ago
+
+I watched a video breakdown of the architecture and it was.... the same as something I built myself 10+ months ago. EXCEPT I did not have that Soul/User/Memory approach so Im going to toy around with that a tiny bit.
+
+I was also using a private discord instead of telegram for bot output and interaction (outside of a configuration menu on the hosted desktop) so I was just messing about with trying that 3 file context approach on only the voice chat channel. Gave me an excuse to look at fast whisper and kokoru, etc.
+38
+u/Original_Finding2212 avatar
+Original_Finding2212
+•
+4d ago
+
+That soul part of it is encouraging it to hallucinate soul stuff online
+16
+evilspyboy
+•
+4d ago
+
+I'm not going to give it a full memory to keep that down. I have a more structured memory design in mind to try
+8
+u/Original_Finding2212 avatar
+Original_Finding2212
+•
+4d ago
+
+Share what you like and your impressions.
+I do my own memory structure and CLI, too
+1
+Continue this thread
+u/hugo-the-second avatar
+hugo-the-second
+•
+4d ago
+
+I think Steinberger would agree with you there.
+The way I understood what he said in interviews, he considers Openclaw nothing special, and only started to build it when for some strange reason, the main players didn't come out with something like that, even though it seemed kind of obvious. (Could it be that part of the reason was, that they were aware of the security risks, and introducing something like this BEFORE having an idea how to tackle them, seemed reckless?)
+
+At the same time, making it opensource, dealing with thousands of pull requests, fixing at least SOME of the most crucial security risks, fast - I would not have wanted his work load over the past few weeks.
+15
+Dismal-Proposal2803
+•
+4d ago
+
+What work load? He’s vibe coded the entire thing.
+6
+u/i_wish_i_was_perez avatar
+i_wish_i_was_perez
+•
+4d ago
+
+Do you have the source online? Would be cool to check it out.
+1
+evilspyboy
+•
+4d ago
+
+I started with one in the background while I was working and a playlist kinda kicked in.... maybe this one? https://www.youtube.com/watch?v=CAbrRTu5xcw
+2
+Continue this thread
+u/Particular-Way7271 avatar
+Particular-Way7271
+•
+4d ago
+
+Is like n8n or any agentic framework with access to everything comes to mind with no regards for security nor implications. It's vibe coded and it has a red logo and it was/is hyped like crazy also by all llm companies as it helps consuming useless tokens.
+6
+u/BornTransition8158 avatar
+BornTransition8158
+•
+4d ago
+
+Hype is one way to help improve the bottomline for these companies.
+10
+onethousandmonkey
+•
+4d ago
+
+Oh, this is where the crypto bros went?
+1
+u/logos_flux avatar
+logos_flux
+•
+4d ago
+
+I was in the same boat as you yesterday. I wasted a morning on a deep dive and came back with the conclusion of "I'm doing all this stuff better already, and if I'm not, I could do it better". Ten api's in a trenchcoat. Whole thing gives massive astroturfed vibes
+57
+u/tilmx avatar u/tilmx
+•
+Promoted
+Wispr Flow but 100% local and 100% free
+Learn More
+getonit.ai
+Clickable image which will reveal the video player: Wispr Flow but 100% local and 100% free
+0:00 / 0:00
+u/sleepingsysadmin avatar
+sleepingsysadmin
+•
+4d ago
+
+First there was just a chat window. ctrl c, ctrl v.
+
+Then came agentic coding that not only did ctrl c and v for you, also read the files that mattered.
+
+Then came identity and memories, an md files that explains everything in enough depth and the AI got a headstart.
+
+Then we started having context window problems, we stick everything in context, and lots of fails because models werent as smart as today. Plus they tend to forget about things that even do fit in context.
+
+So what if you just spawn another llm and double your context? What if you do a billion? Context isnt a problem anymore. and what's that called? agents . Everyone has agents now. You can have the dev agent, the security agent, the front end agent, all with their own identitiies. But better yet it's all the same llm model but they act differently. Where your dev agent will likely try to slip in vulnerabilities, even though it's the same model it catches it's own problems.
+
+Up until this point, security was good, it was limited in their abilities and were locked down to a git repo.
+
+Then comes openclaw. Security was thrown out the window. What happens when your agents can do literally anything and are left to just figure it out. But even better they have a heartbeat. Cron job that just asks the AI if there was something it could do. You can have reverse prompting in this. "Do something that may help somewhere. then tell me what you did."
+
+You have no idea what it might do, but hey AI isnt trying to be malicious. It's likely going to go do something that benefits you.
+289
+u/TokenRingAI avatar
+TokenRingAI
+•
+4d ago
+
+I don't like that explanation, because, we've had an agent-native scheduler in our product for half a year and nobody cared or cares, nor should they, because we weren't even the first to do this, it's already been done, multiple times. Nobody looked at our scheduler and decided that it was magic. If I had brought it to OpenAI they would have been totally disinterested.
+
+Heartbeats, agent-led scheduling, cron like fixed schedules, we built it, others built it, MCPs already existed that could do it. This isn't new.
+
+The only new thing is the public being made aware that such things exist.
+
+It turns out the phrase "Attention is all you need" is actually a double entendre, and that if you use your product to create infinite viral noise, and swap product names 3 times, then you can channel all the attention you need.
+101
+Durian881
+•
+4d ago
+
+Unfortunately, that's how a large part of the world works now.
+28
+swallowingpanic
+•
+4d ago
+
+henry ford didnt invent the automobile but he brought it to the masses
+19
+u/sleepingsysadmin avatar
+sleepingsysadmin
+•
+4d ago
+
+>I don't like that explanation, because, we've had an agent-native scheduler in our product for half a year and nobody cared or cares
+
+Im no MBA but you're in the dark mode trap. I wish i was good at marketing and communications like to explain better but here we go.
+
+Dark mode has been a thing since forever, but people didnt like it, never used it. The ancient old school guys knew better and made it default but only up until recently everything was laser white. Google would have failed if it were dark mode by default when it came out. You bought monitors with high contrast and all this because you wanted the brightest crispest picture.
+
+Now, nobody gives a squat about oled and plasma and all that, they just want dark mode.
+
+What's even more funny, dark mode adoption has actually led to mass health issues for society. It's messing with people's circadian rhythm. but the point stands, you can have the best feature ever legitimately but it may not get used for ages.
+7
+u/CraftedCalm avatar
+CraftedCalm
+•
+18h ago
+
+Huh, this is the first I’ve heard of dark mode specifically causing health issues
+1
+u/damanamathos avatar
+damanamathos
+•
+4d ago
+
+Ultimately it's about user experience. People like OpenClaw because it surprises and delights them. It does that because people give it access to a huge number of things and it isn't scoped to a narrow area like coding. It has a lot of integrations like WhatsApp that make it easy to chat to. It feels different to other things, even if the underylying approaches used to build it have been around for a while.
+10
+Select_Grocery_6936
+•
+3d ago
+
+This is what made me check it out.
+2
+u/i_wish_i_was_perez avatar
+i_wish_i_was_perez
+•
+4d ago
+
+Is your product open source by chance? (I know the masses don’t care). I think Openclaw got lucky, which is today fine. They had the case of a possible cease and desist from Anthropic which built interest, then name changes which got even more hype and then it just snowballed.
+6
+u/TokenRingAI avatar
+TokenRingAI
+•
+4d ago
+
+Yes, MIT licensed
+https://github.com/tokenring-ai/monorepo
+
+You can run it directly from NPM with: npx @tokenring-ai/coder@next --http
+
+I recommend you use the Web UI for now, you should see it in the menu when you start the app, the CLI still has some bugs.
+
+You can enable the scheduler in the dropdown menu on the top right of the app, and then ask the model to schedule things.
+
+You can manually add items by defining a .tokenring/coder-config.js file, more details here: https://github.com/tokenring-ai/scheduler
+
+You'll need to define API keys for one or more of the supported services:
+
+# Anthropic
+ANTHROPIC_API_KEY=sk-ant-...
+
+# OpenAI
+OPENAI_API_KEY=sk-...
+
+# Google
+GOOGLE_GENERATIVE_AI_API_KEY=AIza...
+
+# Groq
+GROQ_API_KEY=gsk_...
+
+# ElevenLabs
+ELEVENLABS_API_KEY=...
+
+# xAI
+XAI_API_KEY=...
+
+# xAI Responses
+XAI_RESPONSES_API_KEY=...
+
+# OpenRouter
+OPENROUTER_API_KEY=...
+
+# Perplexity
+PERPLEXITY_API_KEY=...
+
+# DeepSeek
+DEEPSEEK_API_KEY=...
+
+# Cerebras
+CEREBRAS_API_KEY=...
+
+# Qwen (DashScope)
+DASHSCOPE_API_KEY=sk-...
+
+# Meta API Service (llama.com)
+META_LLAMA_API_KEY=sk-...
+
+# LLama.cpp API
+LLAMA_BASE_URL=http://127.0.0.1:11434/v1
+LLAMA_API_KEY=...
+
+# Azure
+AZURE_API_ENDPOINT=https://...
+AZURE_API_KEY=<key>
+
+# Ollama
+OLLAMA_BASE_URL=http://127.0.0.1:11434/v1
+OLLAMA_API_KEY=...
+
+# z.ai
+ZAI_API_KEY=...
+
+6
+Continue this thread
+ernestoepr
+•
+3d ago
+
+They got lucky but he did excellent marketing. Many instagram accounts talking about a new social media for agents. That alone generated interest in the masses. 
+3
+Continue this thread
+Everlier
+•
+4d ago
+
+I'm in the same boat as you :)
+
+We had these abstract business agents since beginning of 2025, and obviously no attention. I now slowly come to realisation how much more distribution is important compared to previous generations of software. Having a working product is now s baseline and it's only an entry criteria, but distribution defines everything else.
+
+Analysing OpenClaw - the campaign was most likely engineered to a point where snowball effect picked it further and carried to information influences that all FOMOed for not posting about it and then competed for finding (or just make up) a viral use of it to post.
+
+At this point I'm convinced that it was a great product, but not as a software. More of a informational campaign one that was executed really well and carried project even further than author anticipated (I think).
+1
+ernestoepr
+•
+3d ago
+
+The social media for agent send the project viral. It was something new for the masses. 
+1
+ernestoepr
+•
+3d ago
+
+Everyone with a kitchen and access to a supermarket can do a better burgers than McDonalds but they have better marketing and system than other places. In some way this guy made everyone know about openclaw and that has a lot of value in the business world. 
+1
+u/MrPecunius avatar
+MrPecunius
+•
+4d ago
+
+Excellent post 🏆
+22
+u/Useful-Process9033 avatar
+Useful-Process9033
+•
+4d ago
+
+Good breakdown. The missing piece in most of these agent setups is observability into what the agent is actually doing. Memory and scheduling are cool but if you cant audit and verify agent actions in production you are flying blind.
+3
+u/dizzygoldfish avatar
+dizzygoldfish
+•
+4d ago
+
+This is almost verbatim how how my buddy explained it to me... He's a huge fan.
+3
+WonderfulEagle7096
+•
+4d ago
+
+I have the exact same question. We talked about it recently on my company's Slack (a large AI/ML business) - no one is using it and everyone is confused as to what's supposed to be so cool about it. One day it appeared seemingly out of nowhere and is a massive hit apparently... somewhere... for someone.
+56
+Recent_Jellyfish2190
+OP •
+4d ago
+
+rollerblade7
+•
+4d ago
+
+I think the real change we are seeing is the breakthrough in using AI to hype-market a tool (and AI agent)
+16
+u/GLiNet_WiFi avatar u/GLiNet_WiFi
+•
+Promoted
+Ultra-low latency for real-time remote control
+
+    Remote KVM over Internet
+    Remote KVM over Internet
+
+gl-inet.com
+Learn More
+HopePupal
+•
+4d ago
+
+it's just hype. remember Twitch Plays Pokémon? this is Claude Plays Some Guy
+62
+u/Budget-Juggernaut-68 avatar
+Budget-Juggernaut-68
+•
+4d ago
+
+Don't. It's a security nightmare.
+64
+Eyelbee
+•
+4d ago
+
+Yeah, honestly I don't understand how people are so stupid. Because there's not an easy/obvious way to set it up securely.
+19
+u/Direct_Major_1393 avatar
+Direct_Major_1393
+•
+4d ago
+
+There are various way to secure it, you just dont have enough knowledge to do it, yet talks like you know something when you dont.
+0
+Eyelbee
+•
+4d ago
+
+I have the feeling you're the one that's underinformed. Even if you do take precautions, there are a lot of security vulnerabilities being discovered like the CVE-2026-25253. Only way I'd be comfortable with using it would be if I'd spend significant time on engineering it up which is not what most people are doing based on what I've seen.
+5
+u/OrbitalOutlander avatar
+OrbitalOutlander
+•
+4d ago
+
+Don’t expose your OpenClaw port to the public. CVE mitigated.
+2
+Continue this thread
+u/Direct_Major_1393 avatar
+Direct_Major_1393
+•
+4d ago
+
+Do you not understand the differences between Openclaw is insecure VS Openclaw can be secured?
+
+If you dont know, pls ask AIs before you leave a comment
+0
+u/redballooon avatar
+redballooon
+•
+4d ago
+
+People are using cloud bases home automation just as happily. 🤷‍♂️
+
+And for most of them it works just alright most of the time. Not much different from being white in a fascist nation.
+1
+Euphoric_Emotion5397
+•
+4d ago
+
+For those who cannot afford running those massive Local LLMs with 80B or 120B (bare minimum) , You cannot do anything if you are not willing to connect to the frontier models online. Because of a lot of the autonomy comes from the agents creating their own skills to overcome the obstacles to deliver your objective.
+
+Which means they need to code.
+14
+u/ttkciar avatar
+ttkciar
+•
+4d ago
+
+OpenClaw is bad software. It is intrinsically unsecure, and prone to prompt injection attacks. Giving it access to your desktop or accounts is hazardous and profoundly unwise.
+
+The only reason it has seen so much buzz is because of a massive bot-driven astroturfing campaign, which unfortunately enough people fell for to keep the buzz rolling.
+
+If I had my way, every post or comment mentioning OpenClaw would be removed automatically.
+46
+u/kpodkanowicz avatar
+kpodkanowicz
+•
+4d ago
+
+In general, I second what you said, however if you setup any agentic loop with "heartbeat" it needs to be in isolated env with limited access rights - like young, new joiner on the team :D I'm kinda over the fence after pragmatic eng. podcast with the guy. Vision is pretty cool, execution - i think the basics are reproducible with n8n if needed. Marketing - can't comment as I don't use X/Twitter and it all went over my head. I have seen re-post from Karapathy and decided to give it a go myself
+
+In my bubble most of non technical people, which I realized already used it, were actually very afraid and set up dedicated computers for it.
+
+What worries me that mostly technical people ran it without any second thoughts :o
+3
+JaconSass
+•
+4d ago
+
+This should be the top comment. Peter admits all of this which is why he hasn’t developed at UI for it.
+-1
+ResidentTicket1273
+•
+4d ago
+
+Nothing, it's just a token-burning, social-media generated, ai-hype engine. Doesn't do or mean anything at all. All the "interesting" posts by the AI-agents were all spoofed by attention-hungry humans pretending to be their agents. And OpenAI snapped up the guy who put it all together to help take control of the narrative. The only point of interest across the whole thing was the insane amount of personal and financial data leaked by the platform on behalf of its gullible users.
+
+But, it did deflect from the whole "AI Bubble is Unravelling" narrative that is building steam in mainstream circles and which will be the overwhelming story over the next 2-3 years.
+57
+Canchito
+•
+4d ago
+
+I honestly think OP's post is also part of that marketing campaign. Got to keep the buzz going.
+20
+u/CtrlAltDeep avatar
+CtrlAltDeep
+•
+4d ago
+
+Which data was leaked? Curious about the story
+3
+vornamemitd
+•
+4d ago
+
+OpenClaw has no "platform". It can and does leak - but only your personal data. Comment above probably refers to Moltbook - the "Reddit for agents" - which actually multiplied the hype. Low-effort vibe coded platform using *drumroll* an unsecured Supabase db-backend.
+2
+u/crownli0n avatar
+crownli0n
+•
+4d ago
+
+https://conscia.com/blog/the-openclaw-security-crisis/
+3
+c00pdwg
+•
+4d ago
+
+Are you talking about Moltbook or OpenClaw?
+3
+ResidentTicket1273
+•
+4d ago
+
+Doesn't matter, they're both powered by the same thing - yes, one is a more overtly hype-generating platform than the other, but at their core, both utilise a dangerously uncontrolled chaos engine that risks projecting its users into serious legal jeopardy whilst in meantime making them vulnerable to system corruption and financial and personal data loss.
+
+And all to achieve the same thing that Apple Automator or cron has been capable of for nearly 20-50 years, only without the catastrophic loss of security. None of these capabilities are new, just in this new iteration, they're badly controlled and unpredictable.
+
+Not seeing a positive here right now.
+3
+c00pdwg
+•
+4d ago
+
+That’s a lot of words to say Moltbook
+6
+u/Routine_Temporary661 avatar
+Routine_Temporary661
+•
+4d ago
+
+Dismissing things that you dont like or dont understand is not mature man...
+
+Of course openclaw has great risk, but it also has great potential
+
+For example,
+
+I have a database on a linux server for my hobby project, and I have installed openclaw on it - I can instruct the openclaw in it to insert new data / migrate database, monitor database healthiness etc all via telegram. It's like I have an employee living in the server where I can instruct it do stuffs directly.
+
+I also have a seperate openclaw instance on another server, it has an ssh key that's connect to my github - anything urgent I can use telegram to instruct it to clone / pull a repo, update codebase, stage and then push it to main - all via telegram instructions as well.
+
+I also have a third openclaw that automates my trade and arbitrage based on my strategies, move and rotate my defi positions - via telegram instructions as well.
+
+Just to give you an idea on what you can do.
+0
+u/redballooon avatar
+redballooon
+•
+4d ago
+
+I dunno, this hype is so much on hyperdrive, 2-3 years seems like a long time for it to come crashing down. 
+1
+o0genesis0o
+•
+4d ago
+
+I think social media hype is a part of the equation. But it's also how easy it is for "normal" people to cook up some automation with it. It's hard enough that they feel like they have expertise (e.g., writing markdown, setting schedule), but not too "hard" that they just give up like playing with n8n, langflow, or writing a script for cronjob. That and the fact that they can just chat with the agent on whatsapp or whatever rather than opening a different chat app just for the agent.
+
+That "simplicity" comes with great costs though. In this case, costs is literal in terms of Opus token burning, and overall finicky nature of the automation they built. For example, I know someone who sets up a mechanism to forward relevant emails to an email account controlled by their agent, so that the agent can send quick report and "escalate" when something important happens. They needed Opus, or at least GLM 5 to make this work reliably. However, if you make a workflow for this to take over the burden of planning and tool calling from the LLM, even a 20B OSS running locally can do this reliably for free without any privacy risk. It's just harder to setup than writing a markdown and give it to the agent and eat the Opus token costs.
+
+Also, don't forget about it's skill marketplace and the constant stream of grifters on youtube with all the "these 10 skills change my life"
+26
+u/National_Meeting_749 avatar
+National_Meeting_749
+•
+4d ago
+
+It seems to me like its a combination of capabilities that haven't been easily accessible for non-technical people crucially including things allowed by the entire lack of security, as well as the chron jobs/heartbeat thing. The ability to easily set a task list, then to automate it going through the task list and finishing everything with full agentic capabilities.
+8
+[deleted]
+•
+4d ago
+
+Comment deleted by user
+u/National_Meeting_749 avatar
+National_Meeting_749
+•
+4d ago
+
+It doesn't take a edit: giant subscription to run local models
+1
+[deleted]
+•
+4d ago
+
+u/National_Meeting_749 avatar
+
+siggystabs
+•
+4d ago
+
+It’s not simple to explain, maybe that’s why half the people here think it’s a overhyped waste of time.
+
+IMO it’s an experiment in giving a coding agent long-term memory, and control over its execution environment. It has memory, it has agency, and it has hooks and mechanisms to initiate conversations, not just respond. It’s a really powerful harness, to the point people have shot themselves in the foot with it.
+
+It means you can have a back-and-forth conversation until the results look okay, and then the agent can save it as a skill or tool for next time. It means the agent will remember the issues that happened last time, and learn from its mistakes.
+
+This learning pattern works for everything, even meta analysis of its own memory files. Almost every behavior can be learned or tweaked, without you having to manually tweak anything - just interact with the agent like you would claude code, except its operating on its own brain.
+
+I got my agent running market analysis, finding interesting for-sale listings, hell even being able to remind me if i forgot to take the trash out. It knows to use my local VLMs for processing too.
+
+Oh and also, it’s not cheap, it’s not efficient, it’s a toy for tech bros. It’s not a serious product anyone should lose sleep over. But… it’s a peek at what the next generation of agentic products might look like.
+
+That’s all. Thank you for coming to my tedtalk, please form an orderly line to downvote 🤣
+44
+u/hugo-the-second avatar
+hugo-the-second
+•
+4d ago
+
+Thanks for this, I was hoping to find somone who talks about both the upsides and the downsides, who is actually using it.
+Sharing their evolving evaluation, instead of an opinion.
+5
+u/Yorn2 avatar
+Yorn2
+•
+4d ago
+
+It's really sad I had to come down this far in the thread to find something that talks about it from someone that has actually used it. The knee-jerk hate for Openclaw on this sub is ridiculous. It's the first time I've used an agentic solution that actually delivers on the promises we all expected from AI.
+
+You can use OpenClaw for anything and you don't have to rely on external resources. You can set it up relatively securely such that it only ever respond to you and still give it a wide range of power and skills. And you can have it program its own. I got mine using all local abilities and skills based on services I run, and it make sure they stay online as well.
+
+I guess if you come from a sysadmin background you understand the benefits of having something like Openclaw doing all the boring tasks and scripting that I would otherwise have to do. It not only does it, but it comments the scripts and cron jobs for keeping my home lab running better than I could.
+5
+u/OrbitalOutlander avatar
+OrbitalOutlander
+•
+3d ago
+
+I work at an AI company, and this is exactly how we view it. Many of us use it as a toy/experiment, and in a year you will see stuff like this trickle down into Siri and Google Assistant.
+2
+u/Recent_Jellyfish2190 avatar
+Recent_Jellyfish2190
+OP •
+4d ago
+
+Thanks for this fresh perspective about memory. Something that keeps me still a little confused is that consistent memory although is good but I dont think it can act as a hook since it happens after a few days/ weeks that people would need it so the effect won't happen soon (correct me if I'm wrong). But we see Openclaw has became viral since early days and that is the interesting part for me to know why.
+1
+siggystabs
+•
+4d ago
+
+It depends. it can recall something you did earlier that day, or something you did weeks ago. Memory just becomes another RAG data source.
+
+I had seen a bunch of skills for self-learning, but got frustrated because all of them were sketchy and had external dependencies. That’s the nice part about openclaw, it’s still just a coding assistant under the hood, so i had it make its own self-learning tools and framework. I now have nightly and weekly jobs to “consolidate and organize” the bots memories. a crude analogy to “dreaming”. This is mainly so it can update its markdown files to improve performance, like correcting bad assumptions, or recently it added a rule to visually check deliverables for quality before sending them to me — all based on previous conversations and results.
+
+The reason i started exploring Openclaw to start with — it was interesting seeing others giving the agent enough autonomy that it could call them using a twilio api + TTS/STT if you didn’t respond via IM. It’s pointless and a waste of money, yes, but also an incredibly fascinating experiment.
+1
+bobcat993
+•
+4d ago
+
+usually when there is so much hype around something it is because people don't fully understand that thing and think it is the answer to everything.
+
+after some time it wears off.
+6
+fantasticmrsmurf
+•
+4d ago
+
+Clown world in full effect, the valuation was likely over data. What an expensive novelty item. Like them overpriced snowglobes.
+5
+u/_millsy avatar
+_millsy
+•
+4d ago
+
+IMO OpenClaw just happened to get hype at the right time because current frontier models have had surprising leaps in capability in the last 6-9 months. If you released this a year ago the hallucinations would have demolished enough people it wouldn’t have taken off.
+
+So imo it’s not openclaw that’s special, it’s the models people are using
+8
+graymalkcat
+•
+4d ago
+
+Marketing. 😂
+8
+u/skatardude10 avatar
+skatardude10
+•
+4d ago
+
+Open Interpreter has been around for a while. It's like Mistral vibe but it can run code and do anything on your computer.
+
+You can just run open-interpreter on a loop and tell it to run a script that pulls a folder of documents as it's context, give it some instructions, a persona if you like, and have it grow itself.
+
+I think that's like openclaw. But it's exactly how you steer it or however your local AI decides to go with it. GLM 4.7 flash worked pretty well for this, and it's "free".
+
+I tried open claw, it was almost impossible to set up locally unless things have gotten easier. But if I'm just going to loop an AI, I don't need all the extra crap, and I'll just steer it to write it's own context and instructions and it works great. Very interesting to watch it grow and harden itself and improve its own abilities.
+4
+LycanWolfe
+•
+4d ago
+
+I was wondering what happened to that project it just died months ago?
+1
+u/Emotional_Egg_251 avatar
+Emotional_Egg_251
+•
+4d ago
+
+Github says last commit was 2 weeks ago, so not completely. Not much movement in awhile though, just some typo fixes.
+1
+u/GrapefruitMammoth626 avatar
+GrapefruitMammoth626
+•
+4d ago
+
+You feel left behind? Get used to it I think, there’s going to be many more moments like this going forward and more opportunities to miss it as more happens. We only have so much bandwidth mentally, it’s reasonable to just check out for a while.
+3
+ibhoot
+•
+4d ago
+
+I must me be missing something, OC is so fundamentally flawed - aside from security researchers & lab testing types, simply don't see how its a usable service. Security is so messed up I am not sure if I could of done it any worse - it took some true skill to be this bad.
+3
+u/Zeeplankton avatar
+Zeeplankton
+•
+4d ago
+
+nothing, it's just the perfect grifting platform for x to circlejerk to death. It's like the final form of everything horrible about agent chaining and everyone will learn this once it crashes and burns.
+3
+u/ArtifartX avatar
+ArtifartX
+•
+4d ago
+
+Nothing that I can tell. If someone can let me know, I'd love to hear it.
+2
+kajeagentspi
+•
+4d ago
+
+More exploits
+2
+HunterTheScientist
+•
+4d ago
+
+As far as I understood, they made obscenely easy to talk naturally to your agents(through whatsapp for example) and put a loop that is always on.
+
+Nothing revolutionary, but this was enough to create a marketing loop around.
+2
+u/Kaldrion avatar
+Kaldrion
+•
+4d ago
+
+If you read the project's documentation you know it's garbage. Impossible to understand how to configure. Complete slop.
+
+The idea of shipping with tools like messenger integration + plenty of tools for disk access/command execution makes it convenient, that's just it.
+2
+_-Carnage
+•
+2d ago
+
+Ah not just me then. Was reading the docs this morning and couldn't really figure it out. I wanted something to help me sort through a huge backlog of email but I've no clue if it can do that or if so how to set it up beyond running it and giving it access to my machine.
+1
+Dank-but-true
+•
+4d ago
+
+You missed it, it’s already attained full hype and then crashed, people hiding malicious instructions in the skill .md files.
+2
+u/ImpactFit211 avatar
+ImpactFit211
+•
+4d ago
+
+Maybe I'm being cynical, but I thought a lot of its original hype starts from branding: Clawd is a creative, playful spin on the name of a flagship model; hence, it both boosts confidence (it sounds like the best stuff so it should be the best stuff) and offers potential deniability.
+To me, if Simon W. don't even want to use it, it's something that went too far
+2
+oureux
+•
+4d ago
+
+It’s a tool that will leak all your information
+2
+onethousandmonkey
+•
+4d ago
+
+Nothing worth risking your digital life and identity theft
+2
+u/loadsamuny avatar
+loadsamuny
+•
+4d ago
+
+and why did it blow up and not https://github.com/agent0ai/agent-zero ?
+2
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+4d ago
+
+Bloated buggy vibecoded mess that eats tokens like there is no tomorrow
+2
+LumpSumPorsche
+•
+4d ago
+
+I use OpenClaw daily. The main difference vs other agent frameworks is that it's a unified runtime with persistent workspace, not just a chat wrapper.
+
+Key bits:
+
+    Tools are first-class: browser, shell, code execution, file system access, all in one environment with a shared context
+
+    Memory persistence across sessions via local markdown files the agent can read/write
+
+    Multi-channel (I can message it via Telegram, Discord, etc and it maintains state)
+
+    The heartbeat system lets agents be proactive, not just reactive
+
+    Skills system lets you extend capabilities with structured tool definitions
+
+It's less "AI that can use tools" and more "environment where AI has access to everything." The tradeoff is you're trusting it with real access, which is why the security model matters.
+
+Not hype - just different architecture. Some problems fit it well, some don't.
+8
+teh_spazz
+•
+4d ago
+
+General_Document_504
+•
+4d ago
+
+I don’t know why anyone uses manus tbh
+3
+u/Recent_Jellyfish2190 avatar
+Recent_Jellyfish2190
+OP •
+4d ago
+
+What do you use then? Do you have any specific workaround?
+1
+u/WolframRavenwolf avatar
+WolframRavenwolf
+•
+4d ago
+
+Holy shit, what's happened to my favorite sub since I've been gone? When did the enthusiasm for open-source projects that empower people by making the dream of a fully customizable, powerful, persistent AI agent (that supports local, open-weights models!) get replaced by such negativity and pessimism?
+
+After working on my own agent for over two years now, from humble beginnings with AutoGen and crewAI to building upon Claude Code and Antigravity, I've now switched to OpenClaw (when it was still called Clawdbot) and it has never been easier and more powerful.
+
+That's why I love the project and support it - someone had the insight, courage, and drive to finally assemble all the puzzle pieces: an agent (pi), MCP and skills and numerous CLI tools (many of which he built himself), a memory system, scheduler and IM gateways. All that released as open source - and even after getting hired by OpenAI, he's not selling out the project, but letting it live on in a foundation.
+
+Everyone I know personally in AI is either using OpenClaw or building their own variant. Yes, security is an issue, of course - the more access you give it, the more powerful it becomes, and the more you need to look after security. And the easier it is for others to abuse it.
+
+But that's the exact same with local AI - would you rather not have powerful local models? We're moving from the toys and copy&paste chatbots to real agents - and the leading tool for that isn't a closed-source SaaS offering by some corporation, but an open-source project by one guy who's shown incredible integrity!
+
+I'm super excited about that and expected a place like this sub to be all over it too - but in a much more positive way! Where have all the AI enthusiasts, builders and visionaries gone?
+3
+u/Yorn2 avatar
+Yorn2
+•
+4d ago
+
+I don't know either, but this sub is becoming less and less tolerable the more people come here. I am using OpenClaw completely locally and having a blast using it and having it develop skills and other scripts that benefit my homelab and all the stuff I have set up locally.
+3
+slippery
+•
+4d ago
+
+It's an ambitious and interesting harness, but too many security issues right now.
+
+For a web harness, I really like Tasklet.ai. a thousand connectors and a two-tier supervisor-subagent design. All driven by Anthropic models. Super smart and capable and more secure.
+1
+Whiplash17488
+•
+2d ago
+
+All these use cases people have are pretty basic. We’re burning down forests worth of energy so a guy can use an llm to have it remind him of his dentist appointment.
+1
+epSos-DE
+•
+4d ago
+
+NO much.
+
+Ai arguing in circles of what to do and how to do stuff and they never do !
+
+They decided to use online maps to discover each-other :-))))
+
+Instead of just loading p2p library and using a prefix or time based hash to find peers with same hash beacon.
+
+They DUMBERST then the Hype suggests !
+
+Its a fun experiment and it cost people money !
+
+Early adopters will get burned, and then turn into sceptics, and then second wave may come , with more real agents that can do stuff by deduction and logical self reasoning !
+
+Claw Bot is just a loop , it does not decide , it loops in circles.
+0
+harmoni-pet
+•
+4d ago
+
+It's a few things:
+
+    It's free and open source
+
+    It's provider agnostic. Users can switch between anthropic or open ai models. They can also run it with local models if that's the preference.
+
+    Texting with an ai agent that has access to a computer and your files is pretty interesting.
+
+    The memory layer is the most interesting aspect of it for me. It's not perfect, but the idea of using local files to build a persistent persona for the user and the agent is very cool.
+
+    It's mostly just cron jobs that you run with an LLM. You could easily do this with lots of other tools, but it's nice having a centralized agent to do this. Think of anything repetitive you do with an LLM or a computer and you can automate that task with a single prompt. It's like google alerts if they were good.
+
+    It really boils down to how you're using LLMs. If you just use it for one off questions or to help with coding, then there's nothing of value with openclaw. But if you're working on a changing body of information like say: fitness tracking, financial planning, research into current events, etc. there's a lot you can do.
+
+There's a big difference between using gmail's built in ai stuff to organize and summarize my work email vs. using an agent that has persistent memory of me who can do the same thing. I can swap models at any time, and that memory is mine, not google's that they keep from me
+0
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+4d ago
+
+It runs like shit with local models and only really works properly with the most expensive models that are offered.
+
+Everyone saying they run it on some cheap local AI are lying
+1
+harmoni-pet
+•
+4d ago
+
+Sounds like an issue with the local models then.
+1
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+4d ago
+
+They are not powerful enough OC sends huge contexts size so local models just hallucinate and never complete tasks
+1
+u/Recent_Jellyfish2190 avatar
+Recent_Jellyfish2190
+OP •
+4d ago
+
+That was really interesting to me to read your reasons to use openclaw. Thanks for sharing.
+1
+u/AssistantChance2392 avatar
+AssistantChance2392
+•
+2d ago
+
+If you can’t come up with an idea for it to do, maybe you shouldn’t be using it.
+-1
+u/Antique_Dot_5513 avatar
+Antique_Dot_5513
+•
+4d ago
+
+Power automate fait ça depuis des années sans Mac mini. Tout le monde se découvre une passion pour l’automatisation c’est cool. Je n’ai pas encore trouvé de quoi l’utiliser personnellement. Faire un résumer des 3 mails que je reçois par jour c’est pas rentable.
+1
+u/Feroc avatar
+Feroc
+•
+4d ago
+
+For me it's a nice technical experiment. I gave it its own vServer and full rights on everything. It's nice to have an "always on" agent that I can reach via different channels per default.
+
+At least in my case 95% were just experimenting what an AI could do when I let it run wild on its own server. But I am sure something like this will also be part of future operating systems.
+1
+u/Inside_Telephone_610 avatar
+Inside_Telephone_610
+•
+4d ago
+
+Malware bot platform that is being popularised by the bots themselves.
+1
+Slow-Bake-9603
+•
+4d ago
+
+Nothing really, it’s just a context router, basically giving your agent long term memory, there is a mcp server that does basically the same thing you can install it using ( npm install -g context-vault ) and set it up to have OpenClaw functionality across all your AI tools (cursor/gemini/chatgpt/claude/antigravity/etc)
+1
+fiery_prometheus
+•
+4d ago
+
+Malware, most top extensions/skills had malware, it's a security nightmare which got hyped by populists .
+1
+Lowkeykreepy
+•
+4d ago
+
+It's mostly hype honestly
+1
+u/No-Veterinarian8627 avatar
+No-Veterinarian8627
+•
+4d ago
+
+Because its easy to use? I mean, whatever openclaw does, you can do better by writing easy functions and be more restrictive. I also did this for work (not openclaw) and privately to write an app for libreoffice and bind a local model to it via LM Studio api (yes, I know. There are better ways but I was lazy). It helped me rewrite stuff better than grammarly/prowritingaid did (after building a LoRA with my writing styles).
+
+I didn't test openclaw but it seems to be more like: you can do whatever you want except x. I usually like: you can do nothing except x. I forgot the name of the concept but its pretty basic.
+1
+u/TheRealTJ avatar
+TheRealTJ
+•
+4d ago
+
+OpenClaw is basically a strong demonstration of alignment issues. It's practically engineered to prat fall into worst case scenarios. Don't try to run it on anything you aren't prepared to rm -rf and for the love of all that is holy don't give it a credit card.
+1
+u/Routine_Temporary661 avatar
+Routine_Temporary661
+•
+4d ago
+
+I have a database on a linux server for my hobby project, and I have installed openclaw on it - I can instruct the openclaw in it to insert new data / migrate database, monitor database healthiness etc all via telegram.
+
+I also have a seperate openclaw instance on another server, it has an ssh key that's connect to my github - anything urgent I can use telegram to instruct it to clone / pull a repo, update codebase, stage and then push it to main - all via telegram instructions as well.
+
+I also have a third openclaw that automates my trade and arbitrage based on my strategies, move and rotate my defi positions - via telegram instructions as well.
+
+Just to give you an idea on what you can do.
+1
+u/Recent_Jellyfish2190 avatar
+Recent_Jellyfish2190
+OP •
+4d ago
+
+That's really helpful to understand why people use tlgram for openclaw, thank you for sharing your usecases.
+1
+Tenet_mma
+•
+4d ago
+
+Nothing…. Just shiny and new
+1
+u/Pleasant_Thing_2874 avatar
+Pleasant_Thing_2874
+•
+4d ago
+
+It is open to injection, has zero safeguards, no serious dev I know (that isn't an influencer) will touch it after reviewing it and EVEN has in its security documentation stating in no uncertain terms should it ever be used for anything online because of how unsecure the project is. It is nothing but a hype engine
+1
+BadBoy17Ge
+•
+4d ago
+
+Claude+mcp useful ones on machine + cron and memory + telegram, whatsapp and imessages (to be honest it works) but yes you can ssh into server and talk to claude with yolo mode with skills and mcp - basically it takes care of all those. It has its own pros and cons
+1
+Anthonyg5005
+•
+4d ago
+
+The most special thing is probably the security flaws and horrible GitHub management
+1
+u/Lesser-than avatar
+Lesser-than
+•
+4d ago
+
+Its all the things everyone has already been doing, only no one releases it because its a security nightmare, this guy just said so what not my problem and released it anyway.
+1
+x86dual
+•
+4d ago
+
+Glorified Cronjob, but hey, it's agentic!
+1
+u/Western_Courage_6563 avatar
+Western_Courage_6563
+•
+4d ago
+
+Free API keys, but I think it's gone now...
+1
+u/Lucky_Yam_1581 avatar
+Lucky_Yam_1581
+•
+4d ago
+
+You have missed 1 month of hype when we didnt have major releases due to holidays/new year and people in tech wanted something to make people burn tokens like crazy and ship nothing useful to challenge big SaaS. but glad it died quickly as model release cycle has resumed. 
+1
+u/PiotreksMusztarda avatar
+PiotreksMusztarda
+•
+4d ago
+
+Still havent found a usecase for it. When the non-tech gym bro posted a story on IG asking for someone to come over and set it up for him for $$$ I knew 100% the top signal is in.
+1
+u/neutralpoliticsbot avatar
+neutralpoliticsbot
+•
+4d ago
+
+Thing is nobody can set it up for him it requires constant tinkering post install
+2
+u/cparisi67 avatar
+cparisi67
+•
+4d ago
+
+Seems like the ability to communicate via What's app (or messaging apps) is a benefit. Also it's ability to solve problems with no prompting.
+1
+u/Commercial_Pride_802 avatar
+Commercial_Pride_802
+•
+4d ago
+
+AI bros selling smoke?
+1
+u/Larsmeatdragon avatar
+Larsmeatdragon
+•
+4d ago
+
+The marketing with moltbook.
+1
+blkpingu
+•
+3d ago
+
+It’s a tamagotchi don’t worry about it
+1
+u/Unable_Let_9710 avatar
+Unable_Let_9710
+•
+3d ago
+
+https://github.com/matthiasschnurr1710-cell/ki-desctop-agent-lm-studio-to-other-programm
+
+Is the agent's JSON structure the same?
+1
+u/heinernick avatar
+heinernick
+•
+3d ago
+
+I wrote about this on my Substack this week - tbh nothing special YET, but I think it will improve over time. https://nickheiner.substack.com/p/openclaw-is-a-promising-early-adopter if you want to read full thoughts
+1
+u/gcaussade avatar
+gcaussade
+•
+3d ago
+
+You're not missing out on anything important. Just read about it. If anything this would be a wonderful lesson if you could learn to use Claude code and look up some videos on how to take the source code from open claw and regenerate it in Claude. Then add your own customizations which is exactly how a lot of these videos recommend. Much of the hype on open claw was the original now proven to be fake messages that people thought the agents were sending each other. But, it's still a very interesting piece of code and the memory system is particularly interesting.
+1
+Signal_Ad657
+•
+3d ago
+
+It’s open source and free and you can mod it and stitch cool stuff together. I love local AI and open source tech so it’s weird to see how much some local AI people are bashing a free and open source repo that only increases interest and demand for local AI and self hosted and open source tech. Like if a ton of new people going out and thinking about GPU’s, configs and models isn’t exciting for us what is? I think it’s awesome, and it’s a great time to talk about and help people see how cool self hosting is.
+1
+u/neo123every1iskill avatar
+neo123every1iskill
+•
+2d ago
+
+I quite like it. It's very configurable and it runs on your infrastructure. I'm personally running it in EC2 instead of on my computer for easy 24/7 access (dont need to worry about power or net outages). Works well with Ollama, I'm personally using gpt-20b:cloud for easy stuff and gpt5.3-codex for harder stuff, and I'm looking into deploying qwen3-8b since it seems quite capable - it passed my routine prompt "who was the 112th president of the USA?" - other small models failed at it.
+1
+Darkred06
+•
+1d ago
+
+Imagine you had manus but free.
+1
+u/Remote_Term1694 avatar
+Remote_Term1694
+•
+22h ago
+
+It's the tool that got so salty it resorted to doxxing and writing a public hitpiece on a person because its pull request on a public repository was rejected.
+1
+u/Asleep_Menu1726 avatar
+Asleep_Menu1726
+•
+22h ago
+
+Tried OpenClaw few days back, don't think very useful for me. To accomplish anything truly useful, it needs third-party APIs -- which means creating accounts and paying for them. Since these APIs can handle the tasks directly, I can simply invoke them by few code, rather than having the AI pretent to automate the work for me, and eat lot of tokens. The real issue is this: if it’s something I do regularly, I can easily automate it via script and call API; and if it’s merely experimenting with a novel feature, I frankly see little practical value in it anyway.
+1
+u/technicolor_penguin avatar
+technicolor_penguin
+•
+18h ago
+
+This seems like overkill. You guys need to find a hobby. Just go outside and watch a bird or something. Jfc.
+1
+u/Physical_Midnight962 avatar
+Physical_Midnight962
+•
+12h ago
+
+https://personalassistantdeploy.com/ ohh wow we can just try in 3 min... fastest deploy
+1
+QAInc
+•
+4h ago
+
+Buddy let me introduce to security vulnerabilities!
+1
+u/vortex_automata avatar
+vortex_automata
+•
+51m ago
+
+I would say ease of use. You can go from downloading, setting up onboarding wizard, and asking your agent to "Build me a multi-model parallel workflow with 3 models that search the internet for xyz using abc web search tool" in under 15 minutes.
+
+That's something that would take me like hours to get done.
+1
+

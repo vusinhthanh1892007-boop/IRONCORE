@@ -1,0 +1,32 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "ironcore.fullname" . }}
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+rules:
+  # Allow ironcore to read its own ConfigMaps and Secrets
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  # Allow reading Pod info (for machine fingerprinting & health checks)
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "ironcore.fullname" . }}
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "ironcore.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "ironcore.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

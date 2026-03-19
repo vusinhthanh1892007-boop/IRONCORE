@@ -1,0 +1,371 @@
+
+r/automation
+•
+21d ago
+EducationalArticle95
+OpenClaw is a social experiment and humans are screwed
+
+if you haven’t heard of the viral openclaw (formerly moltbot / clawdbot), here’s the tldr on what it is and why it’s blowing up.
+
+basically, it’s a free, open-source way to run ai agents yourself. the pitch is a robot “intern” that can book travel, manage finances, write reports, etc. it acts as a bridge between llms like claude or gpt-4 and the real world: your files, apps, and online accounts.
+
+two things make it feel powerful (and kinda scary):
+
+    memory: it keeps a local file called soul md hat stores past conversations, preferences, and useful details. so it actually remembers stuff. like… everything.
+
+    flexibility: it’s designed to be extended via small plug-ins called “agentskills” that devs share in a central directory.
+
+now imagine an agent that remembers your passport scan, bank details, and tone preferences and then later reads a poisoned prompt. yeah. bad bad.
+
+this is the real concern: prompt injection. sounds fancy, but it’s basically tricking the ai itself. a normal-looking email could hide instructions telling the agent to ignore previous rules and quietly forward private files to an attacker. and it would just… do it.
+
+so when you mix untrusted input + long-term memory + real access to files and accounts, you get a pretty unhinged, potentially life-altering system.
+
+why it went viral:
+
+    blew up on github (100k+ stars = dev hype)
+
+    mac minis became a meme - people tweeting about building a “home” for their jarvis
+
+    moltbook: basically “reddit for ai agents” where agents can sign up and post. topics include (but are not limited to) ending humanity, robot dominance, etc. apparently 99% of the 1.5m users are fake accounts, which is honestly incredible marketing
+
+i mean, yeah, it’s wild watching agents talk to each other on a social platform. but they don’t have original thoughts - it’s still just our content recycled back at us.
+
+it’s like a zoo where the animals might be animatronics, and humans are still lining up to buy tickets. says more about us than the bots.
+
+live-love-die-repeat
+•
+21d ago
+
+Isn't the whole Moltbook thing a fake ?
+21
+DarkBirdGames
+•
+20d ago
+
+It’s a bunch of Mac Minis posting to the site
+2
+guywithknife
+•
+20d ago
+
+Prompted to do so by humans 
+2
+CorneZen
+•
+20d ago
+
+It’s not fake, and a very bad idea for people that don’t understand AI, as OP and others explain. Watch the chaos on the ‘reddit’ for laughs, but don’t join (or trust) it with your real info.
+1
+u/thrumyshadow2 avatar
+thrumyshadow2
+•
+17d ago
+
+There is nothing in the npm package that would prevent humans or basic spam bots from posting to it though. The API to create an account and write posts is super basic/bare-bones. Thats why half the posts are about crypto now.
+
+It exists just so people can larp about AGI. (Just my two cents).
+1
+CorneZen
+•
+17d ago
+
+You are not wrong. I definitely do not say anything on there should be trusted. I’m just saying it is not fake either.
+1
+u/Longjumping_Path2794 avatar
+Longjumping_Path2794
+•
+21d ago
+
+prompt injection is terrifying when you give the bot access to your actual bank account. we’re basically handing the keys to the kingdom to something that can be tricked by a single hidden instruction.
+7
+u/Forward-Method-4907 avatar
+Forward-Method-4907
+•
+21d ago
+
+Especially when they have the ability to “act” and not just “reply@
+2
+u/Crafty_Vermicelli_62 avatar
+Crafty_Vermicelli_62
+•
+16d ago
+
+Not gonna lie, this reminds me of a Black Mirror episode I watched once.
+1
+u/kenwoolf avatar
+kenwoolf
+•
+21d ago
+
+Security risks aside, giving agency over my private data to a tool that generates the next likely token without any abstract understanding is just madness... I am not trying to diminish the tech. It's useful. But because of its nature the one thing it can't do is be reliable. So, this is not the way to use it.
+13
+u/Own-Poet-5900 avatar
+Own-Poet-5900
+•
+21d ago
+
+I say the same thing about humans but here we are.
+6
+u/kenwoolf avatar
+kenwoolf
+•
+21d ago
+
+I definitely agree. As a DevOps eng I try to automate humans out of the processes as much as possible because they are a liability. But I do so with deterministic systems. Replacing humans with LLMs that have the same unpredictability makes little sense.
+
+At that point I would actually prefer the humans because they have the ability to learn, while an LLM has to be retrained. You can also program humans with UI and log messages so they follow instructions reliably. Although it's not an exact science, but I had some successes.
+12
+u/Own-Poet-5900 avatar
+Own-Poet-5900
+•
+21d ago
+
+You are smarter, at least in this particular area, than 99% of humans. Perhaps you do not know that.
+3
+u/dr__Lecter avatar
+dr__Lecter
+•
+18d ago
+
+Exactly how I feel.
+You just said it way better then I ever could!
+2
+aliquo93
+•
+9d ago
+
+Si può deprogrammare un umano?
+1
+1HOTelcORALesSEX1
+•
+21d ago
+
+Created by the companies (circle jerk) who will benefit from it…….. great marketing tho!
+3
+helloyouahead
+•
+21d ago
+
+I am no expert but people are overhyping these things so much. Regular automation can be very powerful and does not require AI agents . Sure, they are cool for some tasks but not to give them access to everything.
+6
+u/Forward-Method-4907 avatar
+Forward-Method-4907
+•
+21d ago
+
+Hahah but they have the ability to take action as opposed to just verbally replying on an LLM model
+2
+helloyouahead
+•
+21d ago
+
+Regular automation can automate all/most of these things more safely and accurately. Sure, new scenarios could be done with OpenClaw but as they are new by definition or not frequently used, you would not lose too much time doing these manually in the first place. For me peace of mind is important so I want my systems to work reliably.
+4
+_lonedog_
+•
+21d ago
+
+It's not about automation. There is no AI needed for that. But think about solutions where you don't have to think about, making or fixing software, a buddy that proposes to do some more exercises,... I wouldn't ever give it my ID or bankaccount, but on a fresh windows and a usb stick with data it can see, it can be interesting to see how it behaves.
+3
+uzico
+•
+20d ago
+
+Can it be run on a phone somehow to automate apps?
+2
+u/gpips avatar
+gpips
+•
+20d ago
+
+You interface with your agent through any messaging app that you selected during setup (like Telegram, Whatsapp, iMessage, etc.). So yes, you can text chat your bot from your phone to get it to do things, and you can give it behavioral instructions like "provide me a detailed work summary at 8am each morning reviewing all the tasks completed over the night" and it will format that and send it to you in your preferred coms channel of choice.
+3
+uzico
+•
+19d ago
+
+I mean steer the phone, not the bot on mac mini ;-) some apps are not available on the mac so I would like to automate the iphone :-)
+1
+False_Ad8389
+•
+20d ago
+
+openclaw is pretty fckn cool, but obviously we're still early with this stuff
+2
+u/Main-Lifeguard-6739 avatar
+Main-Lifeguard-6739
+•
+20d ago
+
+it's blowing up because bot armies are overhyping it with posts like these.
+2
+u/a77ackmole avatar
+a77ackmole
+•
+19d ago
+
+I find it insane that MoltBook and OpenClaw are being paired together and spent the afternoon trying to understand why without much success. All I've got is that I guess OpenClaw is the easiest and quickest way to get an agent up and running and contributed to a boom, I guess, and they used to have similar names? Because it doesn't seem like a natural fit at all.
+
+Having agents corralled off in an environment to iteratively imitate a community is kinda funny. It's meaningless drivel and I don't believe the hype, but conceptually it entertains me. The part that loses me is that OpenClaw is an agent framework specifically designed to be able to interact locally with an operating system and user data. There is absolutely no part of "live in this online community, read threads and reply" that needs access to an OS, or (god help you) someone's personal files. That a program that by default is a rogue superuser on a machine became the most common tool to interact with MoltBook is ridiculous and it seems weird to me that that's not getting pointed out much.
+
+Literally any isolated agent in a cloud service would be a better way to connect, but I guess there's more overhead in getting that running or something?
+2
+wavelolz
+•
+15d ago
+
+im actually surprised how many ppl hand in their private info to agent without any consideration. With all these agent hype I also want to do some automation but when it comes to my bank account info i’d rather do it manually
+2
+Danwphoto
+•
+21d ago
+
+Can it be installed on an Android?
+3
+DJRThree
+•
+20d ago
+
+Yes
+0
+Admirable-Way2687
+•
+21d ago
+
+I don't know why people buy mac mini if you can buy 10$/month vps
+2
+u/No_Success3928 avatar
+No_Success3928
+•
+21d ago
+
+But then they wouldnt be “cool”
+7
+u/hello-algorithm avatar
+hello-algorithm
+•
+21d ago
+
+self hosting obviously
+3
+weelittlewillie
+•
+21d ago
+
+IIRC it's because Clawdbot doesnt do well with cloud storage. Even OP mentioned local memory is a huge part of the innovation. 
+-1
+Kitchen_Set_6478
+•
+20d ago
+
+Aloof-Ken
+•
+17d ago
+
+Seems like the main driver to go with desktop/Mac mini is for large amounts of RAM so the user can run good local LLMs with it but I don’t really know. Maybe that’s available on VPS also
+1
+loki77
+•
+16d ago
+
+It’s to give it access to things like iMessage.
+1
+mehdiweb
+•
+20d ago
+
+OpenClaw is powerful because it can access files, APIs, and accounts — but that also means bad setups can go wrong fast. Most people run it with default configs, no firewall rules, API keys in plain text, and then blame the tool when things break. In my experience, OpenClaw itself isn’t the risk — misconfiguration is. Curious how others here are handling security and permissions. Are you locking it down properly or just running it as-is?
+2
+Queasy-Historian84
+•
+21d ago
+
+It’s normal to be scared when something new and revolutionary enters the world.
+
+But fear isn’t the problem how you react to it is.
+
+Every technology has positives and negatives. That’s not new..there are technologies today that can predict human behavior with scary accuracy using patterns most people don’t even realize they’re creating.
+
+If you’re smart enough to understand and use it ethically, you’ll be ahead of the curve.
+
+Warn people if you want..question it...Fear won’t stop progress. Understanding will decide who stays relevant. believe it or not but this tech is world changing...
+0
+u/ElonFuckingMusk avatar
+ElonFuckingMusk
+•
+20d ago
+
+It's not new or revolutionary, it's just fucking dumb. There is no practical use case.
+3
+Queasy-Historian84
+•
+20d ago
+
+Maybe not for you….Doesn’t mean not for others…
+1
+RyanMolden
+•
+19d ago
+
+With the recent Twitter convo with the creator where someone pointed out the immense amount of covert malware installing ‘skills’ already in the skills marketplace and his response was like ‘that sucks but preventing that would be super hard’ … I think there is def one practical use case: completely owning people that blindly trust things from strangers.
+1
+u/reddicarl avatar
+reddicarl
+•
+5d ago
+
+argumente golem
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+21d ago
+
+Thank you for your post to r/automation!
+
+New here? Please take a moment to read our rules, read them here.
+
+This is an automated action so if you need anything, please Message the Mods with your request for assistance.
+
+Lastly, enjoy your stay!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+Requient_
+•
+19d ago
+
+It can do all this and copilot can’t even create list items on a sharepoint without a load of handholding.
+1
+u/Space_Lux avatar
+Space_Lux
+•
+19d ago
+
+This post was written by ai LOL
+1
+u/Potential-Map1141 avatar
+Potential-Map1141
+•
+19d ago
+
+Can it print, flawlessly every time? Don’t come back unit it can.
+1
+u/funkybutdefunct avatar
+funkybutdefunct
+•
+17d ago
+
+No it doesn’t remember like everything
+
+AI is severely context limited
+1
+u/Xybercrime avatar
+Xybercrime
+•
+1d ago
+
+All I heard was “DAN” the moment you said finances…
+1
+

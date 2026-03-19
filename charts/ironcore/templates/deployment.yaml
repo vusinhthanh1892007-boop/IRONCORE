@@ -1,0 +1,166 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ironcore.fullname" . }}
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ironcore.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        # Trigger rolling restart on config/secret changes
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "ironcore.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ironcore.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: ironcore
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - uvicorn
+            - ironcore.api.server:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "8000"
+            - --workers
+            - "1"
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            # ── Edition ────────────────────────────────────────────────
+            - name: IRONCORE_EDITION
+              value: {{ .Values.edition.value | quote }}
+            # ── Air-Gap ────────────────────────────────────────────────
+            {{- if .Values.airgap.enabled }}
+            - name: IRONCORE_AIRGAP_ENABLED
+              value: "true"
+            - name: IRONCORE_VLLM_BASE_URL
+              value: {{ .Values.airgap.vllmBaseUrl | quote }}
+            {{- end }}
+            # ── SIEM ───────────────────────────────────────────────────
+            {{- if .Values.siem.enabled }}
+            - name: IRONCORE_SIEM_TRANSPORTS
+              value: {{ .Values.siem.transports | quote }}
+            {{- if .Values.siem.splunkHecUrl }}
+            - name: IRONCORE_SPLUNK_HEC_URL
+              value: {{ .Values.siem.splunkHecUrl | quote }}
+            {{- end }}
+            - name: IRONCORE_SPLUNK_INDEX
+              value: {{ .Values.siem.splunkIndex | quote }}
+            - name: IRONCORE_SPLUNK_HEC_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.siem.splunkHecToken.secretName }}
+                  key: {{ .Values.siem.splunkHecToken.key }}
+                  optional: true
+            - name: IRONCORE_SIEM_BUFFER_SIZE
+              value: {{ .Values.siem.bufferSize | quote }}
+            - name: IRONCORE_SIEM_FLUSH_INTERVAL
+              value: {{ .Values.siem.flushInterval | quote }}
+            {{- end }}
+            # ── SSO ────────────────────────────────────────────────────
+            {{- if .Values.sso.enabled }}
+            - name: IRONCORE_SSO_PROVIDER
+              value: {{ .Values.sso.provider | quote }}
+            - name: IRONCORE_SSO_CLIENT_ID
+              value: {{ .Values.sso.clientId | quote }}
+            - name: IRONCORE_SSO_TENANT_ID
+              value: {{ .Values.sso.tenantId | quote }}
+            - name: IRONCORE_SSO_REDIRECT_URI
+              value: {{ .Values.sso.redirectUri | quote }}
+            - name: IRONCORE_SSO_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.sso.clientSecret.secretName }}
+                  key: {{ .Values.sso.clientSecret.key }}
+                  optional: true
+            {{- end }}
+            # ── LLM API Keys ───────────────────────────────────────────
+            {{- if .Values.llm.simpleModel }}
+            - name: IRONCORE_LLM_SIMPLE_MODEL
+              value: {{ .Values.llm.simpleModel | quote }}
+            {{- end }}
+            {{- if .Values.llm.complexModel }}
+            - name: IRONCORE_LLM_COMPLEX_MODEL
+              value: {{ .Values.llm.complexModel | quote }}
+            {{- end }}
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.llm.apiKeysSecret }}
+                  key: anthropic-api-key
+                  optional: true
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.llm.apiKeysSecret }}
+                  key: openai-api-key
+                  optional: true
+            # ── Redis ──────────────────────────────────────────────────
+            - name: REDIS_URL
+              value: "redis://{{ include "ironcore.fullname" . }}-redis-master:6379/0"
+          envFrom:
+            - configMapRef:
+                name: {{ include "ironcore.fullname" . }}-config
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: ironcore-data
+              mountPath: /app/data
+            - name: ironcore-logs
+              mountPath: /app/logs
+      volumes:
+        - name: ironcore-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "ironcore.fullname" . }}-data
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: ironcore-logs
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

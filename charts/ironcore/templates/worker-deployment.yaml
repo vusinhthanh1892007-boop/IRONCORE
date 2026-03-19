@@ -1,0 +1,86 @@
+{{- if .Values.worker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ironcore.workerFullname" . }}
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  {{- if not .Values.keda.enabled }}
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ironcore.workerSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ironcore.workerSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ironcore.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: ironcore-worker
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - python
+            - -m
+            - deployment.worker
+          env:
+            - name: IRONCORE_EDITION
+              value: {{ .Values.edition.value | quote }}
+            {{- if .Values.worker.batchMode }}
+            - name: IRONCORE_WORKER_BATCH_MODE
+              value: "true"
+            - name: IRONCORE_WORKER_MAX_ITERATIONS
+              value: {{ .Values.worker.maxIterations | quote }}
+            {{- end }}
+            {{- if .Values.worker.queueUrl }}
+            - name: IRONCORE_WORKER_QUEUE_URL
+              value: {{ .Values.worker.queueUrl | quote }}
+            {{- end }}
+            - name: IRONCORE_WORKER_HEARTBEAT_SECONDS
+              value: {{ .Values.worker.heartbeatSeconds | quote }}
+            {{- if .Values.airgap.enabled }}
+            - name: IRONCORE_AIRGAP_ENABLED
+              value: "true"
+            - name: IRONCORE_VLLM_BASE_URL
+              value: {{ .Values.airgap.vllmBaseUrl | quote }}
+            {{- end }}
+            - name: REDIS_URL
+              value: "redis://{{ include "ironcore.fullname" . }}-redis-master:6379/0"
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.llm.apiKeysSecret }}
+                  key: anthropic-api-key
+                  optional: true
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.llm.apiKeysSecret }}
+                  key: openai-api-key
+                  optional: true
+          envFrom:
+            - configMapRef:
+                name: {{ include "ironcore.fullname" . }}-config
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

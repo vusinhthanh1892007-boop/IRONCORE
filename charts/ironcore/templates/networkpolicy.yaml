@@ -1,0 +1,57 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- if .Values.networkPolicy.blockEgress }}
+# ── Egress Lockdown (Air-Gapped Deployment) ─────────────────────────────────
+# Deny all external egress; allow only intra-cluster traffic and DNS resolution.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "ironcore.fullname" . }}-egress-block
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "ironcore.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Egress
+  egress:
+    # Allow all intra-cluster (any namespace) traffic
+    - to:
+        - namespaceSelector: {}
+    # Allow DNS resolution on UDP and TCP port 53
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}
+---
+# ── Ingress Policy — restrict who can reach the API ─────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "ironcore.fullname" . }}-ingress
+  labels:
+    {{- include "ironcore.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "ironcore.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow ingress controller to reach the API
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8000
+    # Allow intra-namespace traffic (e.g. worker → API)
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8000
+{{- end }}

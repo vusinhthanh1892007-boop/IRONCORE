@@ -1,0 +1,25 @@
+apiVersion: v2
+name: ironcore
+description: IronCore Enterprise AI Platform — Autonomous AI agents for banks & regulated enterprises
+type: application
+version: 2.0.0
+appVersion: "2.0.0"
+keywords:
+  - ai
+  - llm
+  - enterprise
+  - banking
+  - autonomous-agents
+  - airgap
+maintainers:
+  - name: IronCore Team
+    email: enterprise@ironcore.dev
+home: https://ironcore.dev
+icon: https://ironcore.dev/logo.png
+annotations:
+  artifacthub.io/category: ai-machine-learning
+dependencies:
+  - name: redis
+    version: ">=18.0.0"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

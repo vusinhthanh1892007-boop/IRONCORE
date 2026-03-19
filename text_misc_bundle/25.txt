@@ -1,0 +1,300 @@
+
+r/openclaw
+•
+16d ago
+Odd-Aside456
+OpenClaw is a framework and not an end product.
+
+Anywhere OpenClaw is talked about, you'll hear it is not recommended for the non-technical due to the security risks. I'll take it a step further and say it's not recommended for the non-technical due to the need to set OpenClaw up well beyond the initial setup.
+
+Out of the box, the HEARTBEAT . md file really isn't set up for much autonomy, CRON jobs often have issues, and much of the experience we all expect based on what we've seen on YouTube and such can't be achieved without quite a bit of fine-tuning.
+
+I've found that my agent can make most of the changes for me, but it hasn't been something I could achieve without having some background knowledge on the technical side, how LLMs work, and what the purpose of OpenClaw's various documents and directories are for.
+
+I've seen a lot of posts lately of people complaining about their agent not working in the way they expect, or confused as to why it's not autonomously working for them out of the box. I guess this post is for those people just to say that it WON'T do that out of the box without a fair amount of fine tuning beyond the initial setup.
+
+IntroductionSouth513
+•
+16d ago
+
+yup tho actually the agent can pretty much self configure on its own but only if u ask it to. which begs the question - why do people not just TRY asking their agent to do what they want it to, in lay man terms, they may be surprised with what they get! same issue I always notice the issue w using LLMs in general - why the hesitation to ask and clarify ?
+5
+u/Odd-Aside456 avatar
+Odd-Aside456
+OP •
+16d ago
+
+How well the agent can set themselves up (and even understand the framework) is dependent on the LLM model as well.
+2
+u/Longjumping-Bat202 avatar
+Longjumping-Bat202
+•
+15d ago
+
+You also have to be able to fix any issues without the agent, because even opus will break the config sometimes.
+1
+u/AutoModerator avatar
+AutoModerator
+MOD •
+16d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+codeninja
+•
+16d ago
+
+I think it's funny how people are taking a personal assistant and expecting it to become a multibillion dollar multinational development agency overnight.
+
+I've been using it heavily, and i've had a hell of a time getting some simple tasks done. And i've been blown away by some complex tasks that it's just handled.
+
+I think you're right without a pretty solid technical background, you're gonna struggle with this early on. But it'll get better.
+
+Or the next framework will blow everything away.
+3
+u/Odd-Aside456 avatar
+Odd-Aside456
+OP •
+16d ago
+
+Crazy how exponential the progress has been with all things AI! Can't wait to see what OpenClaw 2.0 or the next big competitor are like.
+2
+u/S4L7Y avatar
+S4L7Y
+•
+15d ago
+
+Pretty much been my experience. I've been blown away with some things it does, and eyeroll at some simple things it can't do. I do think it's just the beginning.
+
+OpenClaw already proved that something like it should exist, and now others will either try to improve OpenClaw, or make their own competing products.
+1
+u/InitialJelly7380 avatar
+InitialJelly7380
+•
+15d ago
+
+openclaw is not just a static tool、agent like claude code，it is a bot，a alive bot。
+
+you can teach it，grow it，study with it，think it as a mate or friend to you。
+
+get your hands dirty to it，and you will find it very amazing。
+0
+bulutarkan
+•
+15d ago
+
+my bot find out that cronjob fails because cron system is sleeping when the terminal is idle. so it changes to path to Node.js, i think the server level, which is always up, it started to work correctly for days after that fine tuning.
+1
+u/pxr555 avatar
+pxr555
+•
+15d ago
+
+It's basically an experiment, vibed into existence by one guy over three months and he didn't even read most of the code. It's not a "product" at all.
+1
+
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+8d ago
+PrimeAcrobatics
+If you had the budget, would you run OpenClaw fully local or use APIs
+
+I’m trying to decide the best setup for a really smooth OpenClaw experience.
+
+I already have a Mac mini, and I was thinking of upgrading to a Mac Studio anyway. Now I’ll have to upgrade my ram a bit but If you had the money to spend, would you go fully local for models or still use APIs for some parts?
+
+What I’m curious about:
+
+•	if I had a 128gb ram Mac Studio, how much shittier would that be than using something like kimi
+
+Would love to hear what people are doing and what you would choose if you were starting from scratch.
+
+TFYellowWW
+•
+8d ago
+
+If I had budget I’d get a small mac mini and jusr use opus or top tier got. That’s it. Unless you are really worried about privacy. And if that's the case then just setup an Amazon Bedrock setup and get it done that way.
+6
+u/SeanDreamHsu avatar
+SeanDreamHsu
+•
+7d ago
+
+I agree with that; using a cloud API is easier than spending time setting up a local one.
+1
+bigh-aus
+•
+7d ago
+
+kimi at home would be the minimum IMO. So only the 512gb mac studio.
+4
+u/AI_Negative_Nancy avatar
+AI_Negative_Nancy
+•
+7d ago
+
+You need 2 wired up through thunderbolt five. That’s about $25,000 worth of Mac Studios. Kimmy is a one T model you need at least one terabyte of RAM. One macstudio won’t cut it.
+5
+bigh-aus
+•
+7d ago
+
+One will run it at q3 - xcreate on YouTube did that but yes two for q4 or q8
+2
+u/AI_Negative_Nancy avatar
+AI_Negative_Nancy
+•
+7d ago
+
+Ohhhh I didn’t know that!! Damn I gotta watch a video lol i’m sure even q3 would be pretty amazing wow
+3
+bigh-aus
+•
+7d ago
+
+And you could scale up. It’s still a huge jump up in cost to go to an Nvidia solution that could run it
+2
+u/rawneng avatar
+rawneng
+•
+7d ago
+
+I have an AI/LLM built machine with a 5090, that I use solely for local stuff. I tried to get OpenClaw working fine with local models but it was wildly hallucinating. I’d send a simple “hello” and it would send me back info on research papers I never asked about.
+
+Maybe I will try again.
+4
+u/phillynick avatar
+phillynick
+•
+7d ago
+
+Same. It was useless. Maybe 128GB would be better? However why spend 3-4k for a Mac Studio when you can spend $20-200 a month with ChatGPT and get a much bigger model.
+2
+u/rawneng avatar
+rawneng
+•
+7d ago
+
+My AI/LLM box is about $10k. I have a donked out MacBook Pro, but I wanted to offload stuff to the 5090 rather than keep the MBP screaming. I built this before the OpenClaw movement, so I’m making some changes to how I approach things.
+
+For example, I use Claude Code Max ($200/month), and just started getting toward 75% utilization per week. I’d love to increase the amount of tokens and output, but not everything should be cloud based. For example, I want to process sensitive client data, and build solutions that require make cloud LLMs not always the easiest hurdle to get approval on.
+
+:: shrug ::
+2
+u/PrimeAcrobatics avatar
+PrimeAcrobatics
+OP •
+7d ago
+
+That’s honestly so disappointing haha
+1
+u/rawneng avatar
+rawneng
+•
+7d ago
+
+I’ll spin something up tonight and see how it does. This was back when I first got started with OpenClaw, so maybe…maybe it’ll be a different experience?!
+2
+u/PrimeAcrobatics avatar
+PrimeAcrobatics
+OP •
+7d ago
+
+Please keep us updated if you do! I’d love to hear if you have a good experience with it now
+1
+u/AI_Negative_Nancy avatar
+AI_Negative_Nancy
+•
+7d ago
+
+You’re asking the right questions and this is gonna be a huge topic in the future. Like why do we have to do API calls for simple things like back up in heartbeat? A small 3B model can handle that no problem. Or maybe a 7B model. Now what do we really need llm for? If we route the reasoning and use a local model for mundane tasks that should lower API calls. But why stop there? Why not fine Tune a model and make it the execution layer? Guarantee you that’s what the next move. But why stop there? Do you really need a one terabyte model? What does the average person need? I think the industry is gonna fall into a local model execution layer with higher reasoning API calls. And some people with a Mac studio that you were talking about will probably end up with a probably 70b model that can do everything for the most part and escalate to the big LLM’s if necessary.
+
+That keeps the API calls down to the bare minimum with not that much investment. Because the next step would be a max studio wired to another Mac studio with thunderbolt five both of them 512 GB that’s like $25,000 of equipment for a local Kimmy 1 trillion parameter model. And this is just our local model models. What about enterprise? How big do we need these things? The local models are gonna get more efficient and we’re gonna be using those a lot more. So to answer your question if I had unlimited money, I would do the local Kimmy model the two max Studios 512 GB if I had the budget that you described the one M4 Mac with 128 GB I would do a 70 B model and see how that goes.
+4
+u/AutoModerator avatar
+AutoModerator
+MOD •
+7d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/PrimeAcrobatics avatar
+PrimeAcrobatics
+OP •
+7d ago
+
+Thanks yall! Seems like the general consensus is that anything local is just going to suck and my moneys better spent calling the best models. That makes sense to me tbh!
+3
+Signal_Ad657
+•
+8d ago
+
+It’ll be much slower and lower bandwidth on a studio. Beyond that? You can do a lot with 90-95GB VRAM you’ll just have to get specific about the type of work you want it to do etc.
+2
+User1542x
+•
+8d ago
+
+Best just use OpenRouter AI, plenty of of free models for vast majority of capabilities… even with local llm, you still need internet
+2
+u/bodobeers2 avatar
+bodobeers2
+•
+7d ago
+
+If money is no option, i'd hammer the enterprise grade LLM models and keep my openclaw just running lean and clean on decent hardware. I don't think any local model on any single computer would have the capabilities of what these awesome models are dishing out.
+2
+Important_Quote_1180
+•
+7d ago
+
+Since you didn’t mention security needs, just stick with Mac mini 4 and pay for a Claude pro max account. Happy to discuss more in dm
+2
+u/AI_Negative_Nancy avatar
+AI_Negative_Nancy
+•
+7d ago
+
+I want to say that I will also if I had infinite money trained the model to all my data, like Reddit, Facebook, text messages, all of it. And I would also make body cam videos and a bunch of other content, and put it as structured data and continue training the model. That would.reweight model and it would know me through and through like nothing else.
+
+Now we’re talking truly personalized AI assistance that live locally. That’s the future, my friend.
+2
+thebadslime
+•
+7d ago
+
+step 3.4 and minimac are ok as agents and small enough to run on 256gb
+1
+NewRedditor23
+•
+7d ago
+
+It's much more expensive to do fully local model at a quality in the ball park near the frontier labs. These local solutions at 30-50 tokens / second are going to feel incredibly slow for OpenClaw which requires a ton of loops back and forth to complete tasks.
+
+Right now the sweet spot is either using your $20 ChatGPT plan, or buy a 2nd plan exclusive for OpenClaw. With context and memory tweaks, you can hammer at it pretty hard w/out hitting your limits, for now. Might change after April 1st-- I think Codex was given double the normal amount of usage due to the Codex app launch.
+
+My backup model once usage maxes out (which it hasn't. yet) is openrouter auto router model, which will auto send the task to a model suitable for the task-- so we don't break the bank.
+1
+u/terAREya avatar
+terAREya
+•
+7d ago
+
+Maybe 4 Mac studios with 512gb each would be nice 
+1
+

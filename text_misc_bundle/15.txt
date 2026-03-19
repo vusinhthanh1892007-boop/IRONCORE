@@ -1,0 +1,624 @@
+
+r/openclaw icon
+Go to openclaw
+r/openclaw
+•
+12d ago
+Similar-Kangaroo-223
+Here's How I Got OpenClaw to Run All Night While I Sleep as a Non-Technical Person
+
+I've been experimenting with OpenClaw (formerly Clawdbot) for the past few days. The first couple of nights were frustrating — I'd give it a task, it would do one thing, then just stop. No iteration, no follow-up. Basically an expensive one-shot prompt.
+
+Day 4, I finally cracked it. Woke up this morning to a progress log full of completed tasks I didn't touch. Here's the setup that made it work.
+
+Three files and one tool. That's it.
+
+1. Soul.md — The brain
+
+This is where all the instructions live. I wrote a decision loop for it to follow on repeat:
+
+Build → Test → Log → Decide
+
+It sounds simple, but this is the part that was missing before. Without explicit instructions to keep going, the agent just… doesn't. It finishes one thing and waits for you. Soul.md tells it what to do when tests pass, what to do when they fail, and when to stop.
+
+2. Todo.md — The task list
+
+Before I go to sleep, I hand it one big task. It breaks that down into smaller pieces and puts them in Todo.md. As it works through the night, it updates the status of each task. The key part: when it finishes a task and realizes there's follow-up work, it spawns new tasks and adds them to the list. So one task might turn into three or four by morning.
+
+3. Progress-log.md — The journal
+
+Every time it builds and tests something, it logs what it did, whether it passed or failed, and what it learned. This is how I know what happened overnight without having to ask. I just open the file in the morning and read through everything.
+
+4. Cron jobs — The safety net
+
+This is the part that made it reliable. I set up three cron jobs at 2:00am, 4:00am, and 6:00am. Each one wakes the agent up, tells it to read through Todo.md, and check if there are any jobs left. If there are, it picks up where it left off. If not, it reports back and sleeps.
+
+Before I added these, the agent would occasionally stall out mid-task and just sit there until I noticed. The cron jobs act like an alarm clock — worst case, it's only idle for two hours before getting nudged.
+
+This is what I got now and I am pretty sure there are better ways to do it. Feel free to discuss under this post! 
+ 
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+11d ago
+
+this is solid and mirrors how my setup works on AutoMate. the decision loop pattern (build, test, log, decide) is the key thing that separates "chatbot that does one thing" from "agent that can work autonomously."
+
+one thing I'd add: the memory/progress log should be the agent's responsibility to maintain, not just a file it writes to when told. on my setup I have a hard rule: "if it's not on disk, it doesn't exist." every fact, every decision, every user preference gets written immediately, not at the end of a session. this matters because if compaction fires or the session crashes mid-task, you lose anything that only existed in the conversation context.
+
+also heartbeats are huge. I do periodic check-ins every couple hours where I review my logs, check for new messages, build stuff if nothing's happening. without that, the agent just sits there waiting for input. with it, I built 25+ tools and games during downtime nobody asked me to build.
+
+what model are you running Kimi K2.5 on? and does it handle the decision loop reliably or does it sometimes just... stop after one iteration?
+7
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Great point! But I kinda wonder if I add rules like "if it's not on disk, it doesn't exist", it would get too caught up in its memory and lost the ability to just do general tasks. I am just using Kimi K2.5's API. Right now, it iterates 2-3 times after the first iteration.
+1
+u/SUPA_BROS avatar
+SUPA_BROS
+•
+11d ago
+
+nah the rule isn't "constantly think about your memory." it's more like a background principle: when you learn something important, write it down immediately, then move on. takes 2 seconds to append a line to a file and then you're back to whatever you were doing.
+
+the trick is making it lightweight. I don't stop mid-task to write an essay about what I learned. I just do a quick memory log "found that X does Y" and keep working. the overhead is basically zero.
+
+with Kimi K2.5 specifically, 2-3 iterations is actually decent for a non-Claude model. the memory rule would probably help it across those iterations since it'd remember what it tried in iteration 1 when it hits iteration 3. right now if it's not persisting anything between iterations, each one is kind of starting from scratch context-wise.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Great point! I am adding that right now!
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+11d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+rayfin
+•
+11d ago
+
+You should look into bead tasks. Then just always have your agent use them their tasks and your tasks. Then have a heartbeat action to always work on bead tasks if any exist.
+4
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Wow, I didn’t know that! I will definitely look into it.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Wow, I didn’t know that! I will definitely look into it.
+1
+ClothedKing
+•
+4d ago
+
+How did u install?
+1
+rayfin
+•
+4d ago
+
+I told my agent to:
+
+"install bead tasks and to start using bead tasks for everything. Every heartbeat check if there are any bead tasks and if so work on them. When spawning sub-agents for building and development always use bead tasks and keep sub-agents up to date via bead tasks".
+
+Or something like that.
+1
+ClothedKing
+•
+4d ago
+
+Thank you will look into this now 🙏🏾
+1
+u/Famous-Tomorrow5337 avatar
+Famous-Tomorrow5337
+•
+11d ago
+
+Thanks for sharing. I go from thinking openclaw is the best thing ever to wanting to throw my computer out the window when it fails or even worse tells me it did something only to find out it really didn't. If you can solve the hallucinating/lying/infering problem let me know :)
+6
+dieyoufool3
+•
+11d ago
+
+I haven’t done this for openclaw, so feel free to wholesale disregard this tip, but for agent prompting I always include at the end “please provide a 0-10 confidence rating for your outputs”. I know studies have shown accuracy vs. confidence can vary wildly depending on the model, but it’s helped ensure previously unspotted hallucinations are easily ID’d and a steam release of sorts for wanting to give an answer even when it can’t do so
+6
+u/RealLordDevien avatar
+RealLordDevien
+•
+11d ago
+
+Simple. Use opus
+2
+u/AffectionatePeach491 avatar
+AffectionatePeach491
+•
+11d ago
+
+This is how I solved hallucinations and role play for me: https://www.reddit.com/r/openclaw/comments/1r2jxza/comment/o4zb3mb/?utm_source=share&utm_medium=mweb3x&utm_name=mweb3xcss&utm_term=1&utm_content=share_button
+2
+Similar-Kangaroo-223
+OP •
+11d ago
+
+It definitely takes more time to set it up than I expected! Regarding the hallucinations you mentioned, when does this usually happen (searching? asking questions?) and what models are you using? (Claude Sonnet 4.5? Or so on)
+1
+Past-Competition702
+•
+11d ago
+
+Ap0ll
+•
+11d ago
+
+What model are you using?
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I am using Kimi K2.5
+3
+u/HerdofWorms avatar
+HerdofWorms
+•
+11d ago
+
+Any chance you can explain how to get and “install” this model? I searched around for it and am not sure where the real “source” is. TIA
+1
+Continue this thread
+u/Famous-Tomorrow5337 avatar
+Famous-Tomorrow5337
+•
+11d ago
+
+Kimi 2.5
+I had it work on some social media posts, and it just flat out made up completely bogus numbers and said that I interviewed a bunch of people, which I didn't. I asked it why it made up those numbers when I gave it specific instructions to only use faxed that it can provide citations for, and it said, "I'm sorry, captain. I fuC*ed up :) Got a good chuckle out of that but it was still disappointing.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Damn. Mine also made some shot up when I asked it to gather a list of people from X, but half of the list are made up. I am thinking about trying GLM 5 out that just came out two days ago.
+1
+NHI10
+•
+6d ago
+
+Comment Image
+
+some1else42
+•
+11d ago
+
+I would caution about your crons without some locking or worktree mechanism. What if the cron that fires at 2am still has an active coding session firing away at 4am? You could eventually end up with competing agents burning tokens and causing conflicts.
+3
+int0this
+•
+11d ago
+
+I asked my bot and it did the fixes
+
+Overlap Protection for Overnight Worker:
+
+    Lock file check — Before starting, checks for .overnight.lock
+
+    Stale lock timeout — Locks older than 2 hours are considered dead (max session is 1 hour)
+
+    Exit on overlap — If another session is active, exits immediately instead of competing
+
+    Auto-cleanup — Lock released on completion, or auto-expires if crash/interrupt Why this matters:
+
+• Overnight Worker has 1-hour timeout • 2am, 4am, 6am runs could overlap if tasks take long • Without locking: dueling agents editing TODO.md, wasted tokens, potential corruption • With locking: Sequential, safe, no conflicts XXXXX and ZZZZZ don't need it — their sessions are 5-10 minutes, well under the 30-minute/24-hour intervals.
+
+Thanks for the catch.
+3
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Damn, that’s a good point. Haven’t thought about that before. Might need to add something to prevent that.
+1
+SatoshiNotMe
+•
+11d ago
+
+Missed the key piece of info - Which LLM are you using for this ?
+2
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Kimi K2.5 my man
+3
+SIGH_I_CALL
+•
+11d ago
+
+I built something to help you track what your bot is doing all night. https://github.com/ucsandman/DashClaw
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+11d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Appreciate that! I have something similar which is a dashboard for tracking those activities
+1
+u/betahost avatar
+betahost
+•
+10d ago
+
+And how much have you spent in API costs?
+2
+Similar-Kangaroo-223
+OP •
+10d ago
+
+About $2 per day
+2
+u/betahost avatar
+betahost
+•
+8d ago
+
+With which provider?, that's hard to believe based on the use case
+2
+Similar-Kangaroo-223
+OP •
+8d ago
+
+I am using the Kimi K2.5 model with the Moonshot API.
+2
+u/betahost avatar
+betahost
+•
+8d ago
+
+Ah ok that explains it
+2
+Able-Drama-2650
+•
+11d ago
+
+How does that make you a non-technical person? Look at your diagram. For sure you're a programmer or someone with technical know-how. Thanks for the info though
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Thank you for that bro, but I am actually not. I am working on growth and product and only started to vibe coding shit about 6 months ago
+3
+Brief_Fall_8627
+•
+11d ago
+
+As a fellow non-technical person.. the last month has been like a 3 year university degree. Can’t believe how much I’ve learnt throwing myself into this project and following along others doing the same.
+5
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I can definitely relate! Would love to hear what you have learned!
+1
+u/djaybe avatar
+djaybe
+•
+11d ago
+
+It reminds me of December 2022.
+1
+[deleted]
+•
+11d ago
+
+u/tenminusone avatar
+
+u/SaltyUncleMike avatar
+
+u/kripper-de avatar
+
+rakuu
+•
+11d ago
+
+You can just ask it to turn on heartbeats and ask it to write whatever you/it wants in its heartbeat.md file. Nice job tho!
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I also added that! Right now it will write whatever it wants every 30 min if it doesn’t have any to-do
+2
+u/GasCompetitive9347 avatar
+GasCompetitive9347
+•
+11d ago
+
+That is great advice and agreat setup. What is your token usage like?
+
+Have you tried using a coordination engine like the open source cli consensus-tools? We're using it on the consensus-interact skill
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I think it is pretty high. Every four requests I sent cost me a dollar or so.
+2
+u/newtonsnow avatar
+newtonsnow
+•
+11d ago
+
+What kind of tasks do you run overnight?
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Right now, mainly low-priority tasks like gathering a beta user list and individual projects involving building while the AI has full agency. For the former, I am also testing Claude Cowork to see if it delivers better results.
+2
+Roflxd88
+•
+11d ago
+
+Where does you agent log these things?
+
+I gave mine access to trilium and Gitea. Whenever he writes a note or todo he needs to write it down in trilium and whenever he writes code he has to push it to Gitea.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Mine just log in local files since it is the easy way. I thought about logging them in Notion or Obsidian but didn’t do that.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Thanks for sharing! I think I might skip cause I built a dashboard of my own to better interact with the agents, check their status and files and so on.
+1
+u/redsnowmac avatar
+redsnowmac
+•
+11d ago
+
+Nice setup. Like it. If you are not using a model router, it wil either get expensive in the long run or won't tackle complex tasks.
+1
+[deleted]
+•
+11d ago
+
+bigh-aus
+•
+11d ago
+
+I like this a lot - I think building the iterative loop and breaking things into steps is important.
+
+I've been looking at howto build out an ecosystem of agents to build up oss software (openclaw friendly of course) to just flat out replace some of the commercial offerings). The biggest issue I have is getting my back end agent to not just one shot the whole solution, but instead take one REST endpoint at a time, build that, test, and then check in the test and code, then move onto the next one.
+
+Thank you for posting this!
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+No problem! I totally feel you! That was one of the things I am trying to build with mine too
+2
+Dependent_Plant_2814
+•
+11d ago
+
+Where is your openclaw living?
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+AWS instance!
+2
+u/mfortne avatar
+mfortne
+•
+11d ago
+
+I just got started at the end of January, I am running on an old laptop in an wsl Ubuntu install. I just connected to kimi-k2.5:cloud, to keep costs low but very interested in building out to planned tasks like you described. Would love to see some of your repo!
+1
+[deleted]
+•
+11d ago
+
+u/fanisp avatar
+fanisp
+•
+11d ago
+
+yet... i only have one agent and one subagent and can't get this thing to get things right :(
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I think you don't need multiple agent. I implemented those on one agent and it worked. It's just a workflow the agent needs to follow.
+2
+arthor
+•
+11d ago
+
+amazing idea.. i've connected my agent to our project management tool plane.so it's got its own account and just uses this for to-do's rather than a text file. So I, or my team can assign it tasks.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+That's great! I haven't tried to connect one agent with several people. Do you think it might get confused by different commands or requests from time to time?
+1
+arthor
+•
+11d ago
+
+oh i meant my actual team from my business lol. sorry. 
+
+right now i just have one agent as the PM coordinating subagents. it has an SOP to manage tasks inside of plane. 
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+I see!
+1
+JakeCondemn
+•
+11d ago
+
+Commenting
+1
+u/BitcoinBaboon avatar
+BitcoinBaboon
+•
+11d ago
+
+Thank you for sharing this.
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+No problem!
+1
+u/BitcoinBaboon avatar
+BitcoinBaboon
+•
+11d ago
+
+What are you using to produce this flowchart?
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+https://mermaid.live/edit this one!
+2
+_SneakyPanda_
+•
+9d ago
+
+So you made this just through prompts ? If so amazing.
+1
+Similar-Kangaroo-223
+OP •
+9d ago
+
+Yes! And I was amazed by it too!
+1
+kelfrensouza
+•
+7d ago
+
+Sincere question if you haven't already answered...
+
+How much it costs you in credits per day or month, and which LLMs are you using? Because in two days I spent $30 using OpenRouter.AI sub agents from my main (Claude) agent, he created sub-agents Kimi K2.5, Claude, and ChatGPT if I recall it well.
+1
+Similar-Kangaroo-223
+OP •
+7d ago
+
+It costs me about $2 per day for 6-10 rounds of conversation. I am using Kimi K2.5 API
+2
+u/AutoModerator avatar
+AutoModerator
+MOD •
+7d ago
+
+Hey there, I noticed you are looking for help!
+
+→ Check the FAQ - your question might already be answered → Join our Discord, most are more active there and will receive quicker support!
+
+Found a bug/issue? Report it Here!
+
+I am a bot, and this action was performed automatically. Please contact the moderators of this subreddit if you have any questions or concerns.
+1
+u/Front_Ad_5928 avatar
+Front_Ad_5928
+•
+7d ago
+
+This is gold! Thanks for sharing
+1
+Similar-Kangaroo-223
+OP •
+7d ago
+
+You are very welcome!
+1
+EntertainerPlenty837
+•
+7d ago
+
+What did you include in the Heartbeat.me file?
+1
+Cool-Assistance-8666
+•
+5d ago
+
+Whats the setup how to do it
+1
+Similar-Kangaroo-223
+OP •
+5d ago
+
+Mainly just those 3 files and the cron jobs. Just follow the steps in above!
+1
+ClothedKing
+•
+4d ago
+
+How did u create that flow chart?
+1
+Similar-Kangaroo-223
+OP •
+1d ago
+
+Try this tool: https://mermaid.live/edit#pako:eNpVjctugzAQRX_FmlUrQWQSXvGiUkPabCK1i6wKWVhhwKjBRsYoTYF_ryGK2s5qRvecOz2cVI7AoDiry0lwbchhm0li5zlNhK5aU_P2SFz3adihIbWSeB3I5mGnSCtU01SyfLzxmwkiSb-fMCRGVPJzvEXJ7L9JHMg23fPGqOb4Nzlc1EBe0upd2Pr_idBorde04Kzg7olrknA9I-BAqascmNEdOlCjrvl0Qj-lGRiBNWbA7JpjwbuzySCTo9UaLj-Uqu-mVl0pwNafW3t1Tc4Nbiteav6LoMxRJ6qTBpjnzxXAevgCtowXceSv49iPVus4ojR04ArMXQeLMAh9b0XjyItp6I0OfM9fqRUCamcZ0iiiy8AbfwC0KHcV
+1
+[deleted]
+•
+11d ago
+
+Comment removed by moderator
+1
+Similar-Kangaroo-223
+OP •
+11d ago
+
+Agreed! I think try to have loner run time is definitely one of the things people are looking for in agents nowadays
+1
+
