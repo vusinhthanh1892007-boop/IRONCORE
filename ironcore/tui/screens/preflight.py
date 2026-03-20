@@ -11,22 +11,22 @@ class PreflightScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):
-            yield Label(i18n.t("preflight_title", "Welcome & Preflight Check"), id="step-title")
-            yield Markdown(
+            yield Label(i18n.t("Welcome & Preflight Check"), id="step-title")
+            yield Markdown(i18n.t(
                 "**IronCore Setup Wizard** will configure your local AI agent runtime.\n\n"
                 "  * Model providers & API keys\n"
                 "  * Gateway service & Memory policy\n"
                 "  * Agent persona & Hooks\n\n"
                 "_Estimated time: 3-5 minutes_"
-            )
+            ))
             
             with Vertical(classes="status-box"):
                 py_ver = f"{sys.version_info.major}.{sys.version_info.minor}"
-                yield Label(f"🖥  OS: {platform.system()}")
-                yield Label(f"🐍 Python: {py_ver} " + (" [green]✓[/]" if sys.version_info >= (3,10) else "[red]✗[/]"))
+                yield Label(f"{i18n.t('🖥  OS:')} {platform.system()}")
+                yield Label(f"{i18n.t('🐍 Python:')} {py_ver} " + (" [green]✓[/]" if sys.version_info >= (3,10) else "[red]✗[/]"))
                 
                 net_ok = self.check_network()
-                yield Label("🌐 Network: " + ("[green]Online ✓[/]" if net_ok else "[red]Offline ✗[/]"))
+                yield Label(f"{i18n.t('🌐 Network:')} " + (i18n.t("[green]Online ✓[/]") if net_ok else i18n.t("[red]Offline ✗[/]")))
             
             yield from self.compose_navigation()
         yield Footer()
