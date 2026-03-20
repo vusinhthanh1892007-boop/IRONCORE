@@ -1,0 +1,14 @@
+{
+    "lang_title": "Scegli Lingua",
+    "lang_search_placeholder": "Cerca...",
+    "lang_no_results": "Nessun risultato.",
+    "btn_continue": "Continua",
+    "btn_quit": "Esci",
+    "preflight_title": "Controllo Sistema",
+    "preflight_body": "La configurazione di **IronCore** imposterà il tuo AI agent.",
+    "preflight_os_label": "Sistema Operativo",
+    "preflight_python_label": "Python",
+    "preflight_network_label": "Rete",
+    "preflight_network_online": "[green]Online ✓[/]",
+    "preflight_network_offline": "[red]Offline ✗[/]"
+}

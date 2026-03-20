@@ -83,23 +83,35 @@ class ModelPickerScreen(BaseWizardScreen):
 
     def _fetch_models_bg(self) -> None:
         models = []
-        try:
-            req = urllib.request.Request("https://openrouter.ai/api/v1/models", headers={"User-Agent": "IronCore TUI"})
-            with urllib.request.urlopen(req, timeout=10) as response:
-                data = json.loads(response.read().decode())
-                models = data.get("data", [])
-        except Exception:
-            models = [
-                {"id": "gpt-4o", "name": "GPT-4o"},
-                {"id": "claude-4.6-sonnet", "name": "Claude 4.6 Sonnet"},
-                {"id": "deepseek/deepseek-r1", "name": "DeepSeek R1"}
-            ]
+        providers = self.app.cfg.get("providers", [])
+        
+        if "ollama" in providers:
+            try:
+                # Fetch local tags safely from reconstructed Core module
+                from ironcore.core.ollama_client import OllamaClient
+                client = OllamaClient()
+                if client.is_available():
+                    for model_name in client.list_models():
+                        models.append({"id": model_name, "name": model_name + " (Local)", "context_length": "N/A"})
+            except Exception: pass
+
+        if not models:
+            try:
+                req = urllib.request.Request("https://openrouter.ai/api/v1/models", headers={"User-Agent": "IronCore TUI"})
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    data = json.loads(response.read().decode())
+                    models = data.get("data", [])
+            except Exception:
+                models = [
+                    {"id": "gpt-4o", "name": "GPT-4o"},
+                    {"id": "claude-4.6-sonnet", "name": "Claude 4.6 Sonnet"},
+                    {"id": "deepseek/deepseek-r1", "name": "DeepSeek R1"}
+                ]
         
         self.all_models = models
         try:
             self.app.call_from_thread(self._update_list, "")
-        except Exception:
-            pass # Ignore if app context is dead
+        except Exception: pass
 
     def _update_list(self, filter_text: str) -> None:
         try:

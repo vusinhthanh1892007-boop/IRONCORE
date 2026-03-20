@@ -1,0 +1,14 @@
+{
+    "lang_title": "Elegir Idioma",
+    "lang_search_placeholder": "Buscar...",
+    "lang_no_results": "Sin resultados.",
+    "btn_continue": "Continuar",
+    "btn_quit": "Salir",
+    "preflight_title": "Comprobación del Sistema",
+    "preflight_body": "El **Asistente de IronCore** configurará su agente de IA.",
+    "preflight_os_label": "Sistema Operativo",
+    "preflight_python_label": "Python",
+    "preflight_network_label": "Red",
+    "preflight_network_online": "[green]En línea ✓[/]",
+    "preflight_network_offline": "[red]Desconectado ✗[/]"
+}

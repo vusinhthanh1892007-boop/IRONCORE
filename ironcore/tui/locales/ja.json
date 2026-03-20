@@ -1,0 +1,14 @@
+{
+    "lang_title": "言語を選択",
+    "lang_search_placeholder": "検索...",
+    "lang_no_results": "見つかりません。",
+    "btn_continue": "次へ",
+    "btn_quit": "終了",
+    "preflight_title": "システムチェック",
+    "preflight_body": "**IronCore セットアップ** はローカルAIを構成します。",
+    "preflight_os_label": "OS",
+    "preflight_python_label": "Python",
+    "preflight_network_label": "ネットワーク",
+    "preflight_network_online": "[green]オンライン ✓[/]",
+    "preflight_network_offline": "[red]オフライン ✗[/]"
+}

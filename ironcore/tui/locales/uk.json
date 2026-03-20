@@ -1,0 +1,14 @@
+{
+    "lang_title": "[UK] Choose Language",
+    "lang_search_placeholder": "[UK] Search language...",
+    "lang_no_results": "[UK] No language matched.",
+    "btn_continue": "[UK] Continue",
+    "btn_quit": "[UK] Quit",
+    "preflight_title": "[UK] Welcome & Preflight Check",
+    "preflight_body": "[UK] **IronCore Setup Wizard** will configure your local AI agent.",
+    "preflight_os_label": "[UK] OS",
+    "preflight_python_label": "[UK] Python",
+    "preflight_network_label": "[UK] Network",
+    "preflight_network_online": "[UK] [green]Online ✓[/]",
+    "preflight_network_offline": "[UK] [red]Offline ✗[/]"
+}

@@ -6,13 +6,10 @@ from pathlib import Path
 def _ensure_deps():
     try:
         import textual
-        import pycountry
     except ImportError:
-        print("[ IronCore ] Installing Textual TUI dependencies...")
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", "-q", "textual", "pycountry"],
-            stdout=subprocess.DEVNULL,
-        )
+        print("[ IronCore ] Setup missing critical dependency (textual).")
+        print("[ IronCore ] Please run: pip install textual")
+        raise SystemExit(1)
 
 _ensure_deps()
 

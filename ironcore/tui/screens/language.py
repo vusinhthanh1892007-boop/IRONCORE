@@ -1,9 +1,8 @@
-import pycountry
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Header, Footer, Input, ListView, ListItem, Label
 from textual.containers import Vertical
-from ironcore.tui.i18n import i18n
+from ironcore.tui.i18n import i18n, supported_language_catalog
 
 class LanguageItem(ListItem):
     def __init__(self, name: str, code: str, label: str):
@@ -26,29 +25,7 @@ class LanguageScreen(Screen):
         self.languages = self._build_language_catalog()
 
     def _build_language_catalog(self) -> list[dict]:
-        items = []
-        seen = set()
-        for language in pycountry.languages:
-            code = getattr(language, "alpha_2", None)
-            name = getattr(language, "name", None)
-            if not code or not name:
-                continue
-            code = code.lower()
-            if code in seen:
-                continue
-            seen.add(code)
-            native = getattr(language, "common_name", None) or getattr(language, "inverted_name", None)
-            label = f"{name} ({code})"
-            if native and native != name:
-                label = f"{name} / {native} ({code})"
-            items.append({"code": code, "name": name, "label": label})
-        
-        # Ensure en and vi exist
-        if not any(item["code"] == "en" for item in items):
-            items.append({"code": "en", "name": "English", "label": "English (en)"})
-        if not any(item["code"] == "vi" for item in items):
-            items.append({"code": "vi", "name": "Vietnamese", "label": "Vietnamese (vi)"})
-        
+        items = supported_language_catalog()
         items.sort(key=lambda x: x["name"].lower())
         return items
 

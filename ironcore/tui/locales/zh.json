@@ -1,0 +1,14 @@
+{
+    "lang_title": "选择语言",
+    "lang_search_placeholder": "搜索语言...",
+    "lang_no_results": "未找到匹配语言。",
+    "btn_continue": "继续",
+    "btn_quit": "退出",
+    "preflight_title": "欢迎与系统检查",
+    "preflight_body": "**IronCore 安装向导**将配置您的本地 AI 代理。",
+    "preflight_os_label": "操作系统",
+    "preflight_python_label": "Python",
+    "preflight_network_label": "网络",
+    "preflight_network_online": "[green]在线 ✓[/]",
+    "preflight_network_offline": "[red]离线 ✗[/]"
+}

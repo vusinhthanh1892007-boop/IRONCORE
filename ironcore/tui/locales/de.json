@@ -1,0 +1,14 @@
+{
+    "lang_title": "Sprache Auswählen",
+    "lang_search_placeholder": "Suchen...",
+    "lang_no_results": "Nichts gefunden.",
+    "btn_continue": "Weiter",
+    "btn_quit": "Beenden",
+    "preflight_title": "Systemprüfung",
+    "preflight_body": "Der **IronCore Assistent** konfiguriert Ihren KI-Agenten.",
+    "preflight_os_label": "Betriebssystem",
+    "preflight_python_label": "Python",
+    "preflight_network_label": "Netzwerk",
+    "preflight_network_online": "[green]Online ✓[/]",
+    "preflight_network_offline": "[red]Offline ✗[/]"
+}

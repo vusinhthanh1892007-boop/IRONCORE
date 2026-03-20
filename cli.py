@@ -17,13 +17,10 @@ def _ensure_deps():
     try:
         import rich
         import questionary
-        import pycountry
     except ImportError:
-        print("[ IronCore ] Installing terminal UI dependencies...")
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", "-q", "rich", "questionary", "pycountry"],
-            stdout=subprocess.DEVNULL,
-        )
+        print("[ IronCore ] Setup Missing critical dependencies (rich, questionary).")
+        print("[ IronCore ] Please run: pip install rich questionary")
+        raise SystemExit(1)
 
 _ensure_deps()
 
@@ -132,31 +129,11 @@ def _load_config() -> dict:
 
 
 def _build_language_catalog() -> list[dict]:
-    items: list[dict] = []
-    seen: set[str] = set()
-
-    for language in pycountry.languages:
-        code = getattr(language, "alpha_2", None)
-        name = getattr(language, "name", None)
-        if not code or not name:
-            continue
-        code = code.lower()
-        if code in seen:
-            continue
-        seen.add(code)
-        native = getattr(language, "common_name", None) or getattr(language, "inverted_name", None)
-        label = f"{name} ({code})"
-        if native and native != name:
-            label = f"{name} / {native} ({code})"
-        items.append({"code": code, "name": name, "label": label})
-
-    if not any(item["code"] == "en" for item in items):
-        items.append({"code": "en", "name": "English", "label": "English (en)"})
-    if not any(item["code"] == "vi" for item in items):
-        items.append({"code": "vi", "name": "Vietnamese", "label": "Vietnamese (vi)"})
-
-    items.sort(key=lambda x: x["name"].lower())
-    return items
+    try:
+        from ironcore.tui.i18n import supported_language_catalog
+        return supported_language_catalog()
+    except Exception:
+        return [{"code": "en", "name": "English", "label": "English (en)"}]
 
 
 _LANG_CATALOG = _build_language_catalog()
@@ -740,13 +717,16 @@ def run_wizard():
 # ─────────────────────────────────────────────────────────────────────────────
 async def run_chat(cfg: dict):
     """Interactive async chat loop with IronCore Engine."""
-    from ironcore.core.engine import IronCoreEngine
-    engine = IronCoreEngine()
+    from ironcore.core.ollama_client import OllamaClient
+    client = OllamaClient()
 
     persona_name = cfg.get("persona", {}).get("name", "IronCore")
+    model = cfg.get("primary_model") or "llama3"
+    
     console.print(Panel(
         f"[bold cyan]{persona_name} is online.[/bold cyan]\n"
-        "[dim]Type your message. Commands: /exit  /clear  /status[/dim]",
+        f"[dim]Model: {model} (Local Ollama)[/dim]\n"
+        "[dim]Type your message. Commands: /exit  /clear[/dim]",
         border_style="cyan", expand=False
     ))
 
@@ -761,17 +741,15 @@ async def run_chat(cfg: dict):
             if prompt == "/clear":
                 console.clear()
                 continue
-            if prompt == "/status":
-                console.print(f"  Model: {cfg.get('selected_model', {})}")
-                continue
 
             console.print("[dim italic]Thinking...[/dim italic]")
             console.print(f"\n🤖 [bold cyan]{persona_name}:[/bold cyan]", end=" ")
-            async for chunk in engine.run_loop(prompt, max_iterations=5):
-                if chunk["type"] == "agent.response":
-                    print(chunk.get("content", ""), end="", flush=True)
-                elif chunk["type"] == "tool.started":
-                    console.print(f"\n[bold yellow]🛠  Tool: {chunk.get('tool_name')}[/bold yellow]")
+            
+            # Replaced engine with local Ollama connection for robustness
+            res = client.chat(model=model, messages=[{"role": "user", "content": prompt}], stream=True)
+            for chunk in res:
+                if chunk:
+                    print(chunk, end="", flush=True)
             print("\n")
 
         except KeyboardInterrupt:

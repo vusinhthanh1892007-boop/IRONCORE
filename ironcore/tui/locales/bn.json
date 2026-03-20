@@ -1,0 +1,14 @@
+{
+    "lang_title": "[BN] Choose Language",
+    "lang_search_placeholder": "[BN] Search language...",
+    "lang_no_results": "[BN] No language matched.",
+    "btn_continue": "[BN] Continue",
+    "btn_quit": "[BN] Quit",
+    "preflight_title": "[BN] Welcome & Preflight Check",
+    "preflight_body": "[BN] **IronCore Setup Wizard** will configure your local AI agent.",
+    "preflight_os_label": "[BN] OS",
+    "preflight_python_label": "[BN] Python",
+    "preflight_network_label": "[BN] Network",
+    "preflight_network_online": "[BN] [green]Online ✓[/]",
+    "preflight_network_offline": "[BN] [red]Offline ✗[/]"
+}

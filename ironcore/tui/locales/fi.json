@@ -1,0 +1,11 @@
+{
+  "lang_title": "Valitse Kieli",
+  "lang_search_placeholder": "🔍 Etsi...",
+  "btn_continue": "Jatka",
+  "preflight_title": "Tervetuloa & Järjestelmän Tarkistus",
+  "preflight_body": "Tarkistetaan riippuvuuksia...",
+  "status_checking": "Tarkistetaan...",
+  "status_ok": "OK",
+  "status_failed": "Epäonnistui",
+  "status_missing": "Puuttuu"
+}

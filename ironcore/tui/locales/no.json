@@ -1,0 +1,11 @@
+{
+  "lang_title": "Velg Språk",
+  "lang_search_placeholder": "🔍 Søk...",
+  "btn_continue": "Fortsett",
+  "preflight_title": "Velkommen & Systemkontroll",
+  "preflight_body": "Sjekker avhengigheter...",
+  "status_checking": "Sjekker...",
+  "status_ok": "OK",
+  "status_failed": "Feilet",
+  "status_missing": "Mangler"
+}
