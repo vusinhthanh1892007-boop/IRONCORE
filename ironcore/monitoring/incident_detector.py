@@ -210,7 +210,7 @@ class IncidentDetector:
                 severity="high",
                 context={"proxy_metric": "requests_1m", "value": req_rate_1m, "threshold": 200},
                 suggested_actions=[
-                    "Review budget spend via /api/enterprise/budget",
+                    "Review cost and request telemetry",
                     "Consider downgrading model for non-critical sessions",
                     "Enable request throttling",
                 ],

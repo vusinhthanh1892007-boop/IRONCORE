@@ -40,4 +40,4 @@ class PreflightScreen(BaseWizardScreen):
 
     def on_next(self) -> None:
         self.app.cfg["preflight"] = {"os": platform.system(), "network_ok": self.check_network()}
-        self.dismiss("auth")
+        self.safe_dismiss("auth")

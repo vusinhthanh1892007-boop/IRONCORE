@@ -45,7 +45,7 @@ class FinalSmokeTestScreen(BaseWizardScreen):
             logs.write_line("[+] All dry-run assertions passed. Workspace status correct.")
 
     def on_next(self) -> None:
-        self.dismiss("deploy")
+        self.safe_dismiss("deploy")
 
 class SummaryExportScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -69,7 +69,7 @@ class SummaryExportScreen(BaseWizardScreen):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-back":
-            self.dismiss(None)
+            self.safe_dismiss(None)
         elif event.button.id == "btn-deploy":
             if not self.query_one("#ack-overwrite", Switch).value:
                 self.notify(i18n.t("Please acknowledge overwriting existing config."), severity="error")
@@ -82,4 +82,4 @@ class SummaryExportScreen(BaseWizardScreen):
             except Exception as e:
                 self.notify(f"Failed to export config: {e}", severity="error")
                 
-            self.dismiss("done")
+            self.safe_dismiss("done")

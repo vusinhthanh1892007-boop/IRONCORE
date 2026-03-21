@@ -39,4 +39,4 @@ class ChannelScreen(BaseWizardScreen):
     def on_next(self) -> None:
         channel = self.query_one("#channel-mode", RadioSet).pressed_button.id
         self.app.cfg["channel"] = channel
-        self.dismiss("skills")
+        self.safe_dismiss("skills")

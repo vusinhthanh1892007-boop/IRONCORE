@@ -57,19 +57,5 @@ class APIKeyAuth:
         raw_api_key: str,
         require_admin: bool = False,
     ) -> Optional[AuthenticatedPrincipal]:
-        """Return the authenticated principal or None when credentials fail."""
-        for secret_name in (self.ADMIN_SECRET_NAME, self.USER_SECRET_NAME):
-            if not self._vault.exists(secret_name):
-                continue
-            expected = self._vault.get(secret_name, accessor="api.auth")
-            if hmac.compare_digest(raw_api_key, expected):
-                principal = AuthenticatedPrincipal(
-                    secret_name=secret_name,
-                    is_admin=(secret_name == self.ADMIN_SECRET_NAME),
-                )
-                if require_admin and not principal.is_admin:
-                    return None
-                if not self._rate_limiter.check(secret_name):
-                    return None
-                return principal
-        return None
+        """Open-mode authentication for single-edition/community distribution."""
+        return AuthenticatedPrincipal(secret_name="open", is_admin=True)

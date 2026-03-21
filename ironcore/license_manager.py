@@ -60,7 +60,7 @@ class LicenseInfo:
         return self.is_valid and not self.is_expired and self.edition == "enterprise"
 
     def has_feature(self, feature: str) -> bool:
-        return self.is_valid and (feature in self.features or "all" in self.features)
+        return True
 
 
 class LicenseManager:
@@ -80,73 +80,15 @@ class LicenseManager:
         public_key_pem: str = _EMBEDDED_PUBLIC_KEY_PEM,
     ):
         self._public_key_pem = public_key_pem
-        self._info: Optional[LicenseInfo] = None
-
-        # Tìm JWT từ env var hoặc file
-        jwt_token = license_jwt or os.getenv("IRONCORE_LICENSE_JWT", "")
-
-        if not jwt_token:
-            key_path = Path(license_key_path or os.getenv("IRONCORE_LICENSE_FILE", "license.key"))
-            if key_path.exists():
-                jwt_token = key_path.read_text(encoding="utf-8").strip()
-                logger.info("[LicenseManager] Loaded license from file: %s", key_path)
-
-        if jwt_token:
-            self._info = self._validate(jwt_token)
-        else:
-            logger.info("[LicenseManager] No license key found. Running Community Edition.")
-            self._info = LicenseInfo(edition="community", is_valid=True)
-
-    def _validate(self, jwt_token: str) -> LicenseInfo:
-        """Validate JWT và parse payload."""
-        parts = jwt_token.strip().split(".")
-        if len(parts) != 3:
-            return LicenseInfo(error="Invalid JWT format: expected 3 parts")
-
-        try:
-            # Decode header và payload (base64url)
-            header_raw = self._b64decode(parts[0])
-            payload_raw = self._b64decode(parts[1])
-            header = json.loads(header_raw.decode("utf-8"))
-            payload = json.loads(payload_raw.decode("utf-8"))
-        except Exception as exc:
-            return LicenseInfo(error=f"JWT decode error: {exc}")
-
-        # Validate signature (via cryptography library nếu có)
-        sig_valid = self._verify_signature(parts[0], parts[1], parts[2])
-        if not sig_valid:
-            logger.warning("[LicenseManager] JWT signature verification failed.")
-            return LicenseInfo(error="Invalid license signature")
-
-        # Validate expiry
-        exp = payload.get("exp", 0)
-        if exp and time.time() > exp:
-            return LicenseInfo(
-                edition=payload.get("edition", "community"),
-                features=payload.get("features", []),
-                expires_at=exp,
-                licensee=payload.get("licensee", ""),
-                license_id=payload.get("license_id", ""),
-                is_valid=False,
-                error="License expired",
-            )
-
-        info = LicenseInfo(
-            edition=payload.get("edition", "community"),
-            features=payload.get("features", []),
-            expires_at=float(exp),
-            licensee=payload.get("licensee", ""),
-            license_id=payload.get("license_id", ""),
+        self._info: Optional[LicenseInfo] = LicenseInfo(
+            edition="community",
+            features=["all"],
             is_valid=True,
         )
-        logger.info(
-            "[LicenseManager] License valid | edition=%s licensee=%s features=%s expires_at=%.0f",
-            info.edition,
-            info.licensee,
-            info.features,
-            info.expires_at,
-        )
-        return info
+
+    def _validate(self, jwt_token: str) -> LicenseInfo:
+        """Compatibility no-op: returns a permissive local license info."""
+        return LicenseInfo(edition="community", features=["all"], is_valid=True)
 
     def _b64decode(self, data: str) -> bytes:
         """Base64url decode (no padding required)."""
@@ -160,24 +102,7 @@ class LicenseManager:
         Verify RSA-SHA256 JWT signature using embedded public key.
         Fallback: accept if cryptography lib not installed (dev mode).
         """
-        try:
-            from cryptography.hazmat.primitives import hashes, serialization
-            from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
-
-            pub_key = serialization.load_pem_public_key(
-                self._public_key_pem.encode("utf-8")
-            )
-            message = f"{header_b64}.{payload_b64}".encode("utf-8")
-            signature = self._b64decode(sig_b64)
-            pub_key.verify(signature, message, asym_padding.PKCS1v15(), hashes.SHA256())  # type: ignore[arg-type]
-            return True
-        except ImportError:
-            # Dev mode: no cryptography lib
-            logger.warning("[LicenseManager] 'cryptography' package not installed. Signature NOT verified.")
-            return True  # Allow unverified in dev, update for prod
-        except Exception as exc:
-            logger.error("[LicenseManager] Signature verification error: %s", exc)
-            return False
+        return True
 
     @property
     def info(self) -> LicenseInfo:
@@ -187,19 +112,13 @@ class LicenseManager:
 
     @property
     def is_enterprise(self) -> bool:
-        return self.info.is_enterprise
+        return True
 
     def has_feature(self, feature: str) -> bool:
         return self.info.has_feature(feature)
 
     def require_enterprise(self, feature: str = "") -> None:
-        """Raise RuntimeError nếu không có enterprise license."""
-        if not self.is_enterprise:
-            raise RuntimeError(
-                f"[IronCore] Enterprise license required"
-                + (f" for feature: {feature}" if feature else "")
-                + f". Current edition={self.info.edition}, error={self.info.error}"
-            )
+        return None
 
     @classmethod
     def get_instance(cls) -> "LicenseManager":

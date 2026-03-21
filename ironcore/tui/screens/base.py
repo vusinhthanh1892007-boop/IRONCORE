@@ -19,10 +19,22 @@ class BaseWizardScreen(Screen):
             
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-back":
-            self.dismiss(None)
+            self.safe_dismiss(None)
         elif event.button.id == "btn-next":
             self.on_next()
             
     def on_next(self) -> None:
         """Override this to handle next logic and validation."""
-        self.dismiss(True)
+        self.safe_dismiss(True)
+
+    def safe_dismiss(self, result=None) -> None:
+        try:
+            self.dismiss(result)
+            return
+        except Exception:
+            pass
+
+        app = getattr(self, "app", None)
+        handler = getattr(app, "handle_screen_result", None)
+        if result is not None and callable(handler):
+            handler(result)

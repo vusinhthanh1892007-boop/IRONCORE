@@ -30,7 +30,7 @@ class SkillsScreen(BaseWizardScreen):
     def on_next(self) -> None:
         sel = self.query_one("#skills-list", SelectionList).selected
         self.app.cfg["skills"] = sel
-        self.dismiss("hooks")
+        self.safe_dismiss("hooks")
 
 class HooksScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -68,7 +68,7 @@ class HooksScreen(BaseWizardScreen):
             return
             
         self.app.cfg["hooks"] = {"enabled": enabled, "url": url, "has_secret": bool(secret)}
-        self.dismiss("gateway")
+            self.safe_dismiss("gateway")
 
 class GatewayScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -95,4 +95,4 @@ class GatewayScreen(BaseWizardScreen):
             
         bind = self.query_one("#gateway-bind", RadioSet).pressed_button.id
         self.app.cfg["gateway"] = {"port": port, "bind": bind}
-        self.dismiss("secrets")
+        self.safe_dismiss("secrets")

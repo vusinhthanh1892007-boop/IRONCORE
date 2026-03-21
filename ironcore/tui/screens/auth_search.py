@@ -32,7 +32,7 @@ class AuthScreen(BaseWizardScreen):
         mode = self.query_one("#auth-mode", RadioSet).pressed_button.id
         token = self.query_one("#auth-token", Input).value
         self.app.cfg["auth"] = {"mode": mode, "token_present": bool(token)}
-        self.dismiss("search")
+        self.safe_dismiss("search")
 
 class SearchProviderScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -64,4 +64,4 @@ class SearchProviderScreen(BaseWizardScreen):
         mode = self.query_one("#search-mode", RadioSet).pressed_button.id
         key = self.query_one("#search-key", Input).value
         self.app.cfg["search"] = {"provider": mode, "has_key": bool(key)}
-        self.dismiss("providers")
+        self.safe_dismiss("providers")

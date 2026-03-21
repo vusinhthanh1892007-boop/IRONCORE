@@ -32,7 +32,7 @@ class SecretsScreen(BaseWizardScreen):
             self.notify(i18n.t("You must confirm that you saved the token to proceed."), title="Warning", severity="warning")
             return
         self.app.cfg["secret_token"] = "present" # Do not store plain text
-        self.dismiss("persona")
+        self.safe_dismiss("persona")
 
 class PersonaScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -61,7 +61,7 @@ class PersonaScreen(BaseWizardScreen):
             "prompt": self.query_one("#persona-prompt", Input).value,
             "memory": self.query_one("#memory-policy", RadioSet).pressed_button.id
         }
-        self.dismiss("monitoring")
+        self.safe_dismiss("monitoring")
 
 class MonitoringScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -87,4 +87,4 @@ class MonitoringScreen(BaseWizardScreen):
             "telemetry": self.query_one("#telemetry", Switch).value,
             "backup": self.query_one("#backup-strategy", RadioSet).pressed_button.id
         }
-        self.dismiss("final")
+        self.safe_dismiss("final")

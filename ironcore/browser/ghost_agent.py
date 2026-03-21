@@ -6,7 +6,7 @@ High-level browser agent that combines ALL Ghost modules (Phase 1-7):
   - MouseEngine                               (Phase 2)
   - GeeTestSolver + ReCaptchaV2Solver         (Phase 3)
   - SessionManager + ProfilePool              (Phase 6)
-  - BotDetectionEvasion (CF + DataDome)       (Phase 7)
+    - Core stealth/session/captcha integrations
 
 This class registers all Ghost tools into IronCoreEngine and acts as
 the single integration point for "The Ghost" module.
@@ -58,16 +58,6 @@ try:
     from ironcore.browser.session_manager import SessionManager
 except Exception:
     SessionManager = None  # type: ignore
-
-try:
-    from ironcore.browser.bot_evasion import BotDetectionEvasion, ChallengeType
-    from ironcore.browser.cloudflare_bypass import CloudflareBypass
-    from ironcore.browser.datadome_bypass import DataDomeBypass
-except Exception:
-    BotDetectionEvasion = None  # type: ignore
-    ChallengeType = None  # type: ignore
-    CloudflareBypass = None  # type: ignore
-    DataDomeBypass = None  # type: ignore
 
 try:
     from ironcore.vlm.bridge import VLMBridge
@@ -137,11 +127,6 @@ class GhostBrowserAgent:
             if SessionManager is not None
             else None
         )
-        self.bot_evasion: Optional["BotDetectionEvasion"] = (
-            BotDetectionEvasion(self.mouse_engine)
-            if BotDetectionEvasion is not None
-            else None
-        )
         self.vlm_bridge: Optional["VLMBridge"] = vlm_bridge
 
         # Active browser (per-session; replaced by get_stealth_browser)
@@ -190,10 +175,8 @@ class GhostBrowserAgent:
         """
         Navigate to url with full Ghost treatment:
         1. Get/launch StealthBrowser via SessionManager (or reuse current)
-        2. Install DataDome header interceptor before goto()
-        3. goto(url)
-        4. Handle any bot challenge (CF/DataDome) via BotDetectionEvasion
-        5. Return navigation result
+        2. goto(url)
+        3. Return navigation result
 
         Args:
             url: Target URL.
@@ -210,35 +193,12 @@ class GhostBrowserAgent:
         if page is None:
             return {"success": False, "error": "Browser has no active page"}
 
-        # Pre-request: install header interceptor (DataDome defense)
-        if self.bot_evasion is not None:
-            profile = getattr(browser, "profile", None)
-            locale = getattr(profile, "locale", "en-US") if profile else "en-US"
-            platform = getattr(profile, "platform", "Win32") if profile else "Win32"
-            ua = getattr(profile, "user_agent", "") if profile else ""
-            await self.bot_evasion.pre_request_prime(page, locale, platform, ua)
-
         # Navigate
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
         except Exception as exc:
             logger.warning("[Ghost/navigate] goto failed: %s", exc)
             return {"success": False, "url": url, "error": str(exc)}
-
-        # Post-navigation: detect and bypass challenges
-        bypass_result = None
-        if self.bot_evasion is not None:
-            challenge = await self.bot_evasion.detect(page)
-            if challenge != "none":
-                bypass_result = await self.bot_evasion.handle_challenge(page, url=url)
-                if not bypass_result.success:
-                    return {
-                        "success": False,
-                        "url": url,
-                        "challenge": challenge,
-                        "bypass_attempts": bypass_result.attempts,
-                        "error": "Bot challenge not bypassed",
-                    }
 
         elapsed_ms = (time.monotonic() - t0) * 1000
         status_code = None
@@ -252,7 +212,7 @@ class GhostBrowserAgent:
             "url": url,
             "final_url": page.url,
             "elapsed_ms": round(elapsed_ms, 1),
-            "challenge_bypassed": bypass_result.challenge_type if bypass_result else None,
+            "challenge_bypassed": None,
         }
 
     async def click(self, selector: str) -> Dict[str, Any]:

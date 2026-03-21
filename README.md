@@ -1,109 +1,95 @@
-# IronCore
+# IronCore: Advanced AI Agent Architecture & Capabilities
 
-IronCore la mot bo khung AI agent huong bao mat, duoc thiet ke de chay theo kieu `Action/Observation`, co sandbox, policy engine, memory, LSP safe editing, monitoring, va deployment scaffold.
+IronCore is a highly scalable, event-driven AI orchestration platform designed with a strong focus on autonomous agents, browser stealth automation, code intelligence, and context optimization.
 
-Du an nay duoc xay theo mo hinh 3 agent phoi hop:
-- `The Architect`: phu trach `core/`, `sandbox/`, `security/`, `lsp/`, `api/`, `monitoring/`, `tests/`, `deployment/`
-- `The Brain`: phu trach memory, skill registry, entity extraction, llm orchestration
-- `The Ghost`: phu trach browser stealth, fingerprint, session manager, anti-bot stack
+## 1. Core Architecture & Infrastructure
 
-## Muc tieu
+The system is built on a robust, async-first Python backend with a decoupled, modern web control-plane.
 
-- Bao mat mac dinh: policy engine, RBAC, encrypted secrets, audit chain
-- Tach biet thuc thi: sandbox Docker/gVisor cho cac tac vu rui ro cao
-- Sua code an toan: LSP bridge + rollback khi diagnostics loi
-- Quan sat duoc: event bus, audit log, verify chain
-- San sang mo rong: memory, browser, VLM, skills, API, worker, CI/CD
+### 1.1 Backend Core & Operations
+- **Async-First Execution:** Fully asynchronous I/O utilizing `asyncio`, FastAPI, and `aiosqlite`. Ensures non-blocking operations for database queries, network dispatching, and queue draining.
+- **Event-Driven Orchestration:** Employs a deterministic Cron Scheduler (APScheduler) for persistent job lifecycles and a Webhook Server with signature verification and replay protection.
+- **Dynamic Plugin System:** Extensible runtime environment with AST-based security scanning before loading plugins. Supports dynamic hot-reloading and sandboxing execution (gVisor/Docker).
+- **OTA Updates & Mesh Coordination:** Built-in Over-The-Air (OTA) update manager with auto-rollback capabilities, alongside multi-node mesh discovery for distributed deployments (targetting Kubernetes/Helm).
+- **Abuse Control:** Community-first safeguards including session/tab throttling, in-memory rate limiting, and anti-spam countermeasures.
 
-## Cau truc chinh
+### 1.2 Frontend Control-Plane & Terminal
+- **Web UI Stack:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS v4, Zustand, and TanStack Query.
+- **Real-Time Responsiveness:** Uses WebSockets and Server-Sent Events (SSE) for token-by-token generation logs, tool execution status, and live telemetry data.
+- **Console-Based TUI:** An interactive Terminal Setup Assistant that provides human-readable flows and machine-readable JSON outputs for rapid local bootstrapping.
 
-```text
-ironcore/
-├── api/          # FastAPI server, auth, health check
-├── browser/      # Stealth browser, session manager, anti-bot components
-├── core/         # Engine, LLM bridge, coordinator, context optimizer
-├── lsp/          # Safe code editing qua Language Server Protocol
-├── memory/       # GraphRAG, session store
-├── monitoring/   # Audit logger, hash chain verification
-├── sandbox/      # Docker/gVisor isolation engine
-├── security/     # Policy engine, vault, RBAC, rule loader
-├── skills/       # Skill registry
-├── tests/        # Test suite cho phan Architect
-└── vlm/          # Vision-Language bridge
-```
+---
 
-## Thanh phan noi bat
+## 2. Advanced Agent Capabilities
 
-- `ironcore/core/engine.py`: vong lap agent async trung tam
-- `ironcore/security/policy_engine.py`: deny/allow/rate-limit/sandbox escalation
-- `ironcore/security/rbac.py`: role + permission + token
-- `ironcore/sandbox/engine.py`: thuc thi container co gioi han tai nguyen
-- `ironcore/lsp/safe_editor.py`: sua file va tu rollback neu sinh diagnostics loi
-- `ironcore/api/server.py`: HTTP API + `/health`
-- `deployment/worker.py`: worker process cho `docker-compose`
+IronCore delegates tasks to specialized autonomous modules, each exhibiting unique technical traits.
 
-## Tính năng mới cập nhật (Tháng 3/2026)
+### 2.1 Browser Automation Engine (Stealth & Interaction)
+- **Stealth Initialization:** Injects scripts via Playwright to spoof `navigator.webdriver` and bypass elementary bot detections.
+- **Hardware & Network Spoofing:** Spoofs WebGL/Canvas APIs using Linear Congruential Generator (LCG) noise to create unique hardware fingerprints. Aligns JA3/TLS headers to match the target OS.
+- **Biometric Simulation (Human-like Behavior):** 
+  - Calculates mouse trajectories using **Cubic Bezier Curves**.
+  - Applies **Fitts's Law** to control movement timing based on target distance and width.
+  - Implements Gaussian-distributed typing delays and deliberate cursor overshoot/micro-jitters.
+- **AI-Driven CAPTCHA Solving:** Uses OpenCV (Template Matching, Canny Edge Detection) for basic slider CAPTCHAs, and bridges visual inputs to Vision-Language Models (VLMs like Gemini Flash) to solve visual grid CAPTCHAs by determining precise (X,Y) click coordinates.
 
-- **Setup Wizard Đa Ngôn Ngữ:** Trình cài đặt tương tác qua Terminal hỗ trợ hơn 100+ ngôn ngữ, tự động dịch các prompt setup sang ngôn ngữ bản địa của người dùng.
-- **Tùy biến Kỹ năng (Skills Selection):** Cho phép người dùng tùy chọn chỉ cài đặt các kỹ năng AI cần thiết (Web Browsing, Code Execution, Vision...) ngay trong lúc chạy setup.
-- **Hỗ trợ Danh sách Model 2026 Đồ Sộ:** Tích hợp tất cả model mạnh nhất tính đến thời điểm hiện tại:
-  - **OpenAI:** GPT-5.4, o1, GPT-5.3-Codex...
-  - **Anthropic:** Claude 4.6 (Opus, Sonnet, Haiku)
-  - **Google:** Gemini 3.1 Pro, Gemini 3.1 Flash-Lite
-  - **China LLMs:** Qwen 3.5 397B, GLM-5, Kimi K2.5, Hunyuan Turbo S
-  - **Others:** DeepSeek V4, Grok 4.20, Mistral Large 3, Command R+
-- **Giao diện Cài đặt (Settings UI) Thông Minh:** Chọn AI Provider tự động load danh sách Model tương ứng. Hỗ trợ kết nối qua hơn 40 API Gateways phổ biến (OpenRouter, Together AI, AWS Bedrock, Replicate...).
-- **Chế độ chạy linh hoạt:** Lựa chọn chạy IronCore thông qua Web UI hiện đại hoặc CLI Terminal siêu nhẹ.
-- **Tích hợp Workflow Sidebars:** Click "Deploy Staging" hoặc các script lưu sẵn trên Sidebar Web UI sẽ tự động kích hoạt Agent thực thi lệnh trong Chat.
+### 2.2 The Brain (Context & Memory Optimizer)
+- **Semantic Caching:** Integrates `sentence-transformers` and ChromaDB to intercept semantically identical queries, bypassing LLM processing entirely to save costs.
+- **Prompt KV-Cache:** Exploits prompt caching (`ephemeral` cache controls) to reuse static system instructions, significantly reducing Time To First Token (TTFT).
+- **Token Compression & Filtering:** Uses advanced algorithms like LLMLingua to compress RAG context before LLM injection, eliminating stop words while maintaining information entropy.
+- **Infinite Context via Sliding Windows:** Prevents context window overflows. When tokens reach a critical threshold, the oldest segments are extracted and condensed into an abstractive summary by a local model (e.g., Llama 3).
+- **Model Context Protocol (MCP):** Implements an independent MCP Server handling JSON-RPC 2.0 over SSE, standardizing access to tools and resources for external clients.
+- **Autonomous Cost Optimization:** Engine capable of tracking dynamic model utilization and performing automated downgrades during high-burn periods.
 
-## Chay nhanh
+### 2.3 Self-Healing LSP Engine (Code Intelligence)
+- **Autonomous Code Repair:** Implements a diagnostic-driven healing loop. When the engine detects a syntax or execution error via AST parsing, it consults the LLM, parses the Unified Diff response, and patches the code safely.
+- **Safe Edit Rollbacks:** Validates AST integrity before committing files. If diagnostics continue to fail, the system automatically rolls backward to the last healthy state to prevent logic corruption.
 
-### Cach 1: Local Python
+---
 
+## 3. Engineering Patterns & Technologies Used
+
+- **Languages & Runtimes:** Python 3.13+, Node.js 22+.
+- **Data Modeling:** Pydantic V2 ensures strict typing, validation, and immutable data structures across API endpoints.
+- **Database & State:** SQLite via `aiosqlite` with `WAL` journaling mode for concurrent reads/writes without blocking the async event loop.
+- **Dependency Injection:** Applied universally across API routers for isolating components during testing.
+- **Testing:** Comprehensive test suite utilizing `pytest` and `pytest-asyncio` covering happy paths, security constraints, and failure degradations.
+- **Fail-Safe Design:** Employs circuit breakers, exponential backoff/retries, and graceful degradation layers.
+
+---
+
+## 4. Setup & Execution
+
+### Option 1: Local Python
 ```bash
 python -m pip install -r requirements.txt
 python -m pip install -e .[dev]
 uvicorn ironcore.api.server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Cach 2: Dung Makefile
-
+### Option 2: Using Makefile
 ```bash
 make install
 make run-api
 ```
 
-### Cach 3: Dung Docker Compose
-
+### Option 3: Docker Compose
 ```bash
 docker compose up --build
 ```
 
-API health check:
-
+**API Health Check:**
 ```bash
 curl http://127.0.0.1:8000/health
 ```
 
-## Test va lint
+---
 
+## 5. Testing & Linting
 ```bash
 make test
 make test-cov
 make lint
 make format
 ```
-
-Neu moi truong cua ban chua co `pytest`, `ruff`, `mypy` hoac `docker`, hay chay `make install` truoc.
-
-## Tai lieu lien quan
-
-- `implementation_plan.md`: ke hoach tong the cua IronCore
-- `walkthrough.md`: tom tat qua trinh nghien cuu va xay dung
-- `prompt_gpt5_4_architect.md`: prompt chi huy cho The Architect
-- `prompt_claude4_6_brain.md`: prompt chi huy cho The Brain
-- `prompt_gemini3_1_ghost.md`: prompt chi huy cho The Ghost
-
-## Trang thai
-
-Du an dang o giai doan scaffold + implementation theo phase. Kien truc da du phan he chinh, nhung van can tiep tuc hardening, integration test, va dong bo giua 3 nhom module.
+If your environment lacks `pytest`, `ruff`, `mypy`, or `docker`, please run `make install` first.

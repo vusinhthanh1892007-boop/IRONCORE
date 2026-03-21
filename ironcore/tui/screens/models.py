@@ -54,8 +54,10 @@ class ModelProvidersScreen(BaseWizardScreen):
         if not sel:
             self.notify(i18n.t("You must select at least one Provider!"), severity="error")
             return
+        provider_key = self.query_one("#provider-key", Input).value
         self.app.cfg["providers"] = sel
-        self.dismiss("model_picker")
+        self.app.cfg["provider_key_present"] = bool(provider_key)
+        self.safe_dismiss("model_picker")
 
 import urllib.request
 import json
@@ -149,7 +151,7 @@ class ModelPickerScreen(BaseWizardScreen):
         item_id = event.item.id
         if item_id in self._item_mapping:
             self.app.cfg["primary_model"] = self._item_mapping[item_id]
-            self.dismiss("channels")
+            self.safe_dismiss("channels")
 
     def on_next(self) -> None:
         lst = self.query_one("#model-list", ListView)
@@ -157,7 +159,7 @@ class ModelPickerScreen(BaseWizardScreen):
             item_id = lst.children[lst.index].id
             if item_id in self._item_mapping:
                 self.app.cfg["primary_model"] = self._item_mapping[item_id]
-                self.dismiss("channels")
+                self.safe_dismiss("channels")
                 return
         
         self.notify(i18n.t("You must select a primary model from the list!"), severity="error")
