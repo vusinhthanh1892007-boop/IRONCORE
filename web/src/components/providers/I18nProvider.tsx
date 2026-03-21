@@ -27,7 +27,7 @@ function batch<T>(items: T[], size = 24) {
 }
 
 function normalizedCode(code: string) {
-  const value = code.trim().toLowerCase().replace("_", "-");
+  const value = code.trim().toLowerCase().replace(/_/g, "-");
   if (!value) return "en";
   return value.split("-")[0] || "en";
 }
