@@ -1,0 +1,13 @@
+{
+  "name": "IronCore AI Assistant",
+  "short_name": "IronCore",
+  "description": "Powerful AI assistant powered by IronCore V2",
+  "start_url": "/chat",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#6366f1",
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
