@@ -67,12 +67,12 @@ export default function DashboardUsagePage() {
 
       const series = (metrics.time_series ?? []).map((row, index) => ({
         t: row.label || `T${index + 1}`,
-        tokenIn: Math.round((row.value ?? 0) * 6000),
-        tokenOut: Math.round((row.value ?? 0) * 9000),
-        latencyP50: 210 + index * 8,
-        latencyP95: 620 + index * 20,
-        errorRate: Math.min(4.8, 0.8 + index * 0.3),
-        cacheHit: Math.round((metrics.cache_hit_rate ?? 0.6) * 100),
+        tokenIn: (row as { token_in?: number }).token_in ?? 0,
+        tokenOut: (row as { token_out?: number }).token_out ?? 0,
+        latencyP50: (row as { latency_p50?: number }).latency_p50 ?? 0,
+        latencyP95: (row as { latency_p95?: number }).latency_p95 ?? 0,
+        errorRate: (row as { error_rate?: number }).error_rate ?? 0,
+        cacheHit: Math.round((metrics.cache_hit_rate ?? 0) * 100),
         cost: row.value ?? 0,
       }));
 

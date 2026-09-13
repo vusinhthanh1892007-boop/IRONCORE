@@ -47,10 +47,47 @@ async function fetchOllama(path: string, init?: RequestInit) {
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    throw new OllamaError(text || `Ollama HTTP ${res.status}`);
+    let errMsg = text || `Ollama HTTP ${res.status}`;
+    try {
+      const parsed = JSON.parse(text) as { error?: string };
+      if (parsed && typeof parsed.error === "string") {
+        errMsg = parsed.error;
+      }
+    } catch {
+      // keep raw text
+    }
+    throw new OllamaError(errMsg);
   }
 
   return res;
+}
+
+export function isEmbeddingModel(name: string, capabilities?: string[], family?: string): boolean {
+  if (Array.isArray(capabilities) && capabilities.length > 0) {
+    const hasChat = capabilities.some((c) =>
+      ["completion", "chat", "tools", "vision"].includes(c.toLowerCase())
+    );
+    if (!hasChat && capabilities.includes("embedding")) {
+      return true;
+    }
+  }
+
+  const n = name.toLowerCase();
+  const f = (family ?? "").toLowerCase();
+
+  return (
+    n.includes("bge-") ||
+    n.includes("bge_") ||
+    n.includes("embed") ||
+    n.includes("minilm") ||
+    n.includes("paraphrase") ||
+    n.includes("gte-") ||
+    n.includes("e5-") ||
+    n.includes("snowflake-arctic") ||
+    n.includes("rerank") ||
+    f === "bert" ||
+    f === "nomic-bert"
+  );
 }
 
 export async function listOllamaModels(): Promise<OllamaModelInfo[]> {
@@ -61,6 +98,7 @@ export async function listOllamaModels(): Promise<OllamaModelInfo[]> {
       model?: string;
       digest?: string;
       details?: { parameter_size?: string; family?: string };
+      capabilities?: string[];
     }>;
   };
 
@@ -68,6 +106,9 @@ export async function listOllamaModels(): Promise<OllamaModelInfo[]> {
   for (const row of payload.models ?? []) {
     const name = row.name ?? row.model ?? "";
     if (!name) continue;
+    if (isEmbeddingModel(name, row.capabilities, row.details?.family)) {
+      continue;
+    }
     models.push({
       name,
       model: row.model ?? name,
@@ -82,7 +123,9 @@ export async function listOllamaModels(): Promise<OllamaModelInfo[]> {
 export async function resolveOllamaModel(requested?: string | null): Promise<string> {
   const models = await listOllamaModels();
   if (!models.length) {
-    throw new OllamaError("No local Ollama models are installed.");
+    throw new OllamaError(
+      "No chat models found in Ollama (embedding models do not support chat). Please run: ollama pull qwen2.5:3b or ollama pull llama3"
+    );
   }
 
   const needle = requested?.trim().toLowerCase();

@@ -45,18 +45,18 @@ async function resolveModelFromProvider(provider: LocalProviderId, requested?: s
         throw new Error(`${scan.label} is not available at ${scan.baseUrl}.`);
     }
     if (!scan.models.length) {
-        throw new Error(`No models found on ${scan.label} (${scan.baseUrl}).`);
+        throw new Error(`No chat-capable models found on ${scan.label} (${scan.baseUrl}). Please install a chat model (e.g. 'ollama pull qwen2.5:3b' or 'ollama pull llama3').`);
     }
     const candidate = (requested ?? "").trim();
     if (!candidate) {
         return scan.models[0].id;
     }
-    if (!scan.models.some((model) => model.id === candidate)) {
-        throw new Error(
-            `Model '${candidate}' is not installed on ${scan.label}. Please scan local models or enter an installed model.`
-        );
+    const matched = scan.models.find((model) => model.id === candidate || model.id.toLowerCase() === candidate.toLowerCase());
+    if (matched) {
+        return matched.id;
     }
-    return candidate;
+    // If requested model was an embedding-only model or no longer present, fallback to first available chat model
+    return scan.models[0].id;
 }
 
 async function resolveLocalProviderCandidate(requestedProvider?: string): Promise<LocalProviderId> {
@@ -300,11 +300,14 @@ export async function POST(req: NextRequest) {
             }
             return await streamFromOllama({ message, session_id, model, files, history });
         } catch (error) {
+            let errorText = error instanceof Error ? error.message : "Local provider unavailable.";
+            if (errorText.includes("does not support chat")) {
+                errorText = `Model '${model || "selected"}' is an embedding model and cannot generate chat responses. Please select a chat model (e.g. qwen2.5 or llama3) from the top-right model selector.`;
+            }
             return new Response(
                 encodeSse({
                     type: "error",
-                    error:
-                        error instanceof Error ? error.message : "Ollama unavailable.",
+                    error: errorText,
                 }),
                 {
                     status: 200,

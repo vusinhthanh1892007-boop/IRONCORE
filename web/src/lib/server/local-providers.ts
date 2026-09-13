@@ -68,6 +68,42 @@ export function getLocalProviderBaseUrl(provider: LocalProviderId): string {
   return normalizeBaseUrl(raw);
 }
 
+export function isEmbeddingOrNonChatModel(
+  name: string,
+  capabilities?: string[],
+  family?: string
+): boolean {
+  if (Array.isArray(capabilities) && capabilities.length > 0) {
+    const hasChat = capabilities.some((c) =>
+      ["completion", "chat", "tools", "vision"].includes(c.toLowerCase())
+    );
+    if (!hasChat && capabilities.includes("embedding")) {
+      return true;
+    }
+  }
+
+  const n = name.toLowerCase();
+  const f = (family ?? "").toLowerCase();
+
+  if (
+    n.includes("bge-") ||
+    n.includes("bge_") ||
+    n.includes("embed") ||
+    n.includes("minilm") ||
+    n.includes("paraphrase") ||
+    n.includes("gte-") ||
+    n.includes("e5-") ||
+    n.includes("snowflake-arctic") ||
+    n.includes("rerank") ||
+    f === "bert" ||
+    f === "nomic-bert"
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 async function scanOllama(baseUrl: string, id: LocalProviderId, label: string): Promise<LocalProviderScanResult> {
   try {
     const controller = new AbortController();
@@ -81,13 +117,21 @@ async function scanOllama(baseUrl: string, id: LocalProviderId, label: string): 
     }
 
     const payload = (await res.json()) as {
-      models?: Array<{ name?: string; model?: string; details?: { family?: string } }>;
+      models?: Array<{
+        name?: string;
+        model?: string;
+        details?: { family?: string };
+        capabilities?: string[];
+      }>;
     };
 
     const models: LocalProviderModel[] = [];
     for (const row of payload.models ?? []) {
       const modelId = String(row.name ?? row.model ?? "").trim();
       if (!modelId) continue;
+      if (isEmbeddingOrNonChatModel(modelId, row.capabilities, row.details?.family)) {
+        continue;
+      }
       models.push({
         id: modelId,
         name: modelId,
@@ -138,6 +182,9 @@ async function scanOpenAiCompatible(
     for (const row of payload.data ?? []) {
       const modelId = String(row.id ?? row.name ?? "").trim();
       if (!modelId) continue;
+      if (isEmbeddingOrNonChatModel(modelId, undefined, row.owned_by)) {
+        continue;
+      }
       models.push({
         id: modelId,
         name: String(row.name ?? modelId).trim() || modelId,

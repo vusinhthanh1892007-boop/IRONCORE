@@ -64,9 +64,9 @@ export function EngineSidebar() {
       createMessage({
         role: "assistant",
         content:
-          "Engine core online. Connected to primary databases. Waiting for instructions.",
+          "Engine core online. Local workspace ready. Type a command or ask a question to begin.",
         title: "The Engine",
-        meta: "System initialized",
+        meta: "Ready",
       })
     );
     router.push("/chat");

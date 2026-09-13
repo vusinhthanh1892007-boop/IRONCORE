@@ -29,9 +29,9 @@ import {
 
 const SYSTEM_SEED = {
   title: "The Engine",
-  meta: "System initialized",
+  meta: "Ready",
   content:
-    "Engine core online. Connected to primary databases. Waiting for instructions.",
+    "Engine core online. Local workspace ready. Type a command or ask a question to begin.",
 };
 
 export function ChatWindow() {
@@ -146,21 +146,34 @@ export function ChatWindow() {
   const activeSession = activeSessionId ?? sessions[0]?.id;
   const sessionLabel = activeSession ? activeSession.slice(0, 6) : "----";
 
-  // Calculate live telemetry metrics
+  // Calculate live telemetry metrics (exclude system seed and error banners)
   const inTokens = React.useMemo(() => {
-    return Math.floor(messages.filter(m => m.role === 'user').reduce((acc, m) => acc + m.content.length, 0) / 4);
+    return Math.floor(
+      messages
+        .filter((m) => m.role === "user")
+        .reduce((acc, m) => acc + m.content.length, 0) / 4
+    );
   }, [messages]);
 
   const outTokens = React.useMemo(() => {
-    return Math.floor(messages.filter(m => m.role === 'assistant').reduce((acc, m) => acc + m.content.length, 0) / 4);
+    return Math.floor(
+      messages
+        .filter(
+          (m) =>
+            m.role === "assistant" &&
+            m.content !== SYSTEM_SEED.content &&
+            !m.content.startsWith('{"error"')
+        )
+        .reduce((acc, m) => acc + m.content.length, 0) / 4
+    );
   }, [messages]);
 
   const contextLimit = currentModel.includes("5.3") ? 200000 : currentModel.includes("claude") ? 200000 : 128000;
-  const contextPct = Math.min(((inTokens + outTokens) / contextLimit) * 100, 100).toFixed(1);
-  const estCost =
-    provider === "ollama"
-      ? "0.0000"
-      : ((inTokens * 0.005) / 1000 + (outTokens * 0.015) / 1000).toFixed(4);
+  const contextPct = inTokens + outTokens === 0 ? "0.0" : Math.min(((inTokens + outTokens) / contextLimit) * 100, 100).toFixed(1);
+  const isLocalProvider = ["ollama", "localai", "vllm", "lmstudio"].includes(provider.toLowerCase());
+  const estCost = isLocalProvider
+    ? "0.0000"
+    : ((inTokens * 0.005) / 1000 + (outTokens * 0.015) / 1000).toFixed(4);
 
   const pushLog = React.useCallback((label: string) => {
     setStreamLogs((prev) => {
@@ -556,7 +569,7 @@ export function ChatWindow() {
           <div className="h-3 w-[1px] bg-border" />
           <div className="flex items-center gap-1.5">
             <Coins className="h-3 w-3 text-amber-500" />
-            <span>{provider === "ollama" ? `Local $${estCost}` : `Est $${estCost}`}</span>
+            <span>{isLocalProvider ? "Local (Free)" : `Est $${estCost}`}</span>
           </div>
         </div>
       </div>
