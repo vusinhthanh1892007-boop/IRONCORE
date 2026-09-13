@@ -118,7 +118,7 @@ def airgap_verify_destination(host_or_ip: str) -> dict:
     import ipaddress
     import socket
     config = AirGapConfig.from_env()
-    allowed_cidrs = [ipaddress.ip_network(cidr) for cidr in config.allowed_cidrs]
+    allowed_cidrs = [ipaddress.ip_network(cidr) for cidr in config.allowed_internal_cidrs]
     
     is_allowed = False
     resolved_ip = host_or_ip
@@ -149,18 +149,21 @@ from ironcore.enterprise.hitl.engine import MakerCheckerEngine
 hitl_engine = MakerCheckerEngine()
 
 @server.tool()
-def hitl_submit_action(action_type: str, details: str, requester: str = "agent") -> dict:
+async def hitl_submit_action(action_type: str, details: str, requester: str = "agent") -> dict:
     """Submit a high-risk enterprise action for human-in-the-loop (HITL) maker-checker approval."""
-    ticket = hitl_engine.create_ticket(
-        action_name=action_type,
+    ticket = await hitl_engine.request_approval(
+        session_id=f"mcp_{requester}",
+        action_type=action_type,
         action_payload={"details": details},
-        requester_id=requester,
+        risk_reason=f"Action '{action_type}' submitted via MCP by '{requester}'",
+        approver_ids=["security-team@corp.com"],
     )
     return {
         "ticket_id": ticket.ticket_id,
-        "action_name": ticket.action_name,
+        "action_type": ticket.action_type,
         "status": ticket.status.value,
-        "created_at": ticket.created_at
+        "created_at": ticket.created_at,
+        "expires_at": ticket.expires_at
     }
 
 # 8. Self-Healing Code AST Diagnosis
