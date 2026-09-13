@@ -1,3 +1,7 @@
+import pytest
+
+pytest.importorskip("textual")
+
 from types import SimpleNamespace
 
 from ironcore.tui.screens.base import BaseWizardScreen
