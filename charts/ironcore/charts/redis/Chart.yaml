@@ -1,0 +1,4 @@
+apiVersion: v2
+name: redis
+version: 18.0.0
+description: Redis in-memory data store
