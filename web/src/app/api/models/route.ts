@@ -3,7 +3,11 @@ import {
   AI_CATALOG_LAST_UPDATED,
   queryProviderModels,
 } from "@/lib/ai-catalog";
-import { listOllamaModels } from "@/lib/server/ollama";
+import {
+  type LocalProviderId,
+  getLocalProviderBaseUrl,
+  listLocalProviderModels,
+} from "@/lib/server/local-providers";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -24,27 +28,31 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  if (provider.trim().toLowerCase() === "ollama") {
+  const normalizedProvider = provider.trim().toLowerCase();
+  const localProviders: LocalProviderId[] = ["ollama", "localai", "vllm", "lmstudio"];
+
+  if (localProviders.includes(normalizedProvider as LocalProviderId)) {
     try {
-      const models = await listOllamaModels();
+      const scan = await listLocalProviderModels(normalizedProvider as LocalProviderId);
       return NextResponse.json({
         action: "show_models",
-        provider: "Ollama",
-        provider_id: "ollama",
-        models: models.map((model) => ({
-          model_id: model.name,
+        provider: scan.label,
+        provider_id: scan.id,
+        base_url: getLocalProviderBaseUrl(scan.id),
+        models: scan.models.map((model) => ({
+          model_id: model.id,
           model_name: model.name,
           short_description: model.family
-            ? `Local ${model.family} model via Ollama`
-            : "Local model via Ollama",
+            ? `Local ${model.family} model via ${scan.label}`
+            : `Local model via ${scan.label}`,
           context_window: null,
-          tags: ["local", "ollama"],
-          example_endpoint_if_known: "http://127.0.0.1:11434",
+          tags: ["local", scan.id],
+          example_endpoint_if_known: getLocalProviderBaseUrl(scan.id),
         })),
         pagination: {
           page: 1,
           total_pages: 1,
-          total_items: models.length,
+          total_items: scan.models.length,
         },
         filter,
         last_updated: AI_CATALOG_LAST_UPDATED,
@@ -54,9 +62,9 @@ export async function GET(req: NextRequest) {
         {
           action: "show_models",
           error:
-            error instanceof Error ? error.message : "Ollama unavailable",
-          provider: "Ollama",
-          provider_id: "ollama",
+            error instanceof Error ? error.message : "Local provider unavailable",
+          provider: normalizedProvider,
+          provider_id: normalizedProvider,
           models: [],
           pagination: { page: 1, total_pages: 1, total_items: 0 },
           filter,

@@ -298,8 +298,60 @@ class HistorySummarizer:
         max_cache_entries: int = 256,
     ) -> None:
         self._summarize_fn = summarize_fn
+        self._max_cache_entries = max_cache_entries
         self._cache: Dict[str, str] = {}
-# (Removed HistorySummarizer — Replaced by SlidingWindowSummarizer in Phase 6)
+
+    def clear_cache(self) -> None:
+        self._cache.clear()
+
+    def _extractive_fallback(self, messages: List[Dict[str, Any]]) -> str:
+        extracted = []
+        for msg in messages:
+            content = msg.get("content", "")
+            if isinstance(content, str) and content.strip():
+                first_sent = content.strip().split(".")[0].strip()
+                if first_sent:
+                    extracted.append(f"{msg.get('role', 'user')}: {first_sent}.")
+        return " ".join(extracted)
+
+    async def summarize(
+        self,
+        messages: List[Dict[str, Any]],
+        max_summary_tokens: Optional[int] = None,
+    ) -> str:
+        if not messages:
+            return ""
+
+        key = hashlib.sha256(json.dumps(messages, sort_keys=True, default=str).encode()).hexdigest()
+        if key in self._cache:
+            summary = self._cache[key]
+        else:
+            summary = ""
+            if self._summarize_fn is not None:
+                prompt = json.dumps(messages, default=str)
+                try:
+                    res = self._summarize_fn(prompt)
+                    if asyncio.iscoroutine(res):
+                        summary = await res
+                    else:
+                        summary = str(res)
+                except Exception:
+                    summary = self._extractive_fallback(messages)
+            else:
+                summary = self._extractive_fallback(messages)
+
+            if len(self._cache) >= self._max_cache_entries:
+                oldest_key = next(iter(self._cache))
+                del self._cache[oldest_key]
+            self._cache[key] = summary
+
+        if max_summary_tokens is not None and max_summary_tokens > 0:
+            max_chars = int(max_summary_tokens * 3.5)
+            if len(summary) > max_chars:
+                summary = summary[:max_chars]
+
+        return summary
+
 # ──────────────────────────────────────────────────────────────────────────────
 
 
@@ -360,6 +412,7 @@ class ContextOptimizer:
         min_response_reserve: int = 1_024,
         token_compressor: Optional[Any] = None,     # V2 Phase 3 TokenCompressor
         sliding_window: Optional[SlidingWindowSummarizer] = None, # V2 Phase 6
+        summarizer: Optional[HistorySummarizer] = None,
     ) -> None:
         """
         Args:
@@ -369,6 +422,7 @@ class ContextOptimizer:
             total_budget:          Hard context window token cap.
             budget_ratios:         Override default percentage allocations.
             min_response_reserve:  Floor for response reservation (tokens).
+            summarizer:            Optional HistorySummarizer for compressing dropped turns.
         """
         self._session_store = session_store
         self._graph_rag = graph_rag
@@ -377,11 +431,13 @@ class ContextOptimizer:
         self._min_response_reserve = min_response_reserve
         self._counter = TokenCounter()
         self._compressor = token_compressor
+        self._summarizer = summarizer
         
         self._sliding_window = sliding_window or SlidingWindowSummarizer(
             trigger_at_pct=0.75,
             summarization_model=os.getenv("IRONCORE_SUMM_MODEL", "ollama/llama3.1:8b"),
         )
+
 
         ratios = dict(self._DEFAULT_BUDGET_RATIOS)
         if budget_ratios:
@@ -458,10 +514,12 @@ class ContextOptimizer:
         )
 
         # ── Step 3: Load message history from SessionStore ───────────────────
+        budget_for_recent = history_budget if self._summarizer is not None else (history_budget + summary_budget)
         (
             recent_msgs,
             dropped_count,
-        ) = await self._load_history(session_id, history_budget + summary_budget, model)
+            dropped_msgs,
+        ) = await self._load_history(session_id, budget_for_recent, model)
 
         # ── Step 4: Retrieve GraphRAG context ────────────────────────────────
         rag_messages, rag_nodes_count = await self._load_rag_context(
@@ -481,10 +539,24 @@ class ContextOptimizer:
                 "content": f"[AVAILABLE TOOLS]\n{tools_text}",
             })
 
-        # 5c — RAG context (injected early so recent history overrides it)
+        # 5c — Summary of dropped history turns if summarizer present
+        summary_inserted = False
+        if self._summarizer is not None and dropped_count > 0:
+            summary_text = await self._summarizer.summarize(
+                dropped_msgs,
+                max_summary_tokens=summary_budget,
+            )
+            if summary_text:
+                summary_inserted = True
+                messages.append({
+                    "role": "system",
+                    "content": f"[CONTEXT SUMMARY OF PRIOR TURNS]\n{summary_text}",
+                })
+
+        # 5d — RAG context (injected early so recent history overrides it)
         messages.extend(rag_messages)
 
-        # 5d — Verbatim history (newest, highest fidelity)
+        # 5e — Verbatim history (newest, highest fidelity)
         messages.extend(recent_msgs)
 
         # ── Step 6: Sliding Window Compression (Phase 6) ─────────────────────
@@ -533,7 +605,7 @@ class ContextOptimizer:
             token_count=total_tokens,
             dropped_messages=dropped_count,
             rag_nodes_included=rag_nodes_count,
-            summary_inserted=was_compressed,
+            summary_inserted=was_compressed or summary_inserted,
             budget=budget,
             assembly_time_ms=assembly_ms,
         )
@@ -545,15 +617,15 @@ class ContextOptimizer:
         session_id: str,
         total_history_budget: int,
         model: str,
-    ) -> Tuple[List[Dict[str, Any]], int]:
+    ) -> Tuple[List[Dict[str, Any]], int, List[Dict[str, Any]]]:
         """
         Load messages from SessionStore that fit within total_history_budget.
         Older messages that do not fit are dropped (or will be compressed via sliding window).
 
-        Returns (recent_msgs, dropped_count).
+        Returns (recent_msgs, dropped_count, dropped_msgs).
         """
         if self._session_store is None:
-            return [], 0
+            return [], 0, []
 
         try:
             all_messages = await self._session_store.get_messages(session_id)
@@ -563,10 +635,10 @@ class ContextOptimizer:
                 session_id,
                 exc,
             )
-            return [], 0
+            return [], 0, []
 
         if not all_messages:
-            return [], 0
+            return [], 0, []
 
         # Convert SessionMessage objects to OpenAI-format dicts (newest last)
         raw: List[Dict[str, Any]] = []
@@ -593,8 +665,10 @@ class ContextOptimizer:
             recent.insert(0, raw[i])
 
         dropped_count = len(raw) - len(recent)
+        dropped_msgs = raw[:dropped_count]
 
-        return recent, dropped_count
+        return recent, dropped_count, dropped_msgs
+
 
     # ── RAG Context Helpers ───────────────────────────────────────────────────
 

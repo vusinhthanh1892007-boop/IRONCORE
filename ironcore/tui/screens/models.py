@@ -4,6 +4,17 @@ from textual.widgets import Header, Footer, Label, SelectionList, Input, RadioSe
 from textual.widgets.selection_list import Selection
 from textual.containers import Vertical
 from ironcore.tui.screens.base import BaseWizardScreen
+from ironcore.tui.local_providers import scan_local_providers
+
+import urllib.request
+import json
+import threading
+import os
+from textual.widgets import ListView, ListItem
+
+
+LOCAL_PROVIDER_IDS = {"ollama", "localai", "vllm", "lmstudio"}
+ENABLE_REMOTE_MODEL_FETCH = os.environ.get("IRONCORE_TUI_REMOTE_MODEL_FETCH", "0") == "1"
 
 class ModelProvidersScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -40,29 +51,67 @@ class ModelProvidersScreen(BaseWizardScreen):
                 Selection(i18n.t("RunPod"), "runpod"),
                 Selection(i18n.t("Modal"), "modal"),
                 Selection(i18n.t("Ollama (Local)"), "ollama"),
+                Selection(i18n.t("LocalAI (Local)"), "localai"),
                 Selection(i18n.t("vLLM (Local)"), "vllm"),
+                Selection(i18n.t("LM Studio (Local)"), "lmstudio"),
                 id="provider-list"
             )
+            yield Label(i18n.t("Scanning local providers..."), id="local-provider-status")
             yield Label(i18n.t("Global Config:"))
             yield Input(placeholder=i18n.t("Multi-provider API Key (e.g. OpenRouter key)..."), password=True, id="provider-key")
             
             yield from self.compose_navigation()
         yield Footer()
 
+    def on_mount(self) -> None:
+        threading.Thread(target=self._scan_local_bg, daemon=True).start()
+
+    def _scan_local_bg(self) -> None:
+        scans = scan_local_providers()
+        self.app.cfg["local_provider_scan"] = [
+            {
+                "id": scan.id,
+                "label": scan.label,
+                "base_url": scan.base_url,
+                "available": scan.available,
+                "models": [{"id": m.id, "name": m.name, "family": m.family} for m in scan.models],
+                "error": scan.error,
+            }
+            for scan in scans
+        ]
+        try:
+            self.app.call_from_thread(self._update_local_provider_status)
+        except Exception:
+            pass
+
+    def _update_local_provider_status(self) -> None:
+        status_label = self.query_one("#local-provider-status", Label)
+        scan_rows = self.app.cfg.get("local_provider_scan", [])
+        if not scan_rows:
+            status_label.update(i18n.t("Local provider scan unavailable."))
+            return
+
+        parts = []
+        for row in scan_rows:
+            label = str(row.get("label") or row.get("id") or "unknown")
+            available = bool(row.get("available"))
+            count = len(row.get("models", []))
+            if available:
+                parts.append(f"{label}: online ({count} model{'s' if count != 1 else ''})")
+            else:
+                parts.append(f"{label}: offline")
+        status_label.update(" | ".join(parts))
+
     def on_next(self) -> None:
-        sel = self.query_one("#provider-list", SelectionList).selected
+        sel = list(self.query_one("#provider-list", SelectionList).selected)
         if not sel:
             self.notify(i18n.t("You must select at least one Provider!"), severity="error")
             return
         provider_key = self.query_one("#provider-key", Input).value
         self.app.cfg["providers"] = sel
+        self.app.cfg["local_selected_providers"] = [provider for provider in sel if provider in LOCAL_PROVIDER_IDS]
         self.app.cfg["provider_key_present"] = bool(provider_key)
         self.safe_dismiss("model_picker")
-
-import urllib.request
-import json
-import threading
-from textual.widgets import ListView, ListItem
 
 class ModelPickerScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:
@@ -70,7 +119,8 @@ class ModelPickerScreen(BaseWizardScreen):
         with Vertical(id="content-container"):
             yield Label(i18n.t("Primary Model Selection (Live from Web)"), id="step-title")
             yield Input(placeholder=i18n.t("Search 300+ models (e.g. claude, gpt, deepseek)..."), id="model-search")
-            yield Label(i18n.t("Loading models from internet in real-time... Please wait."), id="loading-msg")
+            yield Input(placeholder=i18n.t("Or enter model manually (e.g. qwen2.5:7b)"), id="manual-model")
+            yield Label(i18n.t("Loading models..."), id="loading-msg")
             
             # Using ListView for efficient display of lots of items
             yield ListView(id="model-list")
@@ -84,10 +134,32 @@ class ModelPickerScreen(BaseWizardScreen):
         threading.Thread(target=self._fetch_models_bg, daemon=True).start()
 
     def _fetch_models_bg(self) -> None:
-        models = []
+        models: list[dict] = []
         providers = self.app.cfg.get("providers", [])
+        local_scans = self.app.cfg.get("local_provider_scan", [])
+        selected_local = set(self.app.cfg.get("local_selected_providers", []))
+
+        if selected_local and local_scans:
+            for scan in local_scans:
+                provider_id = scan.get("id")
+                if provider_id not in selected_local:
+                    continue
+                if not scan.get("available"):
+                    continue
+                for model in scan.get("models", []):
+                    model_id = str(model.get("id") or "").strip()
+                    if not model_id:
+                        continue
+                    label = str(model.get("name") or model_id).strip()
+                    models.append(
+                        {
+                            "id": model_id,
+                            "name": f"{label} ({provider_id})",
+                            "context_length": "N/A",
+                        }
+                    )
         
-        if "ollama" in providers:
+        if "ollama" in providers and not any(m.get("id") for m in models):
             try:
                 # Fetch local tags safely from reconstructed Core module
                 from ironcore.core.ollama_client import OllamaClient
@@ -97,23 +169,41 @@ class ModelPickerScreen(BaseWizardScreen):
                         models.append({"id": model_name, "name": model_name + " (Local)", "context_length": "N/A"})
             except Exception: pass
 
-        if not models:
+        if not models and ENABLE_REMOTE_MODEL_FETCH:
             try:
                 req = urllib.request.Request("https://openrouter.ai/api/v1/models", headers={"User-Agent": "IronCore TUI"})
-                with urllib.request.urlopen(req, timeout=10) as response:
+                with urllib.request.urlopen(req, timeout=3) as response:
                     data = json.loads(response.read().decode())
                     models = data.get("data", [])
             except Exception:
-                models = [
-                    {"id": "gpt-4o", "name": "GPT-4o"},
-                    {"id": "claude-4.6-sonnet", "name": "Claude 4.6 Sonnet"},
-                    {"id": "deepseek/deepseek-r1", "name": "DeepSeek R1"}
-                ]
+                models = []
+
+        if not models:
+            models = [
+                {"id": "gpt-4o", "name": "GPT-4o"},
+                {"id": "claude-4.6-sonnet", "name": "Claude 4.6 Sonnet"},
+                {"id": "deepseek/deepseek-r1", "name": "DeepSeek R1"}
+            ]
         
         self.all_models = models
         try:
             self.app.call_from_thread(self._update_list, "")
         except Exception: pass
+
+    def _installed_local_model_ids(self) -> set[str]:
+        scan_rows = self.app.cfg.get("local_provider_scan", [])
+        selected_local = set(self.app.cfg.get("local_selected_providers", []))
+        installed: set[str] = set()
+        for row in scan_rows:
+            if row.get("id") not in selected_local:
+                continue
+            if not row.get("available"):
+                continue
+            for model in row.get("models", []):
+                model_id = str(model.get("id") or "").strip()
+                if model_id:
+                    installed.add(model_id)
+        return installed
 
     def _update_list(self, filter_text: str) -> None:
         try:
@@ -154,6 +244,18 @@ class ModelPickerScreen(BaseWizardScreen):
             self.safe_dismiss("channels")
 
     def on_next(self) -> None:
+        manual_model = self.query_one("#manual-model", Input).value.strip()
+        if manual_model:
+            selected_local = set(self.app.cfg.get("local_selected_providers", []))
+            if selected_local:
+                installed = self._installed_local_model_ids()
+                if installed and manual_model not in installed:
+                    self.notify(i18n.t("Model is not installed on selected local provider(s)."), severity="error")
+                    return
+            self.app.cfg["primary_model"] = manual_model
+            self.safe_dismiss("channels")
+            return
+
         lst = self.query_one("#model-list", ListView)
         if lst.index is not None and lst.index >= 0 and lst.index < len(lst.children):
             item_id = lst.children[lst.index].id

@@ -8,6 +8,8 @@ from ironcore.tui.screens.base import BaseWizardScreen
 from ironcore.tui.i18n import i18n
 
 class PreflightScreen(BaseWizardScreen):
+    show_back_button = False
+
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical(id="content-container"):

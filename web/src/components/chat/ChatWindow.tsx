@@ -97,9 +97,9 @@ export function ChatWindow() {
     const preferredModel = next.defaultModel || defaultUserSettings.defaultModel;
     setProvider(nextProvider);
 
-    if (nextProvider === "ollama") {
+    if (["ollama", "localai", "vllm", "lmstudio"].includes(nextProvider)) {
       try {
-        const res = await fetch("/api/models?provider=ollama", { cache: "no-store" });
+        const res = await fetch(`/api/models?provider=${encodeURIComponent(nextProvider)}`, { cache: "no-store" });
         const payload = (await res.json()) as {
           models?: Array<{ model_id?: string }>;
         };
@@ -346,8 +346,14 @@ export function ChatWindow() {
         }
       }
     } catch (error) {
+      const fallbackMessage =
+        error instanceof Error && error.message.toLowerCase().includes("failed to fetch")
+          ? "Network error: cannot reach /api/chat/stream. Check web server status and retry."
+          : error instanceof Error && error.message.toLowerCase().includes("network error")
+            ? "Network error: cannot reach /api/chat/stream. Check web server status and retry."
+            : "Stream cancelled.";
       finalizeMessage(activeSession, assistantMessage.id, {
-        content: error instanceof Error ? error.message : "Stream cancelled.",
+        content: error instanceof Error ? fallbackMessage : "Stream cancelled.",
       });
       pushLog("Stream cancelled.");
     } finally {
@@ -556,7 +562,7 @@ export function ChatWindow() {
       </div>
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <div>Enter hoặc Cmd/Ctrl+Enter gửi, Shift+Enter xuống dòng.</div>
+        <div>Press Enter or Cmd/Ctrl+Enter to send, Shift+Enter for a new line.</div>
         <Button
           type="button"
           variant="ghost"

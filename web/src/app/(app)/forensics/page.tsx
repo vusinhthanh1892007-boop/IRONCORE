@@ -280,7 +280,7 @@ export default function ForensicsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Forensics & Evidence Replay</h1>
         <p className="text-sm text-muted-foreground">
-          Phát lại timeline session, đồng bộ spatial map và xuất bằng chứng kiểm toán.
+          Replay session timeline, sync spatial map, and export audit evidence.
         </p>
       </div>
 
@@ -323,7 +323,7 @@ export default function ForensicsPage() {
         }}
         onLoadSession={loadSession}
         onExportSnapshot={() => {
-          // Export chính thức dùng EvidenceExport bên dưới
+          // Official export is handled by EvidenceExport below.
         }}
       />
 

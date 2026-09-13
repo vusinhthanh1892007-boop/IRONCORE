@@ -27,7 +27,6 @@ import {
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { LanguageSelector } from "@/components/layout/LanguageSelector";
 
 const groups = [
   {
@@ -117,7 +116,6 @@ export function LinearSidebar() {
       </nav>
 
       <div className="mt-auto space-y-2">
-        <LanguageSelector />
         <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-2 text-xs text-muted-foreground">
           <BookOpen className="h-4 w-4" strokeWidth={1.5} />
           Operator manual

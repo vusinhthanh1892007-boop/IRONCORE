@@ -65,7 +65,7 @@ function ServersTab() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Kết nối Model Context Protocol (MCP) servers hoặc API endpoints.
+          Connect Model Context Protocol (MCP) servers or API endpoints.
         </p>
         <button
           type="button"
@@ -73,7 +73,7 @@ function ServersTab() {
             hover:bg-accent dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
         >
           <Plus className="h-3.5 w-3.5" />
-          Thêm Server
+          Add Server
         </button>
       </div>
 
@@ -106,8 +106,8 @@ function ServersTab() {
       </div>
 
       <div className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
-        Kéo thả cấu hình server vào đây, hoặc nhấn{" "}
-        <strong className="text-foreground">Thêm Server</strong> để kết nối.
+        Drag and drop server configuration here, or click{" "}
+        <strong className="text-foreground">Add Server</strong> to connect.
       </div>
     </div>
   );
@@ -126,7 +126,7 @@ function DatabasesTab() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Kết nối cơ sở dữ liệu để AI có thể truy vấn trực tiếp.
+          Connect databases so AI can query directly.
         </p>
         <button
           type="button"
@@ -134,7 +134,7 @@ function DatabasesTab() {
             hover:bg-accent dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
         >
           <Plus className="h-3.5 w-3.5" />
-          Thêm Database
+          Add Database
         </button>
       </div>
 
@@ -172,7 +172,7 @@ function DatabasesTab() {
       </div>
 
       <div className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
-        Hỗ trợ PostgreSQL, MySQL, MongoDB, Redis, SQLite và nhiều hơn nữa.
+        Supports PostgreSQL, MySQL, MongoDB, Redis, SQLite, and more.
       </div>
     </div>
   );

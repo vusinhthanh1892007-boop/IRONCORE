@@ -147,7 +147,7 @@ export default function SiemPage() {
     <div className="space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold">SIEM Event Stream</h1>
-        <p className="text-sm text-muted-foreground">Theo dõi security events realtime, lọc severity và export JSON/CSV.</p>
+        <p className="text-sm text-muted-foreground">Track security events in real time, filter by severity, and export JSON/CSV.</p>
       </div>
 
       <Card className="border border-border bg-card p-4">

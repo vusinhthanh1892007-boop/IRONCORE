@@ -9,6 +9,35 @@ export interface StreamChunk {
   error?: string;
 }
 
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function isRetryableNetworkError(error: unknown) {
+  if (!(error instanceof Error)) return false;
+  if (error.name === "AbortError") return false;
+  const msg = error.message.toLowerCase();
+  return msg.includes("failed to fetch") || msg.includes("networkerror");
+}
+
+async function fetchStreamWithRetry(
+  url: string,
+  init: RequestInit,
+  retries = 1
+) {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await fetch(url, init);
+    } catch (error) {
+      lastError = error;
+      if (!isRetryableNetworkError(error) || attempt === retries) {
+        throw error;
+      }
+      await sleep(350);
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error("Failed to fetch stream.");
+}
+
 interface StreamChatOptions {
   sessionId: string;
   message: string;
@@ -51,15 +80,27 @@ export async function* streamChat({
     files: files && files.length ? await Promise.all(files.map(fileToBase64)) : undefined,
   };
 
-  const res = await fetch(`${baseUrl}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(apiKey ? { "X-IronCore-API-Key": apiKey } : {}),
-    },
-    body: JSON.stringify(payload),
-    signal,
-  });
+  let res: Response;
+  try {
+    res = await fetchStreamWithRetry(`${baseUrl}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(apiKey ? { "X-IronCore-API-Key": apiKey } : {}),
+      },
+      body: JSON.stringify(payload),
+      signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw error;
+    }
+    yield {
+      type: "error",
+      error: "Network error while connecting to chat stream.",
+    };
+    return;
+  }
 
   if (!res.ok || !res.body) {
     yield {

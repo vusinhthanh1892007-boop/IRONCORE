@@ -5,6 +5,7 @@ import { Camera, HandPalm, Microphone, Keyboard, Sparkle } from "@phosphor-icons
 import { CameraPermission } from "@/components/ironman/CameraPermission";
 import { GestureController } from "@/components/ironman/GestureController";
 import {
+  defaultIronManSettings,
   getIronManSettings,
   saveIronManSettings,
   IRONMAN_SETTINGS_EVENT,
@@ -17,9 +18,13 @@ interface IronManPanelProps {
 }
 
 export function IronManPanel({ onGestureAction }: IronManPanelProps) {
-  const [settings, setSettings] = React.useState<IronManSettings>(() => getIronManSettings());
+  const [settings, setSettings] = React.useState<IronManSettings>(defaultIronManSettings);
   const [cameraStream, setCameraStream] = React.useState<MediaStream | null>(null);
   const [gestureFlash, setGestureFlash] = React.useState(false);
+
+  React.useEffect(() => {
+    setSettings(getIronManSettings());
+  }, []);
 
   React.useEffect(() => {
     const handler = (event: Event) => {

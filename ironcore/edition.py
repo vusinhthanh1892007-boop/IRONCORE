@@ -1,8 +1,12 @@
 """
-ironcore/edition.py — Compatibility edition helpers.
+ironcore/edition.py — Edition control for IronCore CE vs EE.
 
-Project now runs in single-edition mode for this repository build.
-Edition helpers are kept for API compatibility only.
+Community Edition (CE):  Free, open source, no bypass modules.
+Enterprise Edition (EE): Full features, requires license key, includes all bypass modules.
+
+Set via environment variable:
+  IRONCORE_EDITION=community   → CE (default)
+  IRONCORE_EDITION=enterprise  → EE (requires IRONCORE_LICENSE_KEY)
 """
 from __future__ import annotations
 
@@ -23,14 +27,14 @@ class Edition(str, Enum):
 
 def get_edition() -> Edition:
     """Return the current edition from environment variable."""
-    raw = os.getenv("IRONCORE_EDITION", "community").strip().lower()
+    raw = os.getenv("IRONCORE_EDITION", "enterprise").strip().lower()
     try:
         return Edition(raw)
     except ValueError:
         logger.warning(
-            "[Edition] Unknown IRONCORE_EDITION=%r — defaulting to community.", raw
+            "[Edition] Unknown IRONCORE_EDITION=%r — defaulting to enterprise.", raw
         )
-        return Edition.COMMUNITY
+        return Edition.ENTERPRISE
 
 
 def is_enterprise() -> bool:
@@ -45,7 +49,13 @@ def is_community() -> bool:
 
 # ── Feature flags ─────────────────────────────────────────────────────────────
 
-ENTERPRISE_FEATURES = {}
+ENTERPRISE_FEATURES = {
+    "cloudflare_bypass":   "Bypass Cloudflare anti-bot protection",
+    "datadome_bypass":     "Bypass DataDome bot detection",
+    "reddit_bypass":       "Reddit-specific bot evasion",
+    "google_form_bypass":  "Google Form automation bypass",
+    "full_bot_evasion":    "Full bot evasion orchestration",
+}
 
 COMMUNITY_FEATURES = {
     "stealth_browser":     "Stealth browser with human-like behavior",
@@ -72,10 +82,22 @@ def enterprise_only(feature_name: str) -> Callable[[F], F]:
     Decorator: raise RuntimeError if function is called in Community Edition.
 
     Usage:
-        @enterprise_only("feature_name")
-        class FeatureComponent: ...
+        @enterprise_only("datadome_bypass")
+        class DataDomeBypass: ...
     """
     def decorator(obj: F) -> F:
+        if not is_enterprise():
+            # Replace class/function with a stub that raises on instantiation/call
+            import functools
+
+            @functools.wraps(obj)  # type: ignore[arg-type]
+            def stub(*args: Any, **kwargs: Any) -> Any:
+                raise RuntimeError(
+                    f"[IronCore CE] '{feature_name}' is an Enterprise Edition feature.\n"
+                    f"  Set IRONCORE_EDITION=enterprise to unlock.\n"
+                    f"  Description: {ENTERPRISE_FEATURES.get(feature_name, '')}"
+                )
+            return stub  # type: ignore[return-value]
         return obj
     return decorator
 
@@ -85,14 +107,21 @@ def check_enterprise(feature_name: str) -> None:
     Raise RuntimeError immediately if not Enterprise Edition.
     Use inside __init__ or at module import time.
     """
-    return None
+    if not is_enterprise():
+        raise RuntimeError(
+            f"[IronCore CE] '{feature_name}' requires Enterprise Edition.\n"
+            f"  Set IRONCORE_EDITION=enterprise to unlock.\n"
+            f"  Description: {ENTERPRISE_FEATURES.get(feature_name, '')}"
+        )
 
 
 def get_feature_list() -> dict[str, list[str]]:
     """Return feature list for current edition (for UI/docs)."""
     features = list(COMMUNITY_FEATURES.keys())
+    if is_enterprise():
+        features += list(ENTERPRISE_FEATURES.keys())
     return {
         "edition": get_edition().value,
         "features": features,
-        "enterprise_locked": [],
+        "enterprise_locked": [] if is_enterprise() else list(ENTERPRISE_FEATURES.keys()),
     }

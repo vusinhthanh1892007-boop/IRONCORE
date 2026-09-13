@@ -57,27 +57,27 @@ const PLATFORM_DOCS: Record<string, { label: string; envVar: string; help: strin
   telegram: {
     label: "Bot Token",
     envVar: "TELEGRAM_BOT_TOKEN",
-    help: "Lấy token từ @BotFather trên Telegram",
+    help: "Get token from @BotFather on Telegram",
   },
   zalo: {
     label: "OA Access Token",
     envVar: "ZALO_OA_ACCESS_TOKEN",
-    help: "Từ Zalo Developer Console → Official Account → Access Token",
+    help: "From Zalo Developer Console → Official Account → Access Token",
   },
   discord: {
     label: "Bot Token",
     envVar: "DISCORD_BOT_TOKEN",
-    help: "Từ Discord Developer Portal → Applications → Bot → Token",
+    help: "From Discord Developer Portal → Applications → Bot → Token",
   },
   messenger: {
     label: "Page Access Token",
     envVar: "MESSENGER_PAGE_ACCESS_TOKEN",
-    help: "Từ Meta Developer Console → App → Messenger → Configuration → Page Access Token",
+    help: "From Meta Developer Console → App → Messenger → Configuration → Page Access Token",
   },
   whatsapp: {
     label: "Access Token",
     envVar: "WHATSAPP_ACCESS_TOKEN",
-    help: "Từ Meta Developer Console → App → WhatsApp → Configuration → Access Token",
+    help: "From Meta Developer Console → App → WhatsApp → Configuration → Access Token",
   },
 };
 
@@ -159,7 +159,7 @@ export default function BotsPage() {
         <div>
           <h1 className="text-xl font-semibold">Bot Channels</h1>
           <p className="text-sm text-muted-foreground">
-            Kết nối IronCore AI với các nền tảng nhắn tin.
+            Connect IronCore AI to messaging platforms.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchStatus} disabled={loading}>
@@ -223,11 +223,11 @@ export default function BotsPage() {
               <div className="text-xs text-muted-foreground">
                 {ch.configured ? (
                   <span className="flex items-center gap-1 text-emerald-500">
-                    <CheckCircle className="h-3 w-3" /> Token được cấu hình qua env
+                    <CheckCircle className="h-3 w-3" /> Token configured via environment
                   </span>
                 ) : (
                   <span className="flex items-center gap-1 text-red-400">
-                    <XCircle className="h-3 w-3" /> Chưa cấu hình — nhập token bên dưới
+                    <XCircle className="h-3 w-3" /> Not configured — enter token below
                   </span>
                 )}
               </div>
@@ -239,7 +239,7 @@ export default function BotsPage() {
                   onClick={() => setConfigOpen(isOpen ? null : ch.name)}
                 >
                   <Settings className="h-3 w-3" />
-                  {isOpen ? "Ẩn cấu hình" : "Cấu hình token"}
+                  {isOpen ? "Hide config" : "Configure token"}
                 </button>
 
                 {isOpen && (
@@ -283,7 +283,7 @@ export default function BotsPage() {
                           />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">Refresh Token (tùy chọn)</Label>
+                          <Label className="text-xs">Refresh Token (optional)</Label>
                           <Input
                             type="password"
                             autoComplete="new-password"
@@ -319,11 +319,11 @@ export default function BotsPage() {
                             className="h-8 text-xs font-mono"
                           />
                           <p className="text-[10px] text-muted-foreground">
-                            Chuỗi bất kỳ bạn đặt trong Meta → Webhook → Verify Token
+                            Any string you set in Meta → Webhook → Verify Token
                           </p>
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">App Secret (tùy chọn)</Label>
+                          <Label className="text-xs">App Secret (optional)</Label>
                           <Input
                             type="password"
                             autoComplete="new-password"
@@ -379,7 +379,7 @@ export default function BotsPage() {
                           />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">App Secret (tùy chọn)</Label>
+                          <Label className="text-xs">App Secret (optional)</Label>
                           <Input
                             type="password"
                             autoComplete="new-password"
@@ -399,7 +399,7 @@ export default function BotsPage() {
 
                     <div className="space-y-1">
                       <Label className="text-xs">
-                        User ID được phép (cách nhau bằng dấu phẩy, để trống = tất cả)
+                        Allowed user IDs (comma-separated, empty = allow all)
                       </Label>
                       <Input
                         type="text"
@@ -429,9 +429,9 @@ export default function BotsPage() {
                 {busy ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : ch.running ? (
-                  "Dừng bot"
+                  "Stop bot"
                 ) : (
-                  "Khởi động bot"
+                  "Start bot"
                 )}
               </Button>
 
@@ -440,7 +440,7 @@ export default function BotsPage() {
                 <div className="rounded-lg border border-border bg-muted px-3 py-2 text-[10px] text-muted-foreground">
                   Webhook URL: <code className="text-foreground">/v1/webhooks/zalo</code>
                   <br />
-                  Đăng ký URL này trong{" "}
+                  Register this URL in{" "}
                   <a
                     href="https://developers.zalo.me"
                     target="_blank"
@@ -457,7 +457,7 @@ export default function BotsPage() {
                 <div className="rounded-lg border border-border bg-muted px-3 py-2 text-[10px] text-muted-foreground">
                   Webhook URL: <code className="text-foreground">/v1/webhooks/messenger</code>
                   <br />
-                  Đăng ký trong{" "}
+                  Register in{" "}
                   <a
                     href="https://developers.facebook.com/apps"
                     target="_blank"
@@ -475,7 +475,7 @@ export default function BotsPage() {
                 <div className="rounded-lg border border-border bg-muted px-3 py-2 text-[10px] text-muted-foreground">
                   Webhook URL: <code className="text-foreground">/v1/webhooks/whatsapp</code>
                   <br />
-                  Đăng ký trong{" "}
+                  Register in{" "}
                   <a
                     href="https://developers.facebook.com/apps"
                     target="_blank"
@@ -494,26 +494,26 @@ export default function BotsPage() {
 
       {/* How it works */}
       <div className="rounded-xl border border-border bg-card p-6 space-y-3">
-        <div className="font-semibold text-sm">Cách hoạt động</div>
+        <div className="font-semibold text-sm">How it works</div>
         <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
           <li>
-            Người dùng gửi tin nhắn trên{" "}
+            Users send messages on{" "}
             <strong className="text-foreground">Telegram</strong>,{" "}
             <strong className="text-foreground">Zalo</strong>,{" "}
-            <strong className="text-foreground">Messenger</strong>, hoặc{" "}
-            <strong className="text-foreground">WhatsApp</strong> → Bot nhận được.
+            <strong className="text-foreground">Messenger</strong>, and{" "}
+            <strong className="text-foreground">WhatsApp</strong> → the bot receives them.
           </li>
           <li>
-            Tin nhắn được chuyển tiếp vào{" "}
-            <strong className="text-foreground">IronCore Engine</strong> (AI xử lý).
+            Messages are forwarded to the{" "}
+            <strong className="text-foreground">IronCore Engine</strong> for AI processing.
           </li>
           <li>
-            Engine trả lời → Bot gửi phản hồi lại người dùng trong{" "}
-            <strong className="text-foreground">cùng cuộc trò chuyện</strong>.
+            The engine replies → Bot sends the response back in the{" "}
+            <strong className="text-foreground">same conversation</strong>.
           </li>
           <li>
-            Mỗi người dùng có một <strong className="text-foreground">session riêng</strong>{" "}
-            (telegram:user_id / zalo:user_id) để giữ ngữ cảnh hội thoại.
+            Each user has a <strong className="text-foreground">separate session</strong>{" "}
+            (telegram:user_id / zalo:user_id) to preserve conversation context.
           </li>
         </ol>
       </div>

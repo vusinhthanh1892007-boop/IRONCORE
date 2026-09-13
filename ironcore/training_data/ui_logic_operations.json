@@ -1,0 +1,515 @@
+{
+  "version": "2.0",
+  "description": "IronCore AI – Complete UI logic operations training data. Covers all TUI screens, Web components, stores, hooks, and settings.",
+  "last_updated": "2026-03-27",
+
+  "tui_screens": {
+    "BaseWizardScreen": {
+      "file": "ironcore/tui/screens/base.py",
+      "operations": [
+        {"id": "btn_back", "trigger": "button_click", "target": "#btn-back", "effect": "safe_dismiss(None) → pop_screen or fallback_to_wizard_root"},
+        {"id": "btn_next", "trigger": "button_click", "target": "#btn-next", "effect": "calls on_next() (overridden by subclass)"},
+        {"id": "escape_key", "trigger": "key_press", "key": "escape", "effect": "action_back() → safe_dismiss(None)"},
+        {"id": "ctrl_q", "trigger": "key_press", "key": "ctrl+q", "effect": "quit_app"}
+      ],
+      "state": {"_dismiss_handled": "bool – idempotent guard, reset in on_mount()"},
+      "error_handling": "try/except on dismiss(); fallback: pop_screen → fallback_to_wizard_root"
+    },
+
+    "LanguageScreen": {
+      "file": "ironcore/tui/screens/language.py",
+      "route_from": null,
+      "route_to": "preflight",
+      "operations": [
+        {"id": "search_filter", "trigger": "input_changed", "target": "#lang-search", "effect": "filters language list by name/code/label (case-insensitive)"},
+        {"id": "select_language", "trigger": "list_view_selected", "target": "ListView", "effect": "i18n.load_language(code) → push_language_to_backend(code) → cfg[language_code]=code → dismiss(code)"}
+      ],
+      "config_keys": ["language_code", "language"],
+      "side_effects": ["i18n.load_language()", "push_language_to_backend() — API call"],
+      "validation": []
+    },
+
+    "PreflightScreen": {
+      "file": "ironcore/tui/screens/preflight.py",
+      "route_from": "language",
+      "route_to": "auth",
+      "operations": [
+        {"id": "view_status", "trigger": "on_mount", "effect": "displays OS, Python version, network status"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[preflight]={os, network_ok} → dismiss('auth')"}
+      ],
+      "config_keys": ["preflight"],
+      "validation": [
+        {"field": "python_version", "rule": "sys.version_info >= (3,10)", "display": "green ✓ or red ✗"},
+        {"field": "network", "rule": "socket.create_connection('8.8.8.8', 53, timeout=2)", "display": "Online/Offline"}
+      ],
+      "side_effects": ["socket.create_connection to 8.8.8.8:53"]
+    },
+
+    "AuthScreen": {
+      "file": "ironcore/tui/screens/auth_search.py",
+      "route_from": "preflight",
+      "route_to": "search",
+      "operations": [
+        {"id": "radio_auth_mode", "trigger": "radio_set_changed", "target": "#auth-mode", "options": ["local", "cloud"], "effect": "cloud → show token inputs; local → hide them"},
+        {"id": "input_token", "trigger": "text_input", "target": "#auth-token", "masked": true},
+        {"id": "input_profile_id", "trigger": "text_input", "target": "#auth-profile-id"},
+        {"id": "input_scopes", "trigger": "text_input", "target": "#auth-profile-scopes"},
+        {"id": "input_expiry", "trigger": "text_input", "target": "#auth-profile-expiry"},
+        {"id": "btn_token_save", "trigger": "button_click", "effect": "validates profile_id+token → save_token_profile() API → refresh profiles"},
+        {"id": "btn_token_use", "trigger": "button_click", "effect": "validates profile_id → use_token_profile() API → sets token"},
+        {"id": "btn_token_revoke", "trigger": "button_click", "effect": "validates profile_id → revoke_token_profile() API"},
+        {"id": "btn_token_refresh", "trigger": "button_click", "effect": "list_token_profiles() API → update counts"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[auth]={mode, token_present, token_profile} → dismiss('search')"}
+      ],
+      "config_keys": ["auth"],
+      "validation": [
+        {"field": "profile_id", "rule": "required for save/use/revoke"},
+        {"field": "token", "rule": "required for save"}
+      ],
+      "side_effects": ["list_token_profiles()", "save_token_profile()", "use_token_profile()", "revoke_token_profile()"],
+      "threading": "all API calls via daemon threads"
+    },
+
+    "SearchProviderScreen": {
+      "file": "ironcore/tui/screens/auth_search.py",
+      "route_from": "auth",
+      "route_to": "providers",
+      "operations": [
+        {"id": "radio_search_mode", "trigger": "radio_set_changed", "target": "#search-mode", "options": ["brave", "gemini", "grok", "kimi", "perplexity", "tavily", "none"], "effect": "none → hide key input; others → show key input"},
+        {"id": "input_search_key", "trigger": "text_input", "target": "#search-key", "masked": true},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[search]={provider, has_key} → dismiss('providers')"}
+      ],
+      "config_keys": ["search"],
+      "validation": []
+    },
+
+    "ModelProvidersScreen": {
+      "file": "ironcore/tui/screens/models.py",
+      "route_from": "search",
+      "route_to": "model_picker",
+      "operations": [
+        {"id": "multi_select_providers", "trigger": "selection_list_toggle", "target": "#provider-list", "count": 36, "default": ["openai"], "effect": "toggle provider selection"},
+        {"id": "input_provider_key", "trigger": "text_input", "target": "#provider-key"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "validates ≥1 provider → cfg[providers]=selected → dismiss('model_picker')"}
+      ],
+      "config_keys": ["providers", "local_selected_providers", "provider_key_present", "local_provider_scan"],
+      "validation": [{"field": "providers", "rule": "at least one selected"}],
+      "side_effects": ["on_mount → background thread scan_local_providers()"],
+      "provider_list": ["openai", "anthropic", "google", "meta", "mistral", "deepseek", "cohere", "alibaba", "zhipu", "moonshot", "tencent", "bytedance", "baidu", "xiaomi", "minimax", "stepfun", "xai", "nvidia", "stability", "runway", "blackforest", "openrouter", "together", "replicate", "fireworks", "huggingface", "azure", "aws", "groq", "deepinfra", "runpod", "modal", "ollama", "localai", "vllm", "lmstudio"]
+    },
+
+    "ModelPickerScreen": {
+      "file": "ironcore/tui/screens/models.py",
+      "route_from": "providers",
+      "route_to": "channels",
+      "operations": [
+        {"id": "search_filter", "trigger": "input_changed", "target": "#model-search", "effect": "filters models by ID/name, max 100 displayed"},
+        {"id": "manual_model_input", "trigger": "text_input", "target": "#manual-model"},
+        {"id": "select_model", "trigger": "list_view_selected", "target": "#model-list", "effect": "maps item_id → model_id → cfg[primary_model] → dismiss('channels')"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "validates model selection → cfg[primary_model] → dismiss('channels')"}
+      ],
+      "config_keys": ["primary_model"],
+      "validation": [
+        {"field": "model", "rule": "must select or enter a valid model"},
+        {"field": "manual_model", "rule": "if local provider: cross-check against installed models"},
+        {"field": "list_selection", "rule": "not 'none' placeholder"}
+      ],
+      "fetch_priority": [
+        "1. local provider scan → OllamaClient.list_models()",
+        "2. model_registry.fetch_models()",
+        "3. direct OpenRouter API (if IRONCORE_TUI_REMOTE_MODEL_FETCH=1)",
+        "4. hardcoded fallback (15 latest models)"
+      ],
+      "fallback_models": ["openai/gpt-5.4", "anthropic/claude-opus-4", "google/gemini-3.1-pro", "deepseek/deepseek-v3.1", "x-ai/grok-4", "alibaba/qwen3.5-397b", "meta/llama-4-maverick", "mistral/mistral-large-3-2512", "zhipu/glm-5", "moonshot/kimi-k2.5", "google/gemma-3n", "nvidia/nemotron-3-super", "microsoft/phi-4", "cohere/command-a", "deepseek/deepseek-r1"]
+    },
+
+    "ChannelScreen": {
+      "file": "ironcore/tui/screens/channels.py",
+      "route_from": "model_picker",
+      "route_to": "skills",
+      "operations": [
+        {"id": "radio_channel", "trigger": "radio_set_changed", "target": "#channel-mode", "options": ["telegram", "whatsapp", "discord", "irc", "gchat", "slack", "signal", "imessage", "line", "feishu", "nostr", "teams", "mattermost", "nextcloud", "matrix", "bluebubbles", "zalo_bot", "zalo_personal", "synology", "tlon"], "default": "telegram"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[channel]=selected → dismiss('skills')"}
+      ],
+      "config_keys": ["channel"],
+      "validation": []
+    },
+
+    "SkillsScreen": {
+      "file": "ironcore/tui/screens/features.py",
+      "route_from": "channels",
+      "route_to": "hooks",
+      "operations": [
+        {"id": "multi_select_skills", "trigger": "selection_list_toggle", "target": "#skills-list", "options": ["web_search", "code_exec", "browser", "memory", "hitl", "rag", "voice"], "default": ["web_search"]},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[skills]=selected → dismiss('hooks')"}
+      ],
+      "config_keys": ["skills"],
+      "validation": []
+    },
+
+    "HooksScreen": {
+      "file": "ironcore/tui/screens/features.py",
+      "route_from": "skills",
+      "route_to": "gateway",
+      "operations": [
+        {"id": "toggle_webhooks", "trigger": "switch_toggle", "target": "#enable-webhooks", "effect": "ON → show URL+secret inputs; OFF → hide"},
+        {"id": "input_webhook_url", "trigger": "text_input", "target": "#webhook-url"},
+        {"id": "input_webhook_secret", "trigger": "text_input", "target": "#webhook-secret", "masked": true},
+        {"id": "btn_next", "trigger": "button_click", "effect": "if enabled: validate URL → cfg[hooks]={enabled, url, has_secret} → dismiss('gateway')"}
+      ],
+      "config_keys": ["hooks"],
+      "validation": [{"field": "webhook_url", "rule": "urlparse: scheme ∈ {http, https}, netloc non-empty"}]
+    },
+
+    "GatewayScreen": {
+      "file": "ironcore/tui/screens/features.py",
+      "route_from": "hooks",
+      "route_to": "ironman",
+      "operations": [
+        {"id": "input_port", "trigger": "text_input", "target": "#gateway-port", "default": "8000"},
+        {"id": "radio_bind", "trigger": "radio_set_changed", "target": "#gateway-bind", "options": ["bind-local", "bind-public"], "default": "bind-local"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "validates port → cfg[gateway]={port, bind} → dismiss('ironman')"}
+      ],
+      "config_keys": ["gateway"],
+      "validation": [
+        {"field": "port", "rule": "isdigit() — must be a valid number"},
+        {"field": "port_range", "rule": "1 ≤ port ≤ 65535"}
+      ]
+    },
+
+    "IronManScreen": {
+      "file": "ironcore/tui/screens/ironman.py",
+      "route_from": "gateway",
+      "route_to": "secrets",
+      "operations": [
+        {"id": "toggle_camera", "trigger": "switch_toggle", "target": "#camera-enabled"},
+        {"id": "toggle_gesture", "trigger": "switch_toggle", "target": "#gesture-enabled"},
+        {"id": "toggle_voice", "trigger": "switch_toggle", "target": "#voice-enabled"},
+        {"id": "input_sensitivity", "trigger": "text_input", "target": "#gesture-sensitivity", "default": "0.6"},
+        {"id": "radio_stt_language", "trigger": "radio_set_changed", "target": "#stt-language", "options": ["vi-VN", "en-US", "ja-JP", "zh-CN", "ko-KR"], "default": "vi-VN"},
+        {"id": "btn_test_gesture", "trigger": "button_click", "effect": "check camera+mediapipe → start GestureEngine → auto-stop 10s → show gesture notifications"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "stop test engine → parse sensitivity → cfg[ironman]={...} → dismiss('secrets')"}
+      ],
+      "config_keys": ["ironman"],
+      "config_shape": {"camera_enabled": "bool", "gesture_enabled": "bool", "voice_enabled": "bool", "sensitivity": "float 0.1–1.0", "stt_language": "str", "gesture_map": "dict"},
+      "gesture_map": {
+        "thumbs_up": "approve_hitl",
+        "fist": "stop_stream",
+        "open_hand": "clear_input",
+        "peace": "new_session",
+        "point_up": "submit_input",
+        "swipe_up": "scroll_up",
+        "swipe_down": "scroll_down",
+        "swipe_left": "navigate_back",
+        "swipe_right": "navigate_forward"
+      },
+      "validation": [
+        {"field": "camera", "rule": "check_camera_available()"},
+        {"field": "mediapipe", "rule": "check_mediapipe_available()"},
+        {"field": "sensitivity", "rule": "float parse, clamp [0.1, 1.0], default 0.6"}
+      ]
+    },
+
+    "SecretsScreen": {
+      "file": "ironcore/tui/screens/system.py",
+      "route_from": "ironman",
+      "route_to": "persona",
+      "operations": [
+        {"id": "view_token", "trigger": "on_mount", "effect": "displays masked gateway token (first4 + **** + last4)"},
+        {"id": "toggle_ack_token", "trigger": "switch_toggle", "target": "#ack-token"},
+        {"id": "input_google_maps_key", "trigger": "text_input", "target": "#google-maps-key", "masked": true},
+        {"id": "btn_save_maps_key", "trigger": "button_click", "effect": "validate key format → save_google_maps_key() API"},
+        {"id": "btn_delete_maps_key", "trigger": "button_click", "effect": "delete_google_maps_key() API"},
+        {"id": "btn_refresh_maps_key", "trigger": "button_click", "effect": "fetch_google_maps_key_status() API"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "validate ack_token ON → cfg[secret_token]='present' → dismiss('persona')"}
+      ],
+      "config_keys": ["secret_token", "google_maps"],
+      "validation": [
+        {"field": "ack_token", "rule": "Switch must be True"},
+        {"field": "google_maps_key", "rule": "regex ^AIza[0-9A-Za-z_-]{20,}$"},
+        {"field": "google_maps_key", "rule": "non-empty for save"}
+      ],
+      "side_effects": ["save_google_maps_key()", "delete_google_maps_key()", "fetch_google_maps_key_status()"]
+    },
+
+    "PersonaScreen": {
+      "file": "ironcore/tui/screens/system.py",
+      "route_from": "secrets",
+      "route_to": "monitoring",
+      "operations": [
+        {"id": "input_name", "trigger": "text_input", "target": "#persona-name"},
+        {"id": "input_prompt", "trigger": "text_input", "target": "#persona-prompt"},
+        {"id": "radio_memory_policy", "trigger": "radio_set_changed", "target": "#memory-policy", "options": ["session", "persistent", "summary"], "default": "persistent"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "validate name+prompt required → cfg[persona]={name, prompt, memory} → dismiss('monitoring')"}
+      ],
+      "config_keys": ["persona"],
+      "validation": [
+        {"field": "name", "rule": "required (non-empty after strip)"},
+        {"field": "prompt", "rule": "required (non-empty after strip)"}
+      ]
+    },
+
+    "MonitoringScreen": {
+      "file": "ironcore/tui/screens/system.py",
+      "route_from": "persona",
+      "route_to": "final",
+      "operations": [
+        {"id": "toggle_telemetry", "trigger": "switch_toggle", "target": "#telemetry", "default": true},
+        {"id": "radio_backup", "trigger": "radio_set_changed", "target": "#backup-strategy", "options": ["daily", "weekly", "none"], "default": "daily"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "cfg[monitoring]={telemetry, backup} → dismiss('final')"}
+      ],
+      "config_keys": ["monitoring"],
+      "validation": []
+    },
+
+    "FinalSmokeTestScreen": {
+      "file": "ironcore/tui/screens/final.py",
+      "route_from": "monitoring",
+      "route_to": "deploy",
+      "operations": [
+        {"id": "btn_test", "trigger": "button_click", "effect": "show logs → check gateway port → check Ollama availability → log results"},
+        {"id": "btn_next", "trigger": "button_click", "effect": "dismiss('deploy')"}
+      ],
+      "config_keys": [],
+      "validation": [],
+      "reads": ["cfg.gateway.port", "cfg.primary_model"]
+    },
+
+    "SummaryExportScreen": {
+      "file": "ironcore/tui/screens/final.py",
+      "route_from": "final",
+      "route_to": "done",
+      "operations": [
+        {"id": "view_config", "trigger": "on_mount", "effect": "displays JSON preview of app.cfg"},
+        {"id": "toggle_ack_overwrite", "trigger": "switch_toggle", "target": "#ack-overwrite"},
+        {"id": "btn_deploy", "trigger": "button_click", "effect": "validate ack ON → save_config(cfg) → dismiss('done')"}
+      ],
+      "config_keys": [],
+      "validation": [{"field": "ack_overwrite", "rule": "Switch must be True"}],
+      "side_effects": ["save_config() → writes ~/.ironcore/config.json"]
+    }
+  },
+
+  "web_components": {
+    "InputBar": {
+      "file": "web/src/components/chat/InputBar.tsx",
+      "operations": [
+        {"id": "type_message", "trigger": "textarea_change", "effect": "updates parent input state"},
+        {"id": "send_message", "trigger": "enter_key OR button_click", "effect": "onSend()"},
+        {"id": "stop_stream", "trigger": "button_click", "effect": "onStop() — shown during streaming"},
+        {"id": "attach_file", "trigger": "button_click", "effect": "openFilePicker (react-dropzone)"},
+        {"id": "drag_drop_file", "trigger": "drag_drop", "effect": "onAddFiles(files)"},
+        {"id": "remove_attachment", "trigger": "button_click", "effect": "onRemoveFile(file.id)"},
+        {"id": "voice_input", "trigger": "voice_component", "effect": "interim → italic display; final → append to input"}
+      ],
+      "validation": [
+        {"field": "send", "rule": "disabled when: !streaming AND input empty AND no attachments"},
+        {"field": "files", "rule": "maxSize 10MB, accepted: image/*, pdf, txt, md, js, py, ts"},
+        {"field": "streaming", "rule": "disables textarea + file picker"}
+      ],
+      "state": {"interimTranscript": "string", "ironManSettings": "IronManSettings"}
+    },
+
+    "ChatWindow": {
+      "file": "web/src/components/chat/ChatWindow.tsx",
+      "operations": [
+        {"id": "send_message", "trigger": "handleSend()", "effect": "guards → offline queue OR online SSE stream → process chunks → finalize"},
+        {"id": "stop_stream", "trigger": "handleStop()", "effect": "abortRef.abort() → setStreaming(false)"},
+        {"id": "select_model", "trigger": "dropdown_change", "effect": "setModel(model)"},
+        {"id": "regenerate", "trigger": "button_click", "effect": "handleSend(lastUserMessage.content)"},
+        {"id": "add_files", "trigger": "file_add", "effect": "filter maxSize 10MB, max 5 total → create Attachment objects"},
+        {"id": "remove_file", "trigger": "button_click", "effect": "revoke preview URL + remove from arrays"},
+        {"id": "pull_to_refresh", "trigger": "touch_pull_down", "effect": "window.location.reload()"},
+        {"id": "engine_run_script", "trigger": "custom_event", "event": "engine-run-script", "effect": "handleSend(event.detail)"},
+        {"id": "keyboard_gesture_shortcuts", "trigger": "key_combo", "keys": {
+          "Ctrl+Shift+1": "approve_hitl → router.push('/hitl')",
+          "Ctrl+Shift+2": "stop_stream → handleStop()",
+          "Ctrl+Shift+3": "clear_input → setInput('')",
+          "Ctrl+Shift+4": "new_session → createSession(seed)",
+          "Ctrl+Shift+5": "submit_input → handleSend()"
+        }},
+        {"id": "ironman_gesture_action", "trigger": "gesture_callback", "actions": {
+          "stop_stream": "handleStop()",
+          "clear_input": "setInput('')",
+          "new_session": "createSession(seed)",
+          "submit_input": "handleSend()",
+          "approve_hitl": "router.push('/hitl')"
+        }}
+      ],
+      "sse_stream_events": {
+        "token": "appendToken to assistant message",
+        "tool_start": "setToolBadge(label, 'running')",
+        "tool_end": "setToolBadge(label, 'done')",
+        "error": "finalizeMessage with error content",
+        "done": "finalizeMessage with cache/tokens/cost metadata"
+      },
+      "validation": [
+        {"field": "files", "rule": "maxSize 10MB, max 5"},
+        {"field": "send", "rule": "requires content or files"},
+        {"field": "api_key", "rule": "warning when non-ollama provider and no key"}
+      ],
+      "state": ["input", "attachments", "files", "streamStatus", "streamLogs", "viewportHeight", "isOnline", "provider", "models", "abortRef"],
+      "telemetry": {
+        "inTokens": "user chars / 4",
+        "outTokens": "assistant chars / 4",
+        "contextPct": "(in+out)/contextLimit * 100",
+        "estCost": "local → $0; remote → ($in*0.005 + $out*0.015) / 1000"
+      }
+    },
+
+    "SessionSidebar": {
+      "file": "web/src/components/chat/SessionSidebar.tsx",
+      "operations": [
+        {"id": "search_sessions", "trigger": "input_change", "effect": "filters sessions by name (case-insensitive)"},
+        {"id": "create_session", "trigger": "button_click", "target": "+", "effect": "createSession()"},
+        {"id": "switch_session", "trigger": "button_click", "effect": "switchSession(session.id)"},
+        {"id": "pin_session", "trigger": "button_click OR context_menu", "effect": "togglePinSession(session.id)"},
+        {"id": "rename_session", "trigger": "context_menu", "effect": "window.prompt() → renameSession(id, name)"},
+        {"id": "export_session", "trigger": "context_menu", "effect": "build JSON → Blob → download as {name}.json"},
+        {"id": "delete_session", "trigger": "context_menu", "effect": "deleteSession(session.id)"}
+      ],
+      "display": "pinned group first, then unpinned"
+    },
+
+    "MessageBubble": {
+      "file": "web/src/components/chat/MessageBubble.tsx",
+      "operations": [
+        {"id": "copy_code", "trigger": "button_click", "effect": "navigator.clipboard.writeText(code) → Check icon 1200ms → revert"}
+      ],
+      "state": {"copied": "bool — auto-resets after 1200ms via useEffect cleanup"}
+    },
+
+    "MessageList": {
+      "file": "web/src/components/chat/MessageList.tsx",
+      "operations": [
+        {"id": "auto_scroll", "trigger": "messages.length OR isStreaming change", "effect": "scrollIntoView(endRef, smooth)"}
+      ]
+    },
+
+    "IronManPanel": {
+      "file": "web/src/components/ironman/IronManPanel.tsx",
+      "operations": [
+        {"id": "toggle_camera", "trigger": "row_click", "effect": "patchSettings({cameraEnabled: !current})"},
+        {"id": "toggle_gesture", "trigger": "row_click", "effect": "patchSettings({gestureEnabled: !current})"},
+        {"id": "toggle_voice", "trigger": "row_click", "effect": "patchSettings({voiceEnabled: !current})"},
+        {"id": "gesture_action", "trigger": "gesture_callback", "effect": "gestureFlash=true 220ms → onGestureAction(action, gesture)"}
+      ],
+      "state": {"settings": "IronManSettings from localStorage + CustomEvent", "cameraStream": "MediaStream | null", "gestureFlash": "bool"},
+      "side_effects": ["patchSettings → localStorage + CustomEvent dispatch"]
+    },
+
+    "GestureController": {
+      "file": "web/src/components/ironman/GestureController.tsx",
+      "operations": [
+        {"id": "gesture_detection_loop", "trigger": "enabled + cameraStream", "effect": "load MediaPipe → rAF loop → detect gesture → debounce 800ms → dispatch CustomEvent → onAction()"},
+        {"id": "hud_display", "trigger": "gesture_detected", "effect": "shows floating HUD with gesture label"}
+      ],
+      "gesture_algorithm": {
+        "thumbs_up": "thumb up, all others down",
+        "fist": "all fingers down",
+        "peace": "index + middle up, others down",
+        "point_up": "only index up",
+        "open_hand": "≥4 fingers up + wide spread"
+      },
+      "thresholds": {
+        "confidence": "0.4 + sensitivity*0.4",
+        "debounce_ms": 800,
+        "landmark_count_min": 21
+      },
+      "side_effects": ["loads cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js", "camera via cameraStream on <video>", "requestAnimationFrame loop", "CustomEvent 'ironman:gesture-detected'"]
+    },
+
+    "VoiceInput": {
+      "file": "web/src/components/ironman/VoiceInput.tsx",
+      "operations": [
+        {"id": "start_voice", "trigger": "button_click", "effect": "create SpeechRecognition → start → interim → onInterimText; final → onFinalText"},
+        {"id": "stop_voice", "trigger": "button_click", "effect": "recognition.stop() → clear interim → active=false"}
+      ],
+      "state": {"active": "bool", "supported": "bool (Web Speech API check)"},
+      "config": {"continuous": false, "interimResults": true, "maxAlternatives": 1}
+    }
+  },
+
+  "zustand_stores": {
+    "useChatStore": {
+      "file": "web/src/store/chat-store.ts",
+      "shape": {
+        "sessions": "Session[]",
+        "activeSessionId": "string | null",
+        "messagesBySession": "Record<string, Message[]>",
+        "isStreaming": "boolean",
+        "currentModel": "string (default 'qwen2.5:7b')"
+      },
+      "actions": [
+        {"id": "createSession", "params": ["name?", "seedMessage?"], "effect": "create Session(UUID) → prepend → set active → optionally seed messages"},
+        {"id": "switchSession", "params": ["id"], "effect": "sets activeSessionId"},
+        {"id": "renameSession", "params": ["id", "name"], "effect": "updates session name + updatedAt"},
+        {"id": "deleteSession", "params": ["id"], "effect": "removes session + messages; if active, switch to first"},
+        {"id": "togglePinSession", "params": ["id"], "effect": "toggles session.pinned + updatedAt"},
+        {"id": "addMessage", "params": ["sessionId", "message"], "effect": "appends to messagesBySession + updates session.updatedAt"},
+        {"id": "appendToken", "params": ["sessionId", "messageId", "token"], "effect": "concatenates token to message.content (streaming)"},
+        {"id": "finalizeMessage", "params": ["sessionId", "messageId", "meta"], "effect": "merges meta + sets isStreaming=false"},
+        {"id": "setToolBadge", "params": ["sessionId", "messageId", "label", "status"], "effect": "upserts tool badge (running/done)"},
+        {"id": "setStreaming", "params": ["value"], "effect": "sets global isStreaming flag"},
+        {"id": "setModel", "params": ["model"], "effect": "sets currentModel"},
+        {"id": "getActiveMessages", "params": [], "effect": "returns messages for activeSessionId"}
+      ]
+    },
+
+    "useSpatialStore": {
+      "file": "web/src/store/spatial-store.ts",
+      "shape": {
+        "agents": "Record<string, SpatialAgent>",
+        "events": "RuntimeAgentEvent[] (max 600)",
+        "highlightedAgentId": "string | null"
+      },
+      "actions": [
+        {"id": "ingestEvent", "params": ["event"], "effect": "maps event_type → zone+state → accumulates costUsd → prepends event (cap 600)"},
+        {"id": "highlightAgent", "params": ["agentId | null"], "effect": "sets highlightedAgentId"},
+        {"id": "clearLive", "params": [], "effect": "resets agents, events, highlightedAgentId"}
+      ],
+      "zone_mapping": {
+        "start": "planner",
+        "tool_call": "tool",
+        "tool_done": "memory",
+        "hitl_wait": "hitl",
+        "complete": "memory",
+        "error": "incident"
+      }
+    }
+  },
+
+  "settings_libs": {
+    "ironman_settings": {
+      "file": "web/src/lib/ironman-settings.ts",
+      "storage_key": "ironcore_ironman_settings",
+      "event": "ironcore:ironman-settings-changed",
+      "defaults": {"camera": false, "gesture": false, "voice": false, "sttLanguage": "vi-VN", "sensitivity": 0.6, "allGesturesEnabled": true}
+    },
+    "user_settings": {
+      "file": "web/src/lib/user-settings.ts",
+      "storage_key": "ironcore_settings",
+      "event": "ironcore:user-settings-changed",
+      "defaults": {"displayName": "User Name", "language": "en", "timezone": "Asia/Ho_Chi_Minh", "defaultModel": "qwen2.5:7b", "apiProvider": "ollama", "temperature": 0.4, "maxTokens": 2048, "theme": "dark", "fontSize": "md", "logLevel": "INFO", "cacheEnabled": true, "compressionEnabled": true}
+    }
+  },
+
+  "wizard_flow": [
+    "language → preflight → auth → search → providers → model_picker → channels → skills → hooks → gateway → ironman → secrets → persona → monitoring → final → deploy → done"
+  ],
+
+  "statistics": {
+    "tui_screens": 14,
+    "web_components": 7,
+    "zustand_stores": 2,
+    "settings_libs": 2,
+    "total_operations": 87,
+    "total_validations": 21,
+    "total_config_keys": 15,
+    "supported_providers": 36,
+    "supported_channels": 20,
+    "supported_skills": 7,
+    "gesture_types": 9,
+    "stt_languages": 5
+  }
+}

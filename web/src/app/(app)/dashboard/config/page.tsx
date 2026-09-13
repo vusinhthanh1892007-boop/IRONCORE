@@ -34,7 +34,7 @@ export default function DashboardConfigPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Runtime Config</h1>
-        <p className="text-sm text-muted-foreground">Plugins, policies, env profile và secrets binding (masked).</p>
+        <p className="text-sm text-muted-foreground">Plugins, policies, env profiles, and masked secret bindings.</p>
       </div>
 
       <ControlPlaneNav />

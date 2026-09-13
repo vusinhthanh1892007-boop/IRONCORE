@@ -151,7 +151,7 @@ export default function AiCatalogPage() {
       <div>
         <h1 className="text-2xl font-semibold">AI Content & UI Generator</h1>
         <p className="text-sm text-muted-foreground">
-          Top-level sections only, chi tiết model hiển thị khi chọn provider. last_updated: 2026-03-12
+          Top-level sections only; model details are shown when a provider is selected. last_updated: 2026-03-12
         </p>
       </div>
 
@@ -163,13 +163,13 @@ export default function AiCatalogPage() {
               checked={latestMode}
               onChange={(event) => setLatestMode(event.target.checked)}
             />
-            Cập nhật mới nhất
+              Latest updates
           </label>
           <Button variant="outline" onClick={() => { void loadSections(); void loadMarkdown(); if (selectedProvider) void loadModels(selectedProvider, page, query); }}>
             Refresh
           </Button>
           {latestMode ? (
-            <span className="text-xs text-muted-foreground">Tùy chọn cập nhật web khả dụng</span>
+            <span className="text-xs text-muted-foreground">Web update options available</span>
           ) : null}
         </div>
       </Card>
@@ -203,7 +203,7 @@ export default function AiCatalogPage() {
                     className="mt-3"
                     onClick={() => handleSelectProvider(provider.provider_id)}
                   >
-                    👉 Xem models của {provider.provider_name}
+                    👉 View models for {provider.provider_name}
                   </Button>
                 </div>
               ))}
@@ -213,7 +213,7 @@ export default function AiCatalogPage() {
       </div>
 
       <Card className="border border-border bg-card p-4 space-y-4">
-        <div className="text-sm font-semibold">Tương tác chọn provider → hiện model</div>
+        <div className="text-sm font-semibold">Select provider → show models</div>
         <div className="grid gap-3 md:grid-cols-3">
           <div className="space-y-1">
             <Label>Provider</Label>
@@ -225,7 +225,7 @@ export default function AiCatalogPage() {
               }}
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
             >
-              <option value="">Chọn provider...</option>
+              <option value="">Select provider...</option>
               {providerOptions.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.name}
@@ -241,7 +241,7 @@ export default function AiCatalogPage() {
                 setQuery(event.target.value);
                 setPage(1);
               }}
-              placeholder="tìm theo tên, ctx, tags"
+              placeholder="search by name, ctx, tags"
             />
           </div>
           <div className="space-y-1">
@@ -288,12 +288,12 @@ export default function AiCatalogPage() {
             </pre>
           </div>
         ) : (
-          <div className="text-sm text-muted-foreground">Chưa chọn provider.</div>
+          <div className="text-sm text-muted-foreground">No provider selected.</div>
         )}
       </Card>
 
       <Card className="border border-border bg-card p-4 space-y-3">
-        <div className="text-sm font-semibold">Thêm model vào danh sách</div>
+        <div className="text-sm font-semibold">Add model to list</div>
         <div className="grid gap-3 md:grid-cols-3">
           <div className="space-y-1">
             <Label>Provider</Label>
@@ -302,7 +302,7 @@ export default function AiCatalogPage() {
               onChange={(event) => setAddModelProvider(event.target.value)}
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
             >
-              <option value="">Chọn provider...</option>
+              <option value="">Select provider...</option>
               {providerOptions.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.name}
@@ -319,7 +319,7 @@ export default function AiCatalogPage() {
             <Input value={addModelName} onChange={(event) => setAddModelName(event.target.value)} placeholder="Llama 4 New" />
           </div>
         </div>
-        <Button onClick={handleAddModel}>Thêm model</Button>
+        <Button onClick={handleAddModel}>Add model</Button>
         {addMessage ? <div className="text-xs text-muted-foreground">{addMessage}</div> : null}
       </Card>
 

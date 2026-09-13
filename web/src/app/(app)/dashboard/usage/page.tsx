@@ -102,7 +102,7 @@ export default function DashboardUsagePage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Usage Realtime</h1>
-        <p className="text-sm text-muted-foreground">Token, latency, cache-hit và error-rate theo thời gian thực.</p>
+        <p className="text-sm text-muted-foreground">Token, latency, cache-hit, and error-rate in real time.</p>
       </div>
 
       <ControlPlaneNav />

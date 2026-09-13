@@ -660,32 +660,35 @@ def run_wizard():
     _banner()
 
     existing = _load_config()
-    if existing:
-        console.print(Panel(
-            f"[bold]Existing config found[/bold] at [dim]{CONFIG_PATH}[/dim]\n\n"
-            f"  Language : {existing.get('language', '?')}\n"
-            f"  Model    : {(existing.get('selected_model') or {}).get('model_id', '?')}\n"
-            f"  Gateway  : {existing.get('gateway', {}).get('web_ui_url', '?')}",
-            title="Existing Config Detected", border_style="yellow", expand=False
-        ))
-        use_existing = questionary.select(
-            "Config handling:",
-            choices=["Use existing values (QuickStart)", "Reconfigure from scratch"],
-            style=IC_STYLE,
-        ).ask()
-        if "QuickStart" in use_existing:
-            console.print("\n[bold cyan]✓ QuickStart — using saved configuration.[/bold cyan]")
-            console.print(f"  [dim]Run [bold]make run-api[/bold] to start the agent.[/dim]\n")
-            return existing
 
     # V3: Use new Textual TUI instead of basic cli steps
     try:
         from ironcore.tui.app import IronCoreTUI
-        cfg = IronCoreTUI().run()
+        app = IronCoreTUI()
+        if existing:
+            app.cfg.update(existing)
+        cfg = app.run()
         if not cfg:
             sys.exit(0)
     except ImportError:
         console.print("[bold red]Failed to load Graphical TUI[/bold red]\nFalling back to old wizard...")
+        cfg: dict = {}
+        cfg = step_preflight(cfg)
+        cfg = step_auth(cfg)
+        cfg = step_search(cfg)
+        cfg = step_providers(cfg)
+        cfg = step_model_picker(cfg)
+        cfg = step_skills(cfg)
+        cfg = step_hooks(cfg)
+        cfg = step_gateway(cfg)
+        cfg = step_secrets(cfg)
+        cfg = step_persona(cfg)
+        cfg = step_smoke_test(cfg)
+        cfg = step_deploy(cfg)
+        cfg = step_summary(cfg)
+    except Exception as exc:
+        console.print(f"[bold red]TUI runtime error:[/bold red] {exc}")
+        console.print("[yellow]Switching to safe CLI wizard mode...[/yellow]")
         cfg: dict = {}
         cfg = step_preflight(cfg)
         cfg = step_auth(cfg)
@@ -785,6 +788,10 @@ def main():
             cfg = IronCoreTUI().run()
         except ImportError:
             console.print("[yellow]TUI Framework missing, falling back to CLI setup...[/yellow]")
+            cfg = run_wizard()
+        except Exception as exc:
+            console.print(f"[bold red]TUI runtime error:[/bold red] {exc}")
+            console.print("[yellow]Falling back to safe CLI setup...[/yellow]")
             cfg = run_wizard()
             
         if cfg and ask_yes_no("Open interactive chat shell now?", default=True):

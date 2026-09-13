@@ -1,5 +1,16 @@
-"""ironcore/browser/__init__.py — Browser module public API (community scope)."""
+"""
+ironcore/browser/__init__.py — Browser module public API.
+
+Community Edition (CE): stealth, mouse, session, fingerprint, captcha (basic).
+Enterprise Edition (EE): + cloudflare_bypass, datadome_bypass,
+                           reddit_bypass, google_form_bypass, bot_evasion.
+"""
 from __future__ import annotations
+
+from ironcore.edition import is_enterprise, get_edition
+import logging
+
+logger = logging.getLogger(__name__)
 
 # ── Core model (single source of truth) ──────────────────────────────────────
 from ironcore.browser.stealth import (
@@ -53,6 +64,46 @@ from ironcore.browser.session_manager import (
     StorageStateInfo,
 )
 
+# ── Enterprise Edition only — bypass modules ─────────────────────────────────
+# These are NOT available in Community Edition.
+# Set IRONCORE_EDITION=enterprise to enable.
+
+CloudflareDetector = CloudflareBypass = CloudflareRateLimitHandler = None
+DataDomeDetector = DataDomeBypass = None
+RedditDetector = RedditBypass = None
+GoogleFormDetector = GoogleFormBypass = None
+BotDetectionEvasion = ChallengeType = BypassResult = None
+
+if is_enterprise():
+    from ironcore.browser.cloudflare_bypass import (
+        CloudflareDetector,
+        CloudflareBypass,
+        CloudflareRateLimitHandler,
+    )
+    from ironcore.browser.datadome_bypass import (
+        DataDomeDetector,
+        DataDomeBypass,
+    )
+    from ironcore.browser.reddit_bypass import (
+        RedditDetector,
+        RedditBypass,
+    )
+    from ironcore.browser.google_form_bypass import (
+        GoogleFormDetector,
+        GoogleFormBypass,
+    )
+    from ironcore.browser.bot_evasion import (
+        BotDetectionEvasion,
+        ChallengeType,
+        BypassResult,
+    )
+    logger.info("[Browser] Enterprise Edition — all bypass modules loaded.")
+else:
+    logger.info(
+        "[Browser] Community Edition — bypass modules disabled. "
+        "Set IRONCORE_EDITION=enterprise to unlock."
+    )
+
 __all__ = [
     # stealth / profiles
     "BrowserProfile", "NavigationResult", "StealthBrowser",
@@ -70,5 +121,11 @@ __all__ = [
     # session manager Phase 6
     "SessionManager", "ProfilePool", "ProfileStorage",
     "ProfileMetadata", "ProfileWarmUp", "StorageStateInfo",
+    # ── Enterprise Edition only (None in CE) ──────────────────────────────────
+    "CloudflareDetector", "CloudflareBypass", "CloudflareRateLimitHandler",
+    "DataDomeDetector", "DataDomeBypass",
+    "RedditDetector", "RedditBypass",
+    "GoogleFormDetector", "GoogleFormBypass",
+    "BotDetectionEvasion", "ChallengeType", "BypassResult",
 ]
 

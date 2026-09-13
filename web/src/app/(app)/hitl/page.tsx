@@ -192,7 +192,7 @@ export default function HitlApprovalPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold">HITL Approval Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Duyệt hoặc từ chối các hành động rủi ro theo thời gian thực.</p>
+          <p className="text-sm text-muted-foreground">Approve or reject risky actions in real time.</p>
         </div>
         <Badge className="bg-red-500/20 text-red-500 border-red-500/30">Pending: {pending.length}</Badge>
       </div>

@@ -87,8 +87,15 @@ export default function PluginsPage() {
                 </label>
                 <Input
                   placeholder="https://github.com/org/plugin"
+                  aria-label="Plugin source URL"
                   value={installUrl}
                   onChange={(event) => setInstallUrl(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      handleInstall();
+                    }
+                  }}
                 />
               </div>
               <div>
@@ -98,6 +105,7 @@ export default function PluginsPage() {
                 <Input
                   type="file"
                   accept=".zip"
+                  aria-label="Upload plugin zip"
                   onChange={() => undefined}
                 />
               </div>
@@ -113,6 +121,7 @@ export default function PluginsPage() {
       <Card className="border border-border/60 bg-background/80 p-4">
         <Input
           placeholder="Search plugins..."
+          aria-label="Search plugins"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
@@ -140,11 +149,17 @@ export default function PluginsPage() {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 Enabled
                 <Switch
+                  aria-label={`Enable ${plugin.name}`}
                   checked={plugin.status === "active"}
                   onCheckedChange={() => handleToggle(plugin)}
                 />
               </div>
-              <Button variant="outline" size="sm" onClick={() => handleUninstall(plugin)}>
+              <Button
+                variant="outline"
+                size="sm"
+                aria-label={`Uninstall ${plugin.name}`}
+                onClick={() => handleUninstall(plugin)}
+              >
                 Uninstall
               </Button>
             </div>

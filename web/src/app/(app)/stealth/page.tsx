@@ -104,7 +104,7 @@ export default function StealthPage() {
       <div>
         <h1 className="text-xl font-semibold">Stealth Browser</h1>
         <p className="text-sm text-muted-foreground">
-          Trình duyệt headless chống bot-detection — chụp màn hình & kéo dữ liệu từ các site bị chặn.
+          Headless anti-bot browser for screenshots and scraping data from protected sites.
         </p>
       </div>
 
@@ -130,7 +130,7 @@ export default function StealthPage() {
       {/* Task panel */}
       <div className="rounded-xl border border-border bg-card p-6 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="font-semibold text-sm">Chạy tác vụ</div>
+          <div className="font-semibold text-sm">Run task</div>
           <Button
             variant="ghost"
             size="sm"
@@ -159,14 +159,14 @@ export default function StealthPage() {
               ) : (
                 <Code2 className="h-3.5 w-3.5" />
               )}
-              {t === "screenshot" ? "Chụp màn hình" : "Kéo dữ liệu"}
+              {t === "screenshot" ? "Screenshot" : "Scrape data"}
             </button>
           ))}
         </div>
 
         {/* URL input */}
         <div className="space-y-1.5">
-          <Label className="text-xs">URL trang web</Label>
+          <Label className="text-xs">Website URL</Label>
           <div className="flex gap-2">
             <Input
               placeholder="https://example.com"
@@ -176,7 +176,7 @@ export default function StealthPage() {
               className="font-mono text-xs"
             />
             <Button onClick={handleRun} disabled={busy || !url.trim()} className="shrink-0">
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Chạy"}
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Run"}
             </Button>
           </div>
         </div>
@@ -184,7 +184,7 @@ export default function StealthPage() {
         {/* Scrape selector */}
         {task === "scrape" && (
           <div className="space-y-1.5">
-            <Label className="text-xs">CSS Selector (mặc định: body)</Label>
+            <Label className="text-xs">CSS Selector (default: body)</Label>
             <Input
               placeholder="body, #content, .article-text"
               value={selector}
@@ -205,7 +205,7 @@ export default function StealthPage() {
       {result && (
         <div className="rounded-xl border border-border bg-card p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <div className="font-semibold text-sm">Kết quả</div>
+            <div className="font-semibold text-sm">Result</div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span
                 className={cn(
@@ -215,7 +215,7 @@ export default function StealthPage() {
                     : "bg-destructive/15 text-destructive"
                 )}
               >
-                {result.success ? "Thành công" : "Lỗi"}
+                {result.success ? "Success" : "Error"}
               </span>
               {result.elapsed_ms && (
                 <span>{result.elapsed_ms.toFixed(0)} ms</span>
@@ -245,7 +245,7 @@ export default function StealthPage() {
           {result.text && (
             <div className="space-y-2">
               <div className="text-xs font-medium text-muted-foreground">
-                Nội dung ({result.text.length} ký tự)
+                Content ({result.text.length} chars)
               </div>
               <pre className="max-h-96 overflow-y-auto rounded-lg border border-border bg-muted px-4 py-3 text-xs whitespace-pre-wrap">
                 {result.text}

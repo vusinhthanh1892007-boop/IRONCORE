@@ -123,7 +123,7 @@ export default function HitlHistoryPage() {
     <div className="space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold">HITL Decision History</h1>
-        <p className="text-sm text-muted-foreground">Lịch sử phê duyệt/từ chối của operator theo hành động và thời gian.</p>
+        <p className="text-sm text-muted-foreground">Operator approval/rejection history by action and timestamp.</p>
       </div>
 
       <Card className="border border-border bg-card p-4">

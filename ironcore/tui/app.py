@@ -23,6 +23,7 @@ from ironcore.tui.screens.channels import ChannelScreen
 from ironcore.tui.screens.features import SkillsScreen, HooksScreen, GatewayScreen
 from ironcore.tui.screens.system import SecretsScreen, PersonaScreen, MonitoringScreen
 from ironcore.tui.screens.final import FinalSmokeTestScreen, SummaryExportScreen
+from ironcore.tui.lang_sync import TUILanguageSyncClient
 
 class IronCoreTUI(App):
     CSS = """
@@ -55,46 +56,67 @@ class IronCoreTUI(App):
     def __init__(self):
         super().__init__()
         self.cfg = {}
+        self._language_sync = TUILanguageSyncClient()
+        self._route_history: list[str] = []
+        self._route_map = {
+            "language": LanguageScreen,
+            "preflight": PreflightScreen,
+            "auth": AuthScreen,
+            "search": SearchProviderScreen,
+            "providers": ModelProvidersScreen,
+            "model_picker": ModelPickerScreen,
+            "channels": ChannelScreen,
+            "skills": SkillsScreen,
+            "hooks": HooksScreen,
+            "gateway": GatewayScreen,
+            "secrets": SecretsScreen,
+            "persona": PersonaScreen,
+            "monitoring": MonitoringScreen,
+            "final": FinalSmokeTestScreen,
+            "deploy": SummaryExportScreen,
+        }
+
+    def _push_route(self, route: str, record_history: bool = True) -> None:
+        screen_cls = self._route_map.get(route)
+        if screen_cls is None:
+            return
+
+        self.push_screen(screen_cls(), self.handle_screen_result)
+        if record_history:
+            self._route_history.append(route)
 
     def on_mount(self) -> None:
-        self.push_screen(LanguageScreen(), self.handle_screen_result)
+        self._language_sync.start(self)
+        self._push_route("language", record_history=True)
+
+    def fallback_to_wizard_root(self) -> None:
+        self._route_history = []
+        self._push_route("language", record_history=True)
 
     def handle_screen_result(self, result: str) -> None:
         if result is None:
-            # Back button pressed (pop screen). Handled gracefully by popping,
-            # but textually we dismiss, so app receives None.
-            # Usually we don't need to do anything as app.pop_screen is bound to ESC/Back
+            # Back/dismiss callback path.
+            # This wizard uses callback-driven transitions where previous screens
+            # are dismissed. So we cannot rely on textual stack pop only.
+            # We restore previous route from explicit history.
+            if self._route_history:
+                self._route_history.pop()
+
+            if self._route_history:
+                previous = self._route_history[-1]
+                self._push_route(previous, record_history=False)
+            else:
+                self.fallback_to_wizard_root()
+            return
+
+        if not isinstance(result, str):
             return
 
         if len(result) == 2: # Language code (e.g. 'en')
             self.notify(f"Language set to: {i18n.current_lang}", title="Info")
-            self.push_screen(PreflightScreen(), self.handle_screen_result)
-        elif result == "auth":
-            self.push_screen(AuthScreen(), self.handle_screen_result)
-        elif result == "search":
-            self.push_screen(SearchProviderScreen(), self.handle_screen_result)
-        elif result == "providers":
-            self.push_screen(ModelProvidersScreen(), self.handle_screen_result)
-        elif result == "model_picker":
-            self.push_screen(ModelPickerScreen(), self.handle_screen_result)
-        elif result == "channels":
-            self.push_screen(ChannelScreen(), self.handle_screen_result)
-        elif result == "skills":
-            self.push_screen(SkillsScreen(), self.handle_screen_result)
-        elif result == "hooks":
-            self.push_screen(HooksScreen(), self.handle_screen_result)
-        elif result == "gateway":
-            self.push_screen(GatewayScreen(), self.handle_screen_result)
-        elif result == "secrets":
-            self.push_screen(SecretsScreen(), self.handle_screen_result)
-        elif result == "persona":
-            self.push_screen(PersonaScreen(), self.handle_screen_result)
-        elif result == "monitoring":
-            self.push_screen(MonitoringScreen(), self.handle_screen_result)
-        elif result == "final":
-            self.push_screen(FinalSmokeTestScreen(), self.handle_screen_result)
-        elif result == "deploy":
-            self.push_screen(SummaryExportScreen(), self.handle_screen_result)
+            self._push_route("preflight", record_history=True)
+        elif result in self._route_map:
+            self._push_route(result, record_history=True)
         elif result == "done":
             self.exit(self.cfg)
 

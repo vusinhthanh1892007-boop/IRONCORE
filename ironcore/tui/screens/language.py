@@ -3,6 +3,7 @@ from textual.screen import Screen
 from textual.widgets import Header, Footer, Input, ListView, ListItem, Label
 from textual.containers import Vertical
 from ironcore.tui.i18n import i18n, supported_language_catalog
+from ironcore.tui.lang_sync import push_language_to_backend
 
 class LanguageItem(ListItem):
     def __init__(self, name: str, code: str, label: str):
@@ -16,7 +17,7 @@ class LanguageItem(ListItem):
 
 class LanguageScreen(Screen):
     BINDINGS = [
-        ("escape", "app.pop_screen", "Back"),
+        ("escape", "app.quit", "Quit"),
         ("ctrl+q", "app.quit", "Quit")
     ]
 
@@ -68,6 +69,7 @@ class LanguageScreen(Screen):
         if isinstance(selected_item, LanguageItem):
             # Change global language
             i18n.load_language(selected_item.lang_code)
+            push_language_to_backend(selected_item.lang_code, source="tui-language-screen")
             # Save to config (assuming app handles config)
             if hasattr(self.app, "cfg"):
                 self.app.cfg["language_code"] = selected_item.lang_code

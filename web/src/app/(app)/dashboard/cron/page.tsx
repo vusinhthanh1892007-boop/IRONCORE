@@ -107,7 +107,7 @@ export default function DashboardCronPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Scheduler Console</h1>
-        <p className="text-sm text-muted-foreground">Quản lý cron jobs: pause/resume/run-now/delete và tạo lịch mới.</p>
+        <p className="text-sm text-muted-foreground">Manage cron jobs: pause, resume, run-now, delete, and create new schedules.</p>
       </div>
 
       <ControlPlaneNav />

@@ -54,10 +54,10 @@ export async function GET(req: NextRequest) {
     pagination: result.pagination,
     filter,
     can_web_update: false,
-    notice: wantLatest ? "Tùy chọn cập nhật web khả dụng" : undefined,
-    permission_notice: wantLatest ? "Một số provider yêu cầu API key hoặc quyền truy cập riêng." : undefined,
-    rate_limit_notice: wantLatest ? "Nếu bật web fetch thật, cần tôn trọng rate-limit của từng provider." : undefined,
-    update_scope: "cập nhật tới ngày 2026-03-12 (inclusive)",
+    notice: wantLatest ? "Web update option available" : undefined,
+    permission_notice: wantLatest ? "Some providers require API keys or private access." : undefined,
+    rate_limit_notice: wantLatest ? "If live web fetch is enabled, respect provider-specific rate limits." : undefined,
+    update_scope: "updated through 2026-03-12 (inclusive)",
     last_updated: AI_CATALOG_LAST_UPDATED,
   });
 }

@@ -67,7 +67,7 @@ export default function DashboardAlertsPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Alert / Incident Panel</h1>
-        <p className="text-sm text-muted-foreground">Theo dõi incidents, xem suggested action và đánh dấu resolved.</p>
+        <p className="text-sm text-muted-foreground">Track incidents, review suggested actions, and mark them as resolved.</p>
       </div>
 
       <ControlPlaneNav />

@@ -96,7 +96,7 @@ class TestInMemoryThrottleStore:
         await store.set("k1", "hello", ex=5)
         raw = await store.get("k1")
         assert raw is not None
-        assert float(raw) or raw == b"hello"  # can decode
+        assert raw == b"hello"  # can decode
 
     @pytest.mark.asyncio
     async def test_get_returns_bytes(self) -> None:

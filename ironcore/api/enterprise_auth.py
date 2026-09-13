@@ -104,7 +104,26 @@ async def require_enterprise(
     Dependency: require any valid API key for enterprise endpoints.
     In dev mode (IRONCORE_ENTERPRISE_AUTH_REQUIRED=false), pass through.
     """
-    return EnterprisePrincipal(api_key_name="open", is_admin=True)
+    if not _auth_required():
+        logger.debug("[EnterpriseAuth] Auth bypassed (dev mode)")
+        return EnterprisePrincipal(api_key_name="dev", is_admin=True)
+
+    if not x_api_key:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            detail="X-Api-Key header required for enterprise endpoints",
+            headers={"WWW-Authenticate": "ApiKey"},
+        )
+
+    principal = _check_key(x_api_key)
+    if principal is None:
+        logger.warning("[EnterpriseAuth] Invalid API key attempt")
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail="Invalid API key",
+        )
+
+    return principal
 
 
 async def require_admin(
@@ -113,4 +132,10 @@ async def require_admin(
     """
     Dependency: require admin-level API key for destructive/sensitive operations.
     """
-    return EnterprisePrincipal(api_key_name="open", is_admin=True)
+    principal = await require_enterprise(x_api_key)
+    if not principal.is_admin:
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail="Admin API key required for this operation",
+        )
+    return principal

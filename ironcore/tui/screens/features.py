@@ -68,7 +68,7 @@ class HooksScreen(BaseWizardScreen):
             return
             
         self.app.cfg["hooks"] = {"enabled": enabled, "url": url, "has_secret": bool(secret)}
-            self.safe_dismiss("gateway")
+        self.safe_dismiss("gateway")
 
 class GatewayScreen(BaseWizardScreen):
     def compose(self) -> ComposeResult:

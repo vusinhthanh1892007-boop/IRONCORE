@@ -114,7 +114,7 @@ export default function IamPage() {
     <div className="space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold">IAM Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Quản lý Users, Roles, SSO mappings và Vault bindings.</p>
+        <p className="text-sm text-muted-foreground">Manage users, roles, SSO mappings, and vault bindings.</p>
       </div>
 
       <Card className="border border-border bg-card p-5">

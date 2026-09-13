@@ -11,6 +11,7 @@ interface CameraPermissionProps {
 
 export function CameraPermission({ enabled, onEnabledChange, onStreamChange }: CameraPermissionProps) {
   const [supported, setSupported] = React.useState(true);
+  const [permissionState, setPermissionState] = React.useState<"granted" | "denied" | "prompt" | "unknown">("unknown");
   const [error, setError] = React.useState<string>("");
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const streamRef = React.useRef<MediaStream | null>(null);
@@ -32,13 +33,38 @@ export function CameraPermission({ enabled, onEnabledChange, onStreamChange }: C
   }, []);
 
   React.useEffect(() => {
+    let mounted = true;
+    if (typeof navigator === "undefined") return;
+    if (!("permissions" in navigator)) return;
+
+    const updatePermission = async () => {
+      try {
+        const status = await navigator.permissions.query({ name: "camera" as PermissionName });
+        if (!mounted) return;
+        const state = status.state as "granted" | "denied" | "prompt";
+        setPermissionState(state);
+        status.onchange = () => {
+          setPermissionState(status.state as "granted" | "denied" | "prompt");
+        };
+      } catch {
+        if (mounted) setPermissionState("unknown");
+      }
+    };
+
+    void updatePermission();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (!enabled) {
       stopStream();
       return;
     }
 
     if (!supported) {
-      setError("Camera không được hỗ trợ trên browser này.");
+      setError("Camera is not supported in this browser.");
       return;
     }
 
@@ -58,8 +84,19 @@ export function CameraPermission({ enabled, onEnabledChange, onStreamChange }: C
         if (onStreamChange) onStreamChange(stream);
         setError("");
       })
-      .catch(() => {
-        setError("Không thể truy cập camera. Kiểm tra quyền trình duyệt.");
+      .catch((err: unknown) => {
+        const errorName = err instanceof DOMException ? err.name : "UnknownError";
+        if (errorName === "NotAllowedError") {
+          setError("Camera permission denied. Click the lock icon near the URL and allow Camera, then Retry camera.");
+        } else if (errorName === "NotFoundError") {
+          setError("No camera device found.");
+        } else if (errorName === "NotReadableError") {
+          setError("Camera is busy in another app. Close that app and Retry camera.");
+        } else if (errorName === "SecurityError") {
+          setError("Camera is blocked by browser security policy.");
+        } else {
+          setError("Cannot access camera. Check browser permissions and Retry camera.");
+        }
         onEnabledChange(false);
       });
 
@@ -73,7 +110,13 @@ export function CameraPermission({ enabled, onEnabledChange, onStreamChange }: C
     <div className="space-y-2">
       {!supported ? (
         <div className="rounded-md border border-yellow-500/30 bg-yellow-500/10 px-2 py-1 text-[11px] text-yellow-600">
-          Camera feature hỗ trợ tốt nhất trên Chrome/Edge mới.
+          Camera feature works best on modern Chrome/Edge.
+        </div>
+      ) : null}
+
+      {supported && permissionState === "denied" ? (
+        <div className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-[11px] text-amber-600">
+          Camera access is currently blocked by browser permission.
         </div>
       ) : null}
 
@@ -88,9 +131,22 @@ export function CameraPermission({ enabled, onEnabledChange, onStreamChange }: C
           <video ref={videoRef} autoPlay muted playsInline className="h-28 w-full object-cover" />
         </div>
       ) : (
-        <Button size="sm" variant="outline" className="w-full text-xs" onClick={() => onEnabledChange(true)}>
-          Enable camera preview
-        </Button>
+        <div className="space-y-2">
+          <Button size="sm" variant="outline" className="w-full text-xs" onClick={() => onEnabledChange(true)}>
+            Enable camera preview
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="w-full text-xs"
+            onClick={() => {
+              setError("");
+              onEnabledChange(true);
+            }}
+          >
+            Retry camera
+          </Button>
+        </div>
       )}
     </div>
   );

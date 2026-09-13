@@ -115,7 +115,7 @@ export function VoiceInput({ language, disabled, onInterimText, onFinalText }: V
   return (
     <button
       type="button"
-      title={supported ? (active ? "Stop voice input" : "Start voice input") : "Mic không được hỗ trợ"}
+      title={supported ? (active ? "Stop voice input" : "Start voice input") : "Microphone is not supported"}
       disabled={disabled || !supported}
       onClick={active ? stop : start}
       className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed md:h-10 md:w-10"

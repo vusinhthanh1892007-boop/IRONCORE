@@ -1,0 +1,564 @@
+{
+  "version": "2.0",
+  "description": "IronCore AI Agent – Multilingual keyword-to-action training data. Maps user intents in 30+ languages to UI screens, buttons, and agent actions.",
+  "last_updated": "2026-03-27",
+
+  "actions": {
+    "navigate_settings": {
+      "target": "settings",
+      "type": "navigation",
+      "tui_screen": "system",
+      "web_route": "/settings",
+      "keywords": {
+        "en": ["open settings", "settings", "configure", "preferences", "config", "setup"],
+        "vi": ["mở cài đặt", "cài đặt", "thiết lập", "tùy chỉnh", "cấu hình", "cấu hình hệ thống"],
+        "zh": ["打开设置", "设置", "配置", "偏好设置", "系统设置"],
+        "ja": ["設定を開く", "設定", "環境設定", "コンフィグ"],
+        "ko": ["설정 열기", "설정", "환경설정", "구성"],
+        "es": ["abrir configuración", "configuración", "ajustes", "preferencias"],
+        "fr": ["ouvrir les paramètres", "paramètres", "configuration", "réglages"],
+        "de": ["Einstellungen öffnen", "Einstellungen", "Konfiguration"],
+        "pt": ["abrir configurações", "configurações", "definições"],
+        "ru": ["открыть настройки", "настройки", "конфигурация", "параметры"],
+        "ar": ["فتح الإعدادات", "الإعدادات", "التكوين"],
+        "hi": ["सेटिंग्स खोलें", "सेटिंग्स", "कॉन्फ़िगरेशन"],
+        "th": ["เปิดการตั้งค่า", "ตั้งค่า", "การกำหนดค่า"],
+        "id": ["buka pengaturan", "pengaturan", "setelan", "konfigurasi"],
+        "tr": ["ayarları aç", "ayarlar", "yapılandırma", "tercihler"],
+        "pl": ["otwórz ustawienia", "ustawienia", "konfiguracja"],
+        "uk": ["відкрити налаштування", "налаштування", "конфігурація"],
+        "nl": ["instellingen openen", "instellingen", "configuratie"]
+      }
+    },
+    "navigate_chat": {
+      "target": "chat",
+      "type": "navigation",
+      "tui_screen": null,
+      "web_route": "/",
+      "keywords": {
+        "en": ["open chat", "chat", "new conversation", "talk", "message", "start chatting"],
+        "vi": ["mở chat", "trò chuyện", "cuộc trò chuyện mới", "nhắn tin", "nói chuyện"],
+        "zh": ["打开聊天", "聊天", "新对话", "发消息"],
+        "ja": ["チャットを開く", "チャット", "新しい会話", "メッセージ"],
+        "ko": ["채팅 열기", "채팅", "새 대화", "메시지"],
+        "es": ["abrir chat", "chat", "nueva conversación", "mensaje"],
+        "fr": ["ouvrir le chat", "chat", "nouvelle conversation", "message"],
+        "de": ["Chat öffnen", "Chat", "neues Gespräch", "Nachricht"],
+        "pt": ["abrir chat", "chat", "nova conversa", "mensagem"],
+        "ru": ["открыть чат", "чат", "новый разговор", "сообщение"],
+        "ar": ["فتح الدردشة", "دردشة", "محادثة جديدة", "رسالة"],
+        "hi": ["चैट खोलें", "चैट", "नई बातचीत", "संदेश"],
+        "th": ["เปิดแชท", "แชท", "สนทนาใหม่", "ข้อความ"],
+        "id": ["buka obrolan", "chat", "percakapan baru", "pesan"],
+        "tr": ["sohbeti aç", "sohbet", "yeni konuşma", "mesaj"],
+        "pl": ["otwórz czat", "czat", "nowa rozmowa", "wiadomość"],
+        "uk": ["відкрити чат", "чат", "нова розмова", "повідомлення"],
+        "nl": ["chat openen", "chat", "nieuw gesprek", "bericht"]
+      }
+    },
+    "navigate_models": {
+      "target": "model_selection", 
+      "type": "navigation",
+      "tui_screen": "model_picker",
+      "web_route": "/models",
+      "keywords": {
+        "en": ["select model", "change model", "models", "choose AI", "switch model", "model picker"],
+        "vi": ["chọn mô hình", "đổi mô hình", "mô hình AI", "chọn AI", "danh sách model"],
+        "zh": ["选择模型", "更换模型", "模型列表", "选择AI"],
+        "ja": ["モデルを選択", "モデル変更", "モデル一覧", "AI選択"],
+        "ko": ["모델 선택", "모델 변경", "모델 목록", "AI 선택"],
+        "es": ["seleccionar modelo", "cambiar modelo", "modelos", "elegir AI"],
+        "fr": ["sélectionner le modèle", "changer de modèle", "modèles", "choisir AI"],
+        "de": ["Modell auswählen", "Modell wechseln", "Modelle", "KI auswählen"],
+        "pt": ["selecionar modelo", "trocar modelo", "modelos", "escolher IA"],
+        "ru": ["выбрать модель", "сменить модель", "модели", "выбрать ИИ"],
+        "ar": ["اختيار النموذج", "تغيير النموذج", "النماذج"],
+        "hi": ["मॉडल चुनें", "मॉडल बदलें", "मॉडल", "AI चुनें"],
+        "th": ["เลือกโมเดล", "เปลี่ยนโมเดล", "โมเดล", "เลือก AI"],
+        "id": ["pilih model", "ganti model", "model", "pilih AI"],
+        "tr": ["model seç", "model değiştir", "modeller", "AI seç"],
+        "pl": ["wybierz model", "zmień model", "modele", "wybierz AI"],
+        "uk": ["вибрати модель", "змінити модель", "моделі", "вибрати ШІ"],
+        "nl": ["model selecteren", "model wijzigen", "modellen", "AI kiezen"]
+      }
+    },
+    "navigate_providers": {
+      "target": "provider_selection",
+      "type": "navigation",
+      "tui_screen": "providers",
+      "web_route": "/providers",
+      "keywords": {
+        "en": ["select provider", "providers", "API providers", "choose provider", "LLM provider"],
+        "vi": ["chọn nhà cung cấp", "nhà cung cấp", "nhà cung cấp API", "chọn provider"],
+        "zh": ["选择提供商", "提供商", "API提供商", "选择供应商"],
+        "ja": ["プロバイダーを選択", "プロバイダー", "APIプロバイダー"],
+        "ko": ["공급자 선택", "공급자", "API 공급자"],
+        "es": ["seleccionar proveedor", "proveedores", "proveedor API"],
+        "fr": ["sélectionner fournisseur", "fournisseurs", "fournisseur API"],
+        "de": ["Anbieter auswählen", "Anbieter", "API-Anbieter"],
+        "pt": ["selecionar provedor", "provedores", "provedor API"],
+        "ru": ["выбрать провайдера", "провайдеры", "API провайдеры"],
+        "ar": ["اختيار المزود", "المزودون", "مزود API"],
+        "hi": ["प्रदाता चुनें", "प्रदाता", "API प्रदाता"],
+        "th": ["เลือกผู้ให้บริการ", "ผู้ให้บริการ", "ผู้ให้บริการ API"],
+        "id": ["pilih penyedia", "penyedia", "penyedia API"],
+        "tr": ["sağlayıcı seç", "sağlayıcılar", "API sağlayıcıları"],
+        "pl": ["wybierz dostawcę", "dostawcy", "dostawcy API"],
+        "uk": ["вибрати провайдера", "провайдери", "API провайдери"],
+        "nl": ["provider selecteren", "providers", "API-providers"]
+      }
+    },
+    "navigate_channels": {
+      "target": "channels",
+      "type": "navigation",
+      "tui_screen": "channels",
+      "web_route": "/channels",
+      "keywords": {
+        "en": ["channels", "integrations", "connect channel", "Telegram", "Slack", "Discord", "Zalo"],
+        "vi": ["kênh", "tích hợp", "kết nối kênh", "Telegram", "Slack", "Discord", "Zalo"],
+        "zh": ["频道", "集成", "连接频道"],
+        "ja": ["チャンネル", "統合", "チャンネル接続"],
+        "ko": ["채널", "통합", "채널 연결"],
+        "es": ["canales", "integraciones", "conectar canal"],
+        "fr": ["canaux", "intégrations", "connecter un canal"],
+        "de": ["Kanäle", "Integrationen", "Kanal verbinden"],
+        "pt": ["canais", "integrações", "conectar canal"],
+        "ru": ["каналы", "интеграции", "подключить канал"]
+      }
+    },
+    "navigate_skills": {
+      "target": "skills",
+      "type": "navigation",
+      "tui_screen": "skills",
+      "web_route": "/skills",
+      "keywords": {
+        "en": ["skills", "features", "capabilities", "enable skill", "plugins", "add feature"],
+        "vi": ["kỹ năng", "tính năng", "khả năng", "bật kỹ năng", "plugin", "thêm tính năng"],
+        "zh": ["技能", "功能", "能力", "启用技能", "插件"],
+        "ja": ["スキル", "機能", "能力", "スキルを有効化", "プラグイン"],
+        "ko": ["스킬", "기능", "능력", "스킬 활성화", "플러그인"],
+        "es": ["habilidades", "funciones", "capacidades", "activar habilidad"],
+        "fr": ["compétences", "fonctionnalités", "capacités", "activer compétence"],
+        "de": ["Fähigkeiten", "Funktionen", "Fähigkeit aktivieren"],
+        "pt": ["habilidades", "funcionalidades", "capacidades", "ativar habilidade"],
+        "ru": ["навыки", "функции", "возможности", "включить навык", "плагины"]
+      }
+    },
+    "navigate_monitoring": {
+      "target": "monitoring",
+      "type": "navigation",
+      "tui_screen": "monitoring",
+      "web_route": "/monitoring",
+      "keywords": {
+        "en": ["monitoring", "metrics", "dashboard", "status", "health", "logs", "analytics"],
+        "vi": ["giám sát", "số liệu", "bảng điều khiển", "trạng thái", "sức khỏe", "nhật ký"],
+        "zh": ["监控", "指标", "仪表盘", "状态", "日志", "分析"],
+        "ja": ["モニタリング", "メトリクス", "ダッシュボード", "ステータス", "ログ"],
+        "ko": ["모니터링", "메트릭", "대시보드", "상태", "로그"],
+        "es": ["monitoreo", "métricas", "panel de control", "estado", "registros"],
+        "fr": ["surveillance", "métriques", "tableau de bord", "statut", "journaux"],
+        "de": ["Überwachung", "Metriken", "Dashboard", "Status", "Protokolle"],
+        "pt": ["monitoramento", "métricas", "painel", "status", "logs"],
+        "ru": ["мониторинг", "метрики", "панель", "статус", "логи"]
+      }
+    },
+    "navigate_deploy": {
+      "target": "deploy",
+      "type": "navigation",
+      "tui_screen": "deploy",
+      "web_route": "/deploy",
+      "keywords": {
+        "en": ["deploy", "deployment", "publish", "launch", "go live", "start server"],
+        "vi": ["triển khai", "xuất bản", "khởi chạy", "đưa lên", "bắt đầu server"],
+        "zh": ["部署", "发布", "启动", "上线"],
+        "ja": ["デプロイ", "展開", "公開", "起動"],
+        "ko": ["배포", "배치", "출시", "시작"],
+        "es": ["desplegar", "despliegue", "publicar", "lanzar"],
+        "fr": ["déployer", "déploiement", "publier", "lancer"],
+        "de": ["bereitstellen", "Bereitstellung", "veröffentlichen", "starten"],
+        "pt": ["implantar", "implantação", "publicar", "lançar"],
+        "ru": ["развернуть", "развёртывание", "опубликовать", "запустить"]
+      }
+    },
+    "navigate_persona": {
+      "target": "persona",
+      "type": "navigation",
+      "tui_screen": "persona",
+      "web_route": "/persona",
+      "keywords": {
+        "en": ["persona", "agent name", "system prompt", "character", "identity", "personality"],
+        "vi": ["nhân cách", "tên agent", "lời hệ thống", "nhân vật", "danh tính", "tính cách"],
+        "zh": ["角色", "代理名称", "系统提示", "身份", "个性"],
+        "ja": ["ペルソナ", "エージェント名", "システムプロンプト", "キャラクター"],
+        "ko": ["페르소나", "에이전트 이름", "시스템 프롬프트", "캐릭터"],
+        "es": ["persona", "nombre del agente", "prompt del sistema", "carácter"],
+        "fr": ["persona", "nom de l'agent", "prompt système", "personnage"],
+        "de": ["Persona", "Agentenname", "Systemaufforderung", "Charakter"],
+        "pt": ["persona", "nome do agente", "prompt do sistema", "personagem"],
+        "ru": ["персона", "имя агента", "системный промпт", "персонаж"]
+      }
+    },
+    "navigate_ironman": {
+      "target": "ironman_panel",
+      "type": "navigation",
+      "tui_screen": "ironman",
+      "web_route": "/ironman",
+      "keywords": {
+        "en": ["ironman", "gesture control", "camera", "voice", "hand control", "gesture"],
+        "vi": ["ironman", "điều khiển cử chỉ", "camera", "giọng nói", "điều khiển tay"],
+        "zh": ["钢铁侠", "手势控制", "摄像头", "语音", "手部控制"],
+        "ja": ["アイアンマン", "ジェスチャー制御", "カメラ", "音声"],
+        "ko": ["아이언맨", "제스처 제어", "카메라", "음성"],
+        "es": ["ironman", "control de gestos", "cámara", "voz"],
+        "fr": ["ironman", "contrôle gestuel", "caméra", "voix"],
+        "de": ["Ironman", "Gestensteuerung", "Kamera", "Stimme"],
+        "pt": ["ironman", "controle de gestos", "câmera", "voz"],
+        "ru": ["айронмен", "управление жестами", "камера", "голос"]
+      }
+    },
+    "navigate_secrets": {
+      "target": "secrets",
+      "type": "navigation",
+      "tui_screen": "secrets",
+      "web_route": "/secrets",
+      "keywords": {
+        "en": ["secrets", "API keys", "tokens", "credentials", "keys", "environment variables"],
+        "vi": ["bí mật", "khóa API", "mã token", "thông tin xác thực", "biến môi trường"],
+        "zh": ["密钥", "API密钥", "令牌", "凭据", "环境变量"],
+        "ja": ["シークレット", "APIキー", "トークン", "認証情報"],
+        "ko": ["시크릿", "API 키", "토큰", "자격증명"],
+        "es": ["secretos", "claves API", "tokens", "credenciales"],
+        "fr": ["secrets", "clés API", "jetons", "identifiants"],
+        "de": ["Geheimnisse", "API-Schlüssel", "Token", "Anmeldedaten"],
+        "pt": ["segredos", "chaves API", "tokens", "credenciais"],
+        "ru": ["секреты", "ключи API", "токены", "учетные данные"]
+      }
+    },
+    "navigate_webhooks": {
+      "target": "webhooks",
+      "type": "navigation",
+      "tui_screen": "hooks",
+      "web_route": "/webhooks",
+      "keywords": {
+        "en": ["webhooks", "hooks", "callbacks", "event hooks", "HTTP hooks"],
+        "vi": ["webhook", "hook", "gọi lại", "sự kiện hook"],
+        "zh": ["网络钩子", "钩子", "回调", "事件钩子"],
+        "ja": ["ウェブフック", "フック", "コールバック"],
+        "ko": ["웹훅", "훅", "콜백"],
+        "es": ["webhooks", "ganchos", "devoluciones de llamada"],
+        "fr": ["webhooks", "crochets", "rappels"],
+        "de": ["Webhooks", "Hooks", "Rückrufe"],
+        "pt": ["webhooks", "ganchos", "retornos de chamada"],
+        "ru": ["вебхуки", "хуки", "обратные вызовы"]
+      }
+    },
+    "navigate_language": {
+      "target": "language_selection",
+      "type": "navigation",
+      "tui_screen": "language",
+      "web_route": "/language",
+      "keywords": {
+        "en": ["language", "change language", "select language", "localization"],
+        "vi": ["ngôn ngữ", "đổi ngôn ngữ", "chọn ngôn ngữ", "bản địa hóa"],
+        "zh": ["语言", "更改语言", "选择语言", "本地化"],
+        "ja": ["言語", "言語を変更", "言語を選択", "ローカライゼーション"],
+        "ko": ["언어", "언어 변경", "언어 선택", "현지화"],
+        "es": ["idioma", "cambiar idioma", "seleccionar idioma", "localización"],
+        "fr": ["langue", "changer de langue", "sélectionner la langue", "localisation"],
+        "de": ["Sprache", "Sprache ändern", "Sprache auswählen", "Lokalisierung"],
+        "pt": ["idioma", "mudar idioma", "selecionar idioma", "localização"],
+        "ru": ["язык", "сменить язык", "выбрать язык", "локализация"]
+      }
+    },
+
+    "action_send_message": {
+      "target": "send_message",
+      "type": "action",
+      "tui_screen": null,
+      "web_component": "InputBar",
+      "keywords": {
+        "en": ["send", "submit", "enter", "send message", "ask"],
+        "vi": ["gửi", "gửi tin nhắn", "nhập", "hỏi", "gửi câu hỏi"],
+        "zh": ["发送", "提交", "输入", "发送消息", "提问"],
+        "ja": ["送信", "送る", "入力", "メッセージを送信", "質問"],
+        "ko": ["보내기", "전송", "입력", "메시지 보내기", "질문"],
+        "es": ["enviar", "enviar mensaje", "preguntar"],
+        "fr": ["envoyer", "envoyer un message", "demander"],
+        "de": ["senden", "Nachricht senden", "fragen"],
+        "pt": ["enviar", "enviar mensagem", "perguntar"],
+        "ru": ["отправить", "отправить сообщение", "спросить"]
+      }
+    },
+    "action_new_session": {
+      "target": "new_session",
+      "type": "action",
+      "web_component": "SessionSidebar",
+      "keywords": {
+        "en": ["new session", "new chat", "start over", "clear chat", "reset"],
+        "vi": ["phiên mới", "chat mới", "bắt đầu lại", "xóa chat", "đặt lại"],
+        "zh": ["新会话", "新聊天", "重新开始", "清除聊天", "重置"],
+        "ja": ["新しいセッション", "新しいチャット", "やり直す", "チャットをクリア", "リセット"],
+        "ko": ["새 세션", "새 채팅", "다시 시작", "채팅 지우기", "리셋"],
+        "es": ["nueva sesión", "nuevo chat", "empezar de nuevo", "borrar chat"],
+        "fr": ["nouvelle session", "nouveau chat", "recommencer", "effacer le chat"],
+        "de": ["neue Sitzung", "neuer Chat", "neu starten", "Chat löschen"],
+        "pt": ["nova sessão", "novo chat", "recomeçar", "limpar chat"],
+        "ru": ["новая сессия", "новый чат", "начать заново", "очистить чат"]
+      }
+    },
+    "action_export_session": {
+      "target": "export_session",
+      "type": "action",
+      "web_component": "SessionSidebar",
+      "keywords": {
+        "en": ["export", "download chat", "save conversation", "export session"],
+        "vi": ["xuất", "tải chat", "lưu cuộc trò chuyện", "xuất phiên"],
+        "zh": ["导出", "下载聊天", "保存对话", "导出会话"],
+        "ja": ["エクスポート", "チャットをダウンロード", "会話を保存"],
+        "ko": ["내보내기", "채팅 다운로드", "대화 저장"],
+        "es": ["exportar", "descargar chat", "guardar conversación"],
+        "fr": ["exporter", "télécharger le chat", "sauver la conversation"],
+        "de": ["exportieren", "Chat herunterladen", "Gespräch speichern"],
+        "pt": ["exportar", "baixar chat", "salvar conversa"],
+        "ru": ["экспорт", "скачать чат", "сохранить разговор"]
+      }
+    },
+    "action_pin_session": {
+      "target": "pin_session",
+      "type": "action",
+      "web_component": "SessionSidebar",
+      "keywords": {
+        "en": ["pin", "pin session", "favorite", "bookmark"],
+        "vi": ["ghim", "ghim phiên", "yêu thích", "đánh dấu"],
+        "zh": ["固定", "固定会话", "收藏", "书签"],
+        "ja": ["ピン留め", "セッションをピン", "お気に入り", "ブックマーク"],
+        "ko": ["고정", "세션 고정", "즐겨찾기", "북마크"],
+        "es": ["fijar", "fijar sesión", "favorito", "marcador"],
+        "fr": ["épingler", "épingler la session", "favori", "signet"],
+        "de": ["anheften", "Sitzung anheften", "Favorit", "Lesezeichen"],
+        "pt": ["fixar", "fixar sessão", "favorito", "marcador"],
+        "ru": ["закрепить", "закрепить сессию", "избранное", "закладка"]
+      }
+    },
+    "action_delete_session": {
+      "target": "delete_session",
+      "type": "action",
+      "web_component": "SessionSidebar",
+      "keywords": {
+        "en": ["delete", "delete session", "remove chat", "delete conversation"],
+        "vi": ["xóa", "xóa phiên", "xóa chat", "xóa cuộc trò chuyện"],
+        "zh": ["删除", "删除会话", "删除聊天", "删除对话"],
+        "ja": ["削除", "セッションを削除", "チャットを削除"],
+        "ko": ["삭제", "세션 삭제", "채팅 삭제"],
+        "es": ["eliminar", "eliminar sesión", "borrar chat"],
+        "fr": ["supprimer", "supprimer la session", "effacer le chat"],
+        "de": ["löschen", "Sitzung löschen", "Chat löschen"],
+        "pt": ["apagar", "apagar sessão", "excluir chat"],
+        "ru": ["удалить", "удалить сессию", "удалить чат"]
+      }
+    },
+    "action_toggle_sidebar": {
+      "target": "toggle_sidebar",
+      "type": "action",
+      "web_component": "EngineSidebar",
+      "keywords": {
+        "en": ["sidebar", "toggle sidebar", "menu", "show sidebar", "hide sidebar"],
+        "vi": ["thanh bên", "bật/tắt thanh bên", "menu", "hiện thanh bên", "ẩn thanh bên"],
+        "zh": ["侧边栏", "切换侧边栏", "菜单", "显示侧边栏"],
+        "ja": ["サイドバー", "サイドバー切替", "メニュー"],
+        "ko": ["사이드바", "사이드바 전환", "메뉴"],
+        "es": ["barra lateral", "alternar barra lateral", "menú"],
+        "fr": ["barre latérale", "basculer la barre latérale", "menu"],
+        "de": ["Seitenleiste", "Seitenleiste umschalten", "Menü"],
+        "pt": ["barra lateral", "alternar barra lateral", "menu"],
+        "ru": ["боковая панель", "переключить панель", "меню"]
+      }
+    },
+    "action_search": {
+      "target": "search",
+      "type": "action",
+      "tui_screen": "search",
+      "web_route": "/search",
+      "keywords": {
+        "en": ["search", "find", "look for", "search for", "query"],
+        "vi": ["tìm kiếm", "tìm", "tra cứu", "tìm kiếm theo"],
+        "zh": ["搜索", "查找", "查询", "搜"],
+        "ja": ["検索", "探す", "クエリ"],
+        "ko": ["검색", "찾기", "조회"],
+        "es": ["buscar", "encontrar", "buscar por"],
+        "fr": ["rechercher", "chercher", "trouver"],
+        "de": ["suchen", "finden", "Suche"],
+        "pt": ["pesquisar", "buscar", "procurar"],
+        "ru": ["поиск", "искать", "найти"]
+      }
+    },
+    "action_copy_code": {
+      "target": "copy_code",
+      "type": "action",
+      "web_component": "MessageBubble",
+      "keywords": {
+        "en": ["copy code", "copy", "copy to clipboard", "copy snippet"],
+        "vi": ["sao chép code", "sao chép", "sao chép vào clipboard"],
+        "zh": ["复制代码", "复制", "复制到剪贴板"],
+        "ja": ["コードをコピー", "コピー", "クリップボードにコピー"],
+        "ko": ["코드 복사", "복사", "클립보드에 복사"],
+        "es": ["copiar código", "copiar", "copiar al portapapeles"],
+        "fr": ["copier le code", "copier", "copier dans le presse-papier"],
+        "de": ["Code kopieren", "kopieren", "in Zwischenablage kopieren"],
+        "pt": ["copiar código", "copiar", "copiar para área de transferência"],
+        "ru": ["скопировать код", "скопировать", "копировать в буфер"]
+      }
+    },
+    "action_stop_generation": {
+      "target": "stop_generation",
+      "type": "action",
+      "web_component": "InputBar",
+      "keywords": {
+        "en": ["stop", "stop generating", "cancel", "abort", "halt"],
+        "vi": ["dừng", "dừng tạo", "hủy", "hủy bỏ"],
+        "zh": ["停止", "停止生成", "取消", "中止"],
+        "ja": ["停止", "生成を停止", "キャンセル", "中止"],
+        "ko": ["중지", "생성 중지", "취소", "중단"],
+        "es": ["detener", "detener generación", "cancelar"],
+        "fr": ["arrêter", "arrêter la génération", "annuler"],
+        "de": ["stoppen", "Generierung stoppen", "abbrechen"],
+        "pt": ["parar", "parar geração", "cancelar"],
+        "ru": ["остановить", "остановить генерацию", "отменить"]
+      }
+    },
+    "action_regenerate": {
+      "target": "regenerate",
+      "type": "action",
+      "web_component": "MessageBubble",
+      "keywords": {
+        "en": ["regenerate", "retry", "try again", "redo"],
+        "vi": ["tạo lại", "thử lại", "thử lần nữa", "làm lại"],
+        "zh": ["重新生成", "重试", "再试一次"],
+        "ja": ["再生成", "やり直す", "もう一度試す"],
+        "ko": ["재생성", "다시 시도", "다시 하기"],
+        "es": ["regenerar", "reintentar", "intentar de nuevo"],
+        "fr": ["régénérer", "réessayer", "essayer à nouveau"],
+        "de": ["regenerieren", "erneut versuchen", "nochmal"],
+        "pt": ["regenerar", "tentar novamente", "refazer"],
+        "ru": ["перегенерировать", "повторить", "попробовать снова"]
+      }
+    },
+    "action_voice_input": {
+      "target": "voice_input",
+      "type": "action",
+      "web_component": "VoiceInput",
+      "tui_screen": "ironman",
+      "keywords": {
+        "en": ["voice", "speak", "microphone", "voice input", "dictate", "speech to text"],
+        "vi": ["giọng nói", "nói", "micro", "nhập bằng giọng", "đọc chính tả"],
+        "zh": ["语音", "说话", "麦克风", "语音输入", "语音转文字"],
+        "ja": ["音声", "話す", "マイク", "音声入力", "音声テキスト変換"],
+        "ko": ["음성", "말하기", "마이크", "음성 입력", "음성 텍스트 변환"],
+        "es": ["voz", "hablar", "micrófono", "entrada de voz", "dictado"],
+        "fr": ["voix", "parler", "microphone", "entrée vocale", "dictée"],
+        "de": ["Stimme", "sprechen", "Mikrofon", "Spracheingabe"],
+        "pt": ["voz", "falar", "microfone", "entrada de voz", "ditado"],
+        "ru": ["голос", "говорить", "микрофон", "голосовой ввод"]
+      }
+    },
+    "action_docker_start": {
+      "target": "docker_start",
+      "type": "action",
+      "keywords": {
+        "en": ["start docker", "docker up", "docker compose up", "start containers"],
+        "vi": ["bắt đầu docker", "docker lên", "khởi chạy container"],
+        "zh": ["启动docker", "docker启动", "启动容器"],
+        "ja": ["Docker起動", "Dockerを開始", "コンテナを起動"],
+        "ko": ["도커 시작", "도커 업", "컨테이너 시작"],
+        "es": ["iniciar docker", "docker up", "iniciar contenedores"],
+        "fr": ["démarrer docker", "docker up", "démarrer conteneurs"],
+        "de": ["Docker starten", "Docker hochfahren", "Container starten"],
+        "pt": ["iniciar docker", "docker up", "iniciar contêineres"],
+        "ru": ["запустить docker", "docker up", "запустить контейнеры"]
+      }
+    },
+    "action_update_models": {
+      "target": "update_model_registry",
+      "type": "action",
+      "keywords": {
+        "en": ["update models", "refresh models", "fetch latest models", "sync models"],
+        "vi": ["cập nhật model", "làm mới model", "lấy model mới nhất", "đồng bộ model"],
+        "zh": ["更新模型", "刷新模型", "获取最新模型", "同步模型"],
+        "ja": ["モデルを更新", "モデルを更新する", "最新モデルを取得"],
+        "ko": ["모델 업데이트", "모델 새로고침", "최신 모델 가져오기"],
+        "es": ["actualizar modelos", "refrescar modelos", "obtener últimos modelos"],
+        "fr": ["mettre à jour les modèles", "rafraîchir les modèles"],
+        "de": ["Modelle aktualisieren", "Modelle aktualisieren"],
+        "pt": ["atualizar modelos", "atualizar modelos"],
+        "ru": ["обновить модели", "обновить реестр моделей"]
+      }
+    },
+    "action_help": {
+      "target": "help",
+      "type": "action",
+      "keywords": {
+        "en": ["help", "how to", "guide", "tutorial", "instructions", "documentation"],
+        "vi": ["trợ giúp", "hướng dẫn", "cách dùng", "tài liệu", "cẩm nang"],
+        "zh": ["帮助", "如何", "指南", "教程", "文档"],
+        "ja": ["ヘルプ", "使い方", "ガイド", "チュートリアル", "ドキュメント"],
+        "ko": ["도움말", "사용법", "가이드", "튜토리얼", "문서"],
+        "es": ["ayuda", "cómo", "guía", "tutorial", "documentación"],
+        "fr": ["aide", "comment", "guide", "tutoriel", "documentation"],
+        "de": ["Hilfe", "wie", "Anleitung", "Tutorial", "Dokumentation"],
+        "pt": ["ajuda", "como", "guia", "tutorial", "documentação"],
+        "ru": ["помощь", "как", "руководство", "документация"]
+      }
+    }
+  },
+
+  "tui_wizard_flow": {
+    "description": "16-screen TUI wizard flow order",
+    "screens": [
+      {"id": "language", "label": "Language Selection"},
+      {"id": "preflight", "label": "System Preflight Check"},
+      {"id": "auth", "label": "Authentication / Token Profiles"},
+      {"id": "search", "label": "Search Provider"},
+      {"id": "providers", "label": "Model Providers (36 options)"},
+      {"id": "model_picker", "label": "Primary Model Selection (Live from Web)"},
+      {"id": "channels", "label": "Communication Channels"},
+      {"id": "skills", "label": "Skills & Features"},
+      {"id": "hooks", "label": "Webhook Configuration"},
+      {"id": "gateway", "label": "API Gateway Settings"},
+      {"id": "ironman", "label": "IronMan Control Panel (Camera/Gesture/Voice)"},
+      {"id": "secrets", "label": "Secrets & API Keys"},
+      {"id": "persona", "label": "Agent Persona"},
+      {"id": "monitoring", "label": "Monitoring & Metrics"},
+      {"id": "final", "label": "Final Summary"},
+      {"id": "deploy", "label": "Deployment"}
+    ]
+  },
+
+  "web_ui_components": {
+    "description": "Web UI interactive components and their actions",
+    "components": [
+      {"id": "ChatWindow", "actions": ["send_message", "stop_generation", "scroll"]},
+      {"id": "InputBar", "actions": ["type_message", "send_message", "stop_generation", "voice_input", "attach_file"]},
+      {"id": "MessageBubble", "actions": ["copy_code", "regenerate", "edit", "react"]},
+      {"id": "SessionSidebar", "actions": ["new_session", "pin_session", "rename_session", "export_session", "delete_session", "search_sessions"]},
+      {"id": "EngineSidebar", "actions": ["toggle_sidebar", "select_engine", "change_model", "view_settings"]},
+      {"id": "GestureController", "actions": ["enable_camera", "enable_gesture", "calibrate"]},
+      {"id": "VoiceInput", "actions": ["start_recording", "stop_recording", "change_language"]},
+      {"id": "IronManPanel", "actions": ["toggle_camera", "toggle_gesture", "toggle_voice", "test_gesture"]}
+    ]
+  },
+
+  "gesture_commands": {
+    "description": "Hand gesture to action mapping",
+    "gestures": {
+      "thumbs_up": {"action": "confirm", "labels": {"en": "Confirm/Yes", "vi": "Xác nhận/Có", "zh": "确认/是", "ja": "確認/はい", "ko": "확인/예"}},
+      "fist": {"action": "stop", "labels": {"en": "Stop/Cancel", "vi": "Dừng/Hủy", "zh": "停止/取消", "ja": "停止/キャンセル", "ko": "중지/취소"}},
+      "open_hand": {"action": "pause", "labels": {"en": "Pause", "vi": "Tạm dừng", "zh": "暂停", "ja": "一時停止", "ko": "일시정지"}},
+      "peace": {"action": "new_session", "labels": {"en": "New Session", "vi": "Phiên mới", "zh": "新会话", "ja": "新しいセッション", "ko": "새 세션"}},
+      "point_up": {"action": "scroll_up", "labels": {"en": "Scroll Up", "vi": "Cuộn lên", "zh": "向上滚动", "ja": "上にスクロール", "ko": "위로 스크롤"}},
+      "swipe_left": {"action": "go_back", "labels": {"en": "Go Back", "vi": "Quay lại", "zh": "返回", "ja": "戻る", "ko": "뒤로"}},
+      "swipe_right": {"action": "go_forward", "labels": {"en": "Go Forward", "vi": "Tiến tới", "zh": "前进", "ja": "進む", "ko": "앞으로"}},
+      "swipe_up": {"action": "scroll_up", "labels": {"en": "Scroll Up", "vi": "Cuộn lên", "zh": "向上", "ja": "上へ", "ko": "위로"}},
+      "swipe_down": {"action": "scroll_down", "labels": {"en": "Scroll Down", "vi": "Cuộn xuống", "zh": "向下", "ja": "下へ", "ko": "아래로"}}
+    }
+  }
+}

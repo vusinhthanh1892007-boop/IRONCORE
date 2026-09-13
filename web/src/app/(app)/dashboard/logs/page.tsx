@@ -59,7 +59,7 @@ export default function DashboardLogsPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Logs & Debug Center</h1>
-        <p className="text-sm text-muted-foreground">Lọc log theo level/session/agent/tool và export JSON/CSV.</p>
+        <p className="text-sm text-muted-foreground">Filter logs by level/session/agent/tool and export JSON/CSV.</p>
       </div>
 
       <ControlPlaneNav />

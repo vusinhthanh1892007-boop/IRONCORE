@@ -2,6 +2,24 @@
 
 IronCore is a highly scalable, event-driven AI orchestration platform designed with a strong focus on autonomous agents, browser stealth automation, code intelligence, and context optimization.
 
+## 0. Project Status Snapshot (Execution-Driven)
+
+- **Roadmap implementation status:** Completed through **Phase 16** in `docs/PHASE_ROADMAP_WEB_TUI.md`.
+- **Parity track:** Web UI and Terminal TUI flows have been expanded phase-by-phase (language sync, local provider/model parity, runtime ops, enterprise screens, plugin runtime, stability hardening, API-key/token management, dual-repo workflow).
+- **Validation discipline:** Focused phase tests + regression matrix (`p0`/`p1`) + per-phase implementation reports in `docs/PHASE*_REPORT_2026-03-22.md`.
+- **Rollback-first workflow:** Each phase uses a checkpoint/tag strategy before implementation.
+
+## Documentation Index (Phase 16)
+
+- Contributing & onboarding: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Architecture deep dive: [docs/ARCHITECTURE_DEEP_DIVE.md](docs/ARCHITECTURE_DEEP_DIVE.md)
+- Plugin developer guide: [docs/PLUGIN_DEV_GUIDE.md](docs/PLUGIN_DEV_GUIDE.md)
+- Incident runbook: [docs/INCIDENT_RUNBOOK.md](docs/INCIDENT_RUNBOOK.md)
+- Production hardening guide: [docs/PRODUCTION_HARDENING_GUIDE.md](docs/PRODUCTION_HARDENING_GUIDE.md)
+- 5-minute demo quickstart: [docs/QUICKSTART_5_MIN_DEMO.md](docs/QUICKSTART_5_MIN_DEMO.md)
+- 15-minute first plugin quickstart: [docs/QUICKSTART_15_MIN_FIRST_PLUGIN.md](docs/QUICKSTART_15_MIN_FIRST_PLUGIN.md)
+- Public benchmark/comparison doc: [docs/BENCHMARK_COMPARISON_PUBLIC.md](docs/BENCHMARK_COMPARISON_PUBLIC.md)
+
 ## 1. Core Architecture & Infrastructure
 
 The system is built on a robust, async-first Python backend with a decoupled, modern web control-plane.
@@ -58,7 +76,33 @@ IronCore delegates tasks to specialized autonomous modules, each exhibiting uniq
 
 ---
 
-## 4. Setup & Execution
+## 4. Skills, Technologies, and Techniques Applied (What has been used)
+
+### 4.1 Core Technical Skills Applied
+- **Backend Architecture:** FastAPI router design, middleware policy enforcement, secure storage strategy, async runtime integration.
+- **Frontend Engineering:** Next.js App Router feature delivery, typed API proxy routes, settings UX flows, state-driven UI toggles.
+- **Terminal UX Engineering:** Textual screen-stack navigation hardening, safe dismiss/fallback routing, runtime action screens.
+- **Security Engineering:** Input validation, token masking, key handling policy, profile-based secret lifecycle design.
+- **Testing & Reliability:** Pytest-first regression design, parity tests across Web/TUI/API, matrix automation and pass/fail reporting.
+
+### 4.2 Technologies Actively Used in Implementation
+- **Backend:** FastAPI, Pydantic v2, `aiosqlite`, APScheduler, Python async runtime.
+- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind v4, fetch-based API route proxies.
+- **TUI:** Textual framework with wizard/screen orchestration and guarded navigation.
+- **Security/Crypto:** OS keyring (preferred) + encrypted file fallback using Fernet.
+- **Tooling/QA:** pytest, pytest-asyncio, Ruff, MyPy, Makefile regression commands.
+
+### 4.3 Engineering Techniques Already Used Across Completed Phases
+- **Realtime sync pattern:** SSE-based language synchronization between Web and TUI.
+- **Provider resilience pattern:** Local provider scanning + online/offline status + model existence validation.
+- **Navigation safety pattern:** Idempotent dismiss and fallback-to-root guard to prevent black-screen states.
+- **Configuration parity pattern:** Shared backend config APIs consumed by both Web and TUI.
+- **Secure token lifecycle pattern:** Profile-based saved token strategy with expiry, scopes, last-used, and revoke.
+- **Dual-repo consistency pattern:** Checklist-driven parity workflow (patch list + test list + diff verification).
+
+---
+
+## 5. Setup & Execution
 
 ### Option 1: Local Python
 ```bash
@@ -85,11 +129,63 @@ curl http://127.0.0.1:8000/health
 
 ---
 
-## 5. Testing & Linting
+## 6. Testing, Linting, and Regression
 ```bash
 make test
 make test-cov
 make lint
 make format
+make regression-p0
+make regression-p1
 ```
 If your environment lacks `pytest`, `ruff`, `mypy`, or `docker`, please run `make install` first.
+
+---
+
+## 8. Consolidated Technology Stack (Used in this repo)
+
+### Backend & API
+- Python 3.13+, FastAPI, Pydantic v2, `aiosqlite`, APScheduler, Uvicorn.
+
+### Web Control Plane
+- Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS v4, Zustand, TanStack Query.
+
+### Terminal UX (TUI)
+- Textual-based wizard/screen architecture with guarded navigation and runtime operations screens.
+
+### AI / Agent / Runtime
+- LiteLLM routing, local provider integrations (Ollama/LocalAI/vLLM/LM Studio), semantic caching & memory optimization pipeline.
+
+### Browser Automation / VLM
+- Playwright stealth automation, OpenCV-based CAPTCHA utilities, vision-bridge integrations.
+
+### Security & Reliability
+- Token/key lifecycle management, keyring-first secret storage with encrypted fallback, rollback-first phase workflow, regression-first testing.
+
+### Tooling & QA
+- pytest, pytest-asyncio, Ruff, MyPy, Makefile-based CI-style command matrix.
+
+---
+
+## 9. Language Behavior
+
+- Web UI is English-only by default and does not expose a language selector.
+- Terminal TUI keeps language selection and can switch language during setup/usage.
+
+---
+
+## 7. Safe Phase Workflow (Rollback First)
+
+Before coding each new phase, create a rollback checkpoint:
+
+```bash
+make phase-start PHASE=phase-name
+```
+
+This creates:
+- an annotated git tag: `rollback/<phase>/<timestamp>`
+- a backup branch: `rollback-<phase>-<timestamp>`
+- checkpoint metadata in `.rollback/checkpoints.log`
+
+Roadmap and phase plan:
+- `docs/PHASE_ROADMAP_WEB_TUI.md`

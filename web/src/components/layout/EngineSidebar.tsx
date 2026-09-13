@@ -18,11 +18,35 @@ import {
   Check,
 } from "@phosphor-icons/react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { LanguageSelector } from "@/components/layout/LanguageSelector";
 
 const SAVED_SCRIPTS = [
   { label: "Deploy Staging", requiresConfirm: false },
   { label: "Clear Cache All", requiresConfirm: true },
+];
+
+const MONITORING_LINKS = [
+  { label: "Stealth Browser", href: "/stealth" },
+  { label: "Bot Channels", href: "/bots" },
+  { label: "Plugin & Skills", href: "/plugins" },
+  { label: "GraphRAG Memory", href: "/memory" },
+];
+
+const MANAGEMENT_LINKS = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Usage", href: "/dashboard/usage" },
+  { label: "Cron Console", href: "/dashboard/cron" },
+  { label: "Nodes", href: "/dashboard/nodes" },
+  { label: "Logs", href: "/dashboard/logs" },
+  { label: "Runtime Config", href: "/dashboard/config" },
+  { label: "Alerts", href: "/dashboard/alerts" },
+  { label: "HITL Approval", href: "/hitl" },
+  { label: "HITL History", href: "/hitl/history" },
+  { label: "SIEM", href: "/siem" },
+  { label: "IAM", href: "/iam" },
+  { label: "AI Catalog", href: "/ai-catalog" },
+  { label: "Spatial Map", href: "/spatial" },
+  { label: "Forensics", href: "/forensics" },
+  { label: "Security Audit", href: "/audit" },
 ];
 
 export function EngineSidebar() {
@@ -187,7 +211,7 @@ export function EngineSidebar() {
                     <div className="rounded-lg border border-amber-500/60 bg-amber-500/10 px-3 py-2 text-xs">
                       <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
                         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                        <span className="font-medium">Bạn chắc chắn muốn xóa cache không?</span>
+                        <span className="font-medium">Confirm cache clear?</span>
                       </div>
                       <div className="mt-2 flex items-center gap-2">
                         <button
@@ -196,7 +220,7 @@ export function EngineSidebar() {
                           className="flex items-center gap-1 rounded bg-amber-500 px-2 py-1 text-[10px] font-medium text-white hover:bg-amber-600"
                         >
                           <Check className="h-3 w-3" />
-                          Xác nhận
+                          Confirm
                         </button>
                         <button
                           type="button"
@@ -204,7 +228,7 @@ export function EngineSidebar() {
                           className="flex items-center gap-1 rounded border border-border px-2 py-1 text-[10px] text-muted-foreground hover:bg-muted"
                         >
                           <X className="h-3 w-3" />
-                          Hủy
+                          Cancel
                         </button>
                       </div>
                     </div>
@@ -264,10 +288,51 @@ export function EngineSidebar() {
             </Link>
           </div>
         </section>
+
+        <section className="space-y-2">
+          <div className="px-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Monitoring
+          </div>
+          <div className="space-y-1">
+            {MONITORING_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex w-full items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm
+                  text-muted-foreground hover:bg-zinc-100 hover:text-foreground
+                  dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100
+                  dark:hover:border-zinc-500 dark:hover:bg-zinc-800"
+              >
+                <Server className="h-4 w-4 shrink-0" />
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-2">
+          <div className="px-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Management
+          </div>
+          <div className="space-y-1">
+            {MANAGEMENT_LINKS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex w-full items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm
+                  text-muted-foreground hover:bg-zinc-100 hover:text-foreground
+                  dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100
+                  dark:hover:border-zinc-500 dark:hover:bg-zinc-800"
+              >
+                <Settings className="h-4 w-4 shrink-0" />
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       <div className="mt-auto space-y-3 border-t border-border px-2 pt-4">
-        <LanguageSelector />
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-xs font-semibold">
             U

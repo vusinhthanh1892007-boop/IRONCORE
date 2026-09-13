@@ -52,7 +52,7 @@ export default function DashboardNodesPage() {
       <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold">Nodes / Workers</h1>
-          <p className="text-sm text-muted-foreground">Giám sát health, tài nguyên và active sessions theo node.</p>
+          <p className="text-sm text-muted-foreground">Monitor health, resources, and active sessions per node.</p>
         </div>
         <ControlPlaneNav />
         <Card className="border border-dashed border-border p-6 text-sm text-muted-foreground">
@@ -74,7 +74,7 @@ export default function DashboardNodesPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Nodes / Workers</h1>
-        <p className="text-sm text-muted-foreground">Giám sát health, tài nguyên và active sessions theo node.</p>
+        <p className="text-sm text-muted-foreground">Monitor health, resources, and active sessions per node.</p>
       </div>
 
       <ControlPlaneNav />

@@ -22,11 +22,30 @@ import {
   writeUserSettings,
   type UserSettings,
 } from "@/lib/user-settings";
-import { useI18n } from "@/components/providers/I18nProvider";
 
 const maskKey = (key: string) => {
   if (key.length <= 6) return key;
   return `${key.slice(0, 2)}-****-****-${key.slice(-4)}`;
+};
+
+const formatUtcDateTime = (epochSeconds: number | null) => {
+  if (!epochSeconds) return "never";
+  const iso = new Date(epochSeconds * 1000).toISOString();
+  return `${iso.slice(0, 19).replace("T", " ")} UTC`;
+};
+
+const GOOGLE_MAPS_KEY_RE = /^AIza[0-9A-Za-z_-]{20,}$/;
+
+type TokenProfile = {
+  profile_id: string;
+  environment: string;
+  scopes: string[];
+  expires_at: number | null;
+  last_used_at: number | null;
+  revoked: boolean;
+  expired: boolean;
+  expiring_soon: boolean;
+  has_token: boolean;
 };
 
 const defaultSettings: UserSettings = defaultUserSettings;
@@ -74,7 +93,7 @@ const TIMEZONES = [
   { value: "Asia/Almaty", label: "UTC+06:00 — Almaty (Kazakhstan)" },
   { value: "Asia/Yangon", label: "UTC+06:30 — Yangon (Myanmar)" },
   { value: "Asia/Bangkok", label: "UTC+07:00 — Bangkok (Thailand)" },
-  { value: "Asia/Ho_Chi_Minh", label: "UTC+07:00 — Hồ Chí Minh, Hà Nội (Việt Nam)" },
+  { value: "Asia/Ho_Chi_Minh", label: "UTC+07:00 — Ho Chi Minh, Hanoi (Vietnam)" },
   { value: "Asia/Jakarta", label: "UTC+07:00 — Jakarta (Indonesia WIB)" },
   { value: "Asia/Novosibirsk", label: "UTC+07:00 — Novosibirsk (Russia)" },
   { value: "Asia/Shanghai", label: "UTC+08:00 — Shanghai, Beijing (China)" },
@@ -187,6 +206,9 @@ const API_PROVIDERS = [
   {
     group: "Local & Internal Providers", options: [
       { value: "ollama", label: "Ollama" },
+      { value: "localai", label: "LocalAI" },
+      { value: "vllm", label: "vLLM" },
+      { value: "lmstudio", label: "LM Studio" },
       { value: "google-antigravity", label: "Google Antigravity" },
       { value: "google-gemini-cli", label: "Google Gemini CLI" },
       { value: "opencode", label: "OpenCode" },
@@ -199,6 +221,18 @@ const API_PROVIDERS = [
     ]
   }
 ];
+
+const LOCAL_PROVIDER_IDS = ["ollama", "localai", "vllm", "lmstudio"] as const;
+type LocalProviderId = (typeof LOCAL_PROVIDER_IDS)[number];
+
+type LocalProviderScanResult = {
+  id: LocalProviderId;
+  label: string;
+  baseUrl: string;
+  available: boolean;
+  models: Array<{ id: string; name: string }>;
+  error?: string;
+};
 
 const PROVIDER_MODELS: Record<string, { value: string, label: string }[]> = {
   "openai": [
@@ -345,35 +379,67 @@ const IRONMAN_ACTIONS: { value: IronManAction; label: string }[] = [
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
-  const { language, setLanguage, options } = useI18n();
   const [activeTab, setActiveTab] = React.useState("general");
   const [apiKey, setApiKey] = React.useState(session?.apiKey ?? "");
   const [showKey, setShowKey] = React.useState(false);
   const [settings, setSettings] = React.useState<UserSettings>(defaultSettings);
-  const [ollamaModels, setOllamaModels] = React.useState<Array<{ value: string; label: string }>>([]);
+  const [localProviderModels, setLocalProviderModels] = React.useState<Array<{ value: string; label: string }>>([]);
+  const [detectedLocalProviders, setDetectedLocalProviders] = React.useState<LocalProviderScanResult[]>([]);
+  const [scanLoading, setScanLoading] = React.useState(false);
+  const [scanError, setScanError] = React.useState<string | null>(null);
+  const [manualModelInput, setManualModelInput] = React.useState("");
+  const [googleMapsKeyInput, setGoogleMapsKeyInput] = React.useState("");
+  const [googleMapsMasked, setGoogleMapsMasked] = React.useState("");
+  const [googleMapsHasKey, setGoogleMapsHasKey] = React.useState(false);
+  const [googleMapsLoading, setGoogleMapsLoading] = React.useState(false);
+  const [tokenProfiles, setTokenProfiles] = React.useState<TokenProfile[]>([]);
+  const [tokenProfilesLoading, setTokenProfilesLoading] = React.useState(false);
+  const [profileIdInput, setProfileIdInput] = React.useState("dev-cloud");
+  const [profileScopesInput, setProfileScopesInput] = React.useState("chat.read,chat.write");
+  const [profileExpiryDaysInput, setProfileExpiryDaysInput] = React.useState("30");
+  const [profileTokenInput, setProfileTokenInput] = React.useState("");
   const [ironManSettings, setIronManSettings] = React.useState<IronManSettings>(
     defaultIronManSettings
   );
+
+  const isLocalProviderSelected = LOCAL_PROVIDER_IDS.includes(
+    settings.apiProvider as LocalProviderId
+  );
+
+  const scanLocalProviders = React.useCallback(async () => {
+    setScanLoading(true);
+    setScanError(null);
+    try {
+      const res = await fetch("/api/local-providers", { cache: "no-store" });
+      const payload = (await res.json()) as { providers?: LocalProviderScanResult[] };
+      setDetectedLocalProviders(payload.providers ?? []);
+    } catch (error) {
+      setScanError(error instanceof Error ? error.message : "Unable to scan local providers.");
+      setDetectedLocalProviders([]);
+    } finally {
+      setScanLoading(false);
+    }
+  }, []);
 
   React.useEffect(() => {
     setApiKey(session?.apiKey ?? "");
   }, [session?.apiKey]);
 
   React.useEffect(() => {
-    setSettings({ ...readUserSettings(), language });
-  }, [language]);
+    setSettings({ ...readUserSettings(), language: "en" });
+  }, []);
 
   React.useEffect(() => {
     setIronManSettings(getIronManSettings());
   }, []);
 
   React.useEffect(() => {
-    if (settings.apiProvider !== "ollama") return;
+    if (!isLocalProviderSelected) return;
 
     let cancelled = false;
     const load = async () => {
       try {
-        const res = await fetch("/api/models?provider=ollama", { cache: "no-store" });
+        const res = await fetch(`/api/models?provider=${encodeURIComponent(settings.apiProvider)}`, { cache: "no-store" });
         const payload = (await res.json()) as {
           models?: Array<{ model_id?: string; model_name?: string }>;
         };
@@ -384,12 +450,12 @@ export default function SettingsPage() {
             label: String(model.model_name ?? model.model_id ?? "").trim(),
           }))
           .filter((model) => model.value);
-        setOllamaModels(models);
+        setLocalProviderModels(models);
         if (models.length && !models.some((model) => model.value === settings.defaultModel)) {
           setSettings((prev) => ({ ...prev, defaultModel: models[0].value }));
         }
       } catch {
-        if (!cancelled) setOllamaModels([]);
+        if (!cancelled) setLocalProviderModels([]);
       }
     };
 
@@ -397,16 +463,84 @@ export default function SettingsPage() {
     return () => {
       cancelled = true;
     };
-  }, [settings.apiProvider, settings.defaultModel]);
+  }, [settings.apiProvider, settings.defaultModel, isLocalProviderSelected]);
+
+  React.useEffect(() => {
+    void scanLocalProviders();
+  }, [scanLocalProviders]);
+
+  const loadGoogleMapsStatus = React.useCallback(async () => {
+    setGoogleMapsLoading(true);
+    try {
+      const res = await fetch("/api/google-maps-key", { cache: "no-store" });
+      const payload = (await res.json()) as { has_key?: boolean; masked_key?: string; detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to load Google Maps key status.");
+      }
+      setGoogleMapsHasKey(Boolean(payload.has_key));
+      setGoogleMapsMasked(String(payload.masked_key || ""));
+    } catch (error) {
+      setGoogleMapsHasKey(false);
+      setGoogleMapsMasked("");
+      toast.error(error instanceof Error ? error.message : "Unable to load Google Maps key status.");
+    } finally {
+      setGoogleMapsLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    void loadGoogleMapsStatus();
+  }, [loadGoogleMapsStatus]);
+
+  const loadTokenProfiles = React.useCallback(async () => {
+    setTokenProfilesLoading(true);
+    try {
+      const res = await fetch("/api/token-profiles", { cache: "no-store" });
+      const payload = (await res.json()) as { profiles?: TokenProfile[]; detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to load token profiles.");
+      }
+      setTokenProfiles(payload.profiles ?? []);
+    } catch (error) {
+      setTokenProfiles([]);
+      toast.error(error instanceof Error ? error.message : "Unable to load token profiles.");
+    } finally {
+      setTokenProfilesLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    void loadTokenProfiles();
+  }, [loadTokenProfiles]);
 
   const activeModelOptions =
-    settings.apiProvider === "ollama"
-      ? ollamaModels
+    isLocalProviderSelected
+      ? localProviderModels
       : PROVIDER_MODELS[settings.apiProvider];
 
-  const saveSettings = () => {
-    writeUserSettings(settings);
-    setLanguage(settings.language);
+  const saveSettings = async () => {
+    if (isLocalProviderSelected) {
+      try {
+        const res = await fetch(`/api/models?provider=${encodeURIComponent(settings.apiProvider)}`, {
+          cache: "no-store",
+        });
+        const payload = (await res.json()) as { models?: Array<{ model_id?: string }> };
+        const installedModels = (payload.models ?? [])
+          .map((item) => String(item.model_id ?? "").trim())
+          .filter(Boolean);
+
+        if (installedModels.length && !installedModels.includes(settings.defaultModel)) {
+          toast.error(`Model '${settings.defaultModel}' is not installed on your local ${settings.apiProvider} provider.`);
+          return;
+        }
+      } catch {
+        toast.error("Unable to validate local model. Run scan and try again.");
+        return;
+      }
+    }
+
+    writeUserSettings({ ...settings, language: "en" });
+    setSettings((prev) => ({ ...prev, language: "en" }));
     toast.success("Settings saved");
   };
 
@@ -430,6 +564,143 @@ export default function SettingsPage() {
     setApiKey("");
     await update({ apiKey: "" });
     toast.success("API key revoked");
+  };
+
+  const handleSaveGoogleMapsKey = async () => {
+    const candidate = googleMapsKeyInput.trim();
+    if (!candidate) {
+      toast.error("Google Maps API key cannot be empty.");
+      return;
+    }
+    if (!GOOGLE_MAPS_KEY_RE.test(candidate)) {
+      toast.error("Invalid Google Maps API key format.");
+      return;
+    }
+
+    setGoogleMapsLoading(true);
+    try {
+      const res = await fetch("/api/google-maps-key", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ api_key: candidate }),
+      });
+      const payload = (await res.json()) as { has_key?: boolean; masked_key?: string; detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to save Google Maps API key.");
+      }
+      setGoogleMapsHasKey(Boolean(payload.has_key));
+      setGoogleMapsMasked(String(payload.masked_key || ""));
+      setGoogleMapsKeyInput("");
+      toast.success("Google Maps API key saved");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to save Google Maps API key.");
+    } finally {
+      setGoogleMapsLoading(false);
+    }
+  };
+
+  const handleDeleteGoogleMapsKey = async () => {
+    setGoogleMapsLoading(true);
+    try {
+      const res = await fetch("/api/google-maps-key", { method: "DELETE" });
+      const payload = (await res.json()) as { detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to delete Google Maps API key.");
+      }
+      setGoogleMapsHasKey(false);
+      setGoogleMapsMasked("");
+      setGoogleMapsKeyInput("");
+      toast.success("Google Maps API key removed");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to delete Google Maps API key.");
+    } finally {
+      setGoogleMapsLoading(false);
+    }
+  };
+
+  const handleSaveTokenProfile = async () => {
+    const profile_id = profileIdInput.trim();
+    const token = profileTokenInput.trim();
+    const scopes = profileScopesInput
+      .split(",")
+      .map((scope) => scope.trim())
+      .filter(Boolean);
+    const expires_in_days = Number(profileExpiryDaysInput || "0");
+
+    if (!profile_id) {
+      toast.error("Token profile id is required.");
+      return;
+    }
+    if (!token) {
+      toast.error("Token value is required.");
+      return;
+    }
+
+    setTokenProfilesLoading(true);
+    try {
+      const res = await fetch("/api/token-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile_id,
+          token,
+          environment: "cloud",
+          scopes,
+          expires_in_days: Number.isFinite(expires_in_days) && expires_in_days > 0 ? expires_in_days : undefined,
+        }),
+      });
+      const payload = (await res.json()) as { detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to save token profile.");
+      }
+      setProfileTokenInput("");
+      toast.success("Token profile saved");
+      await loadTokenProfiles();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to save token profile.");
+    } finally {
+      setTokenProfilesLoading(false);
+    }
+  };
+
+  const handleUseTokenProfile = async (profileId: string) => {
+    setTokenProfilesLoading(true);
+    try {
+      const res = await fetch(`/api/token-profiles/${encodeURIComponent(profileId)}/use`, {
+        method: "POST",
+      });
+      const payload = (await res.json()) as { token?: string; detail?: string };
+      if (!res.ok || !payload.token) {
+        throw new Error(payload.detail || "Unable to activate token profile.");
+      }
+      await update({ apiKey: payload.token });
+      setApiKey(payload.token);
+      toast.success(`Token profile '${profileId}' activated`);
+      await loadTokenProfiles();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to activate token profile.");
+    } finally {
+      setTokenProfilesLoading(false);
+    }
+  };
+
+  const handleRevokeTokenProfile = async (profileId: string) => {
+    setTokenProfilesLoading(true);
+    try {
+      const res = await fetch(`/api/token-profiles/${encodeURIComponent(profileId)}`, {
+        method: "DELETE",
+      });
+      const payload = (await res.json()) as { detail?: string };
+      if (!res.ok) {
+        throw new Error(payload.detail || "Unable to revoke token profile.");
+      }
+      toast.success(`Token profile '${profileId}' revoked`);
+      await loadTokenProfiles();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Unable to revoke token profile.");
+    } finally {
+      setTokenProfilesLoading(false);
+    }
   };
 
   return (
@@ -476,22 +747,7 @@ export default function SettingsPage() {
                 <label className="text-xs font-medium text-muted-foreground">
                   Language
                 </label>
-                <select
-                  value={settings.language}
-                  onChange={(event) =>
-                    setSettings((prev) => ({
-                      ...prev,
-                      language: event.target.value,
-                    }))
-                  }
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  {options.map((option) => (
-                    <option key={option.code} value={option.code}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <Input value="English (en)" disabled readOnly />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground">
@@ -520,6 +776,55 @@ export default function SettingsPage() {
 
         <TabsContent value="models" className="space-y-4">
           <Card className="border border-border/60 bg-background/80 p-6">
+            {isLocalProviderSelected ? (
+              <div className="mb-4 rounded-lg border border-border bg-muted/20 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium">Local AI scan</p>
+                    <p className="text-xs text-muted-foreground">
+                      Scan providers on your machine and auto-load available models.
+                    </p>
+                  </div>
+                  <Button type="button" variant="outline" size="sm" onClick={() => void scanLocalProviders()}>
+                    {scanLoading ? "Scanning..." : "Scan local providers"}
+                  </Button>
+                </div>
+                {scanError ? (
+                  <p className="mt-2 text-xs text-destructive">{scanError}</p>
+                ) : null}
+                <div className="mt-3 space-y-2">
+                  {detectedLocalProviders.map((provider) => (
+                    <div key={provider.id} className="rounded-md border border-border/70 bg-background px-3 py-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span className="font-medium">{provider.label}</span>
+                        <span className={provider.available ? "text-emerald-600" : "text-muted-foreground"}>
+                          {provider.available ? `Online · ${provider.models.length} model(s)` : "Offline"}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">{provider.baseUrl}</p>
+                      {provider.available && provider.models.length ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="mt-2 h-7 px-2 text-xs"
+                          onClick={() =>
+                            setSettings((prev) => ({
+                              ...prev,
+                              apiProvider: provider.id,
+                              defaultModel: provider.models[0].id,
+                            }))
+                          }
+                        >
+                          Use {provider.label}
+                        </Button>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground">
@@ -551,6 +856,30 @@ export default function SettingsPage() {
                     placeholder="Type model name for this gateway..."
                   />
                 )}
+                <div className="mt-2 space-y-2">
+                  <label className="text-xs font-medium text-muted-foreground">
+                    Or enter model manually
+                  </label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={manualModelInput}
+                      onChange={(event) => setManualModelInput(event.target.value)}
+                      placeholder="e.g. qwen2.5:7b"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        const candidate = manualModelInput.trim();
+                        if (!candidate) return;
+                        setSettings((prev) => ({ ...prev, defaultModel: candidate }));
+                        setManualModelInput("");
+                      }}
+                    >
+                      Use
+                    </Button>
+                  </div>
+                </div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground">
@@ -606,11 +935,17 @@ export default function SettingsPage() {
                   <select
                     value={settings.apiProvider}
                     onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        apiProvider: e.target.value,
-                        defaultModel: PROVIDER_MODELS[e.target.value]?.[0]?.value || prev.defaultModel
-                      }))
+                      setSettings((prev) => {
+                        const nextProvider = e.target.value;
+                        const nextModel = LOCAL_PROVIDER_IDS.includes(nextProvider as LocalProviderId)
+                          ? localProviderModels[0]?.value || prev.defaultModel
+                          : PROVIDER_MODELS[nextProvider]?.[0]?.value || prev.defaultModel;
+                        return {
+                          ...prev,
+                          apiProvider: nextProvider,
+                          defaultModel: nextModel,
+                        };
+                      })
                     }
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   >
@@ -692,6 +1027,118 @@ export default function SettingsPage() {
                 <Button type="button" variant="outline" onClick={handleRevoke}>
                   Revoke
                 </Button>
+              </div>
+
+              <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-3">
+                <div>
+                  <div className="text-sm font-semibold">Google Maps API Key</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Stored via backend config API and shared with TUI.
+                  </p>
+                </div>
+                <Input
+                  type="password"
+                  value={googleMapsKeyInput}
+                  onChange={(event) => setGoogleMapsKeyInput(event.target.value)}
+                  placeholder="Enter Google Maps API key (AIza...)"
+                />
+                <div className="text-xs text-muted-foreground">
+                  Status: {googleMapsHasKey ? "Saved" : "Not saved"}
+                  {googleMapsMasked ? ` · ${googleMapsMasked}` : ""}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={handleSaveGoogleMapsKey} disabled={googleMapsLoading}>
+                    Save Maps Key
+                  </Button>
+                  <Button type="button" variant="outline" onClick={handleDeleteGoogleMapsKey} disabled={googleMapsLoading}>
+                    Delete Maps Key
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => void loadGoogleMapsStatus()} disabled={googleMapsLoading}>
+                    Refresh Status
+                  </Button>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-3">
+                <div>
+                  <div className="text-sm font-semibold">Saved Token Profiles</div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Create reusable token profiles with expiry/scopes and quick activate/revoke actions.
+                  </p>
+                </div>
+
+                <div className="grid gap-2 md:grid-cols-2">
+                  <Input
+                    value={profileIdInput}
+                    onChange={(event) => setProfileIdInput(event.target.value)}
+                    placeholder="Profile id (e.g. dev-cloud)"
+                  />
+                  <Input
+                    type="password"
+                    value={profileTokenInput}
+                    onChange={(event) => setProfileTokenInput(event.target.value)}
+                    placeholder="Token value"
+                  />
+                  <Input
+                    value={profileScopesInput}
+                    onChange={(event) => setProfileScopesInput(event.target.value)}
+                    placeholder="Scopes (comma-separated)"
+                  />
+                  <Input
+                    value={profileExpiryDaysInput}
+                    onChange={(event) => setProfileExpiryDaysInput(event.target.value)}
+                    placeholder="Expiry days (optional)"
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={handleSaveTokenProfile} disabled={tokenProfilesLoading}>
+                    Save Profile
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => void loadTokenProfiles()} disabled={tokenProfilesLoading}>
+                    Refresh Profiles
+                  </Button>
+                </div>
+
+                <div className="space-y-2">
+                  {tokenProfiles.length === 0 ? (
+                    <div className="text-xs text-muted-foreground">No token profiles saved.</div>
+                  ) : (
+                    tokenProfiles.map((profile) => (
+                      <div key={profile.profile_id} className="rounded-md border border-border/70 bg-background px-3 py-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                          <span className="font-medium">{profile.profile_id}</span>
+                          <span>
+                            {profile.revoked ? "revoked" : profile.expired ? "expired" : profile.expiring_soon ? "expiring soon" : "active"}
+                          </span>
+                        </div>
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          env={profile.environment} · scopes={profile.scopes.join(",") || "-"} · last_used={formatUtcDateTime(profile.last_used_at)}
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            disabled={tokenProfilesLoading || profile.revoked || profile.expired || !profile.has_token}
+                            onClick={() => void handleUseTokenProfile(profile.profile_id)}
+                          >
+                            Use
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            disabled={tokenProfilesLoading || profile.revoked}
+                            onClick={() => void handleRevokeTokenProfile(profile.profile_id)}
+                          >
+                            Revoke
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </Card>

@@ -257,7 +257,7 @@ export default function SpatialPage() {
       <div>
         <h1 className="text-2xl font-semibold">Spatial Agent 2D Map</h1>
         <p className="text-sm text-muted-foreground">
-          Quan sát runtime theo zone: planner, tool, memory, HITL và incident theo thời gian thực.
+          Observe runtime by zone: planner, tool, memory, HITL, and incidents in real time.
         </p>
       </div>
 
@@ -316,7 +316,7 @@ export default function SpatialPage() {
               <div><strong>Updated:</strong> {new Date(selectedAgent.updatedAt).toLocaleString()}</div>
             </div>
           ) : (
-            <p className="mt-3 text-sm text-muted-foreground">Click một agent trên map để xem chi tiết session/tool/cost/latency.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Click an agent on the map to view session/tool/cost/latency details.</p>
           )}
         </Card>
       </div>

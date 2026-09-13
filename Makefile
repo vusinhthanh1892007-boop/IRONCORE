@@ -6,7 +6,12 @@ PYTEST ?= $(PYTHON) -m pytest
         run-api run-api-ce run-api-ee \
         run-docker run-docker-ce run-docker-ee \
         edition-info clean \
-        helm-lint helm-template helm-install-dev helm-install-prod helm-batch-10k
+	helm-lint helm-template helm-install-dev helm-install-prod helm-batch-10k \
+	phase-start rollback-checkpoint regression-p0 regression-p1 \
+	dual-repo-sync-check dual-repo-sync-check-tests \
+	benchmark eval benchmark-eval
+
+PHASE ?=
 
 install:
 	$(PIP) install --upgrade pip
@@ -90,3 +95,41 @@ helm-batch-10k:
 	  --set keda.enabled=true \
 	  --set keda.maxReplicaCount=10000 \
 	  --set replicaCount=0
+
+# ── Phase rollback checkpoints ───────────────────────────────
+phase-start:
+	@if [ -z "$(PHASE)" ]; then \
+		echo "Usage: make phase-start PHASE=phase-name"; \
+		exit 1; \
+	fi
+	bash scripts/phase_checkpoint.sh "$(PHASE)"
+
+rollback-checkpoint: phase-start
+
+regression-p0:
+	bash scripts/regression_matrix.sh p0
+
+regression-p1:
+	bash scripts/regression_matrix.sh p1
+
+dual-repo-sync-check:
+	python scripts/dual_repo_sync.py \
+	  --free-repo . \
+	  --paid-repo "$${PAID_REPO:-../ai-enterprise}" \
+	  --checklist docs/dual_repo_sync_checklist.json
+
+dual-repo-sync-check-tests:
+	python scripts/dual_repo_sync.py \
+	  --free-repo . \
+	  --paid-repo "$${PAID_REPO:-../ai-enterprise}" \
+	  --checklist docs/dual_repo_sync_checklist.json \
+	  --run-tests
+
+benchmark:
+	python scripts/run_benchmark_eval.py --mode benchmark --iterations 10
+
+eval:
+	python scripts/run_benchmark_eval.py --mode eval
+
+benchmark-eval:
+	python scripts/run_benchmark_eval.py --mode both --iterations 10

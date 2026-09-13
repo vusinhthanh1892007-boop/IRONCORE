@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       {
         action: "add_model",
         ok: false,
-        message: "provider và model_id là bắt buộc",
+        message: "provider and model_id are required",
         last_updated: AI_CATALOG_LAST_UPDATED,
       },
       { status: 400 }
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       provider,
       model_id: modelId,
       ...result,
-      note: "sẽ được cập nhật khi agent fetch được metadata",
+      note: "will be updated once the agent fetches metadata",
       last_updated: AI_CATALOG_LAST_UPDATED,
     },
     { status: result.ok ? 200 : 400 }

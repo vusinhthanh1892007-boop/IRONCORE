@@ -19,14 +19,31 @@ export interface OllamaMessage {
 export class OllamaError extends Error {}
 
 async function fetchOllama(path: string, init?: RequestInit) {
-  const res = await fetch(`${DEFAULT_OLLAMA_BASE_URL}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
-    cache: "no-store",
-  });
+  const controller = new AbortController();
+  const timeoutMs = path === "/api/chat" ? 60000 : 8000;
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  let res: Response;
+  try {
+    res = await fetch(`${DEFAULT_OLLAMA_BASE_URL}${path}`, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers ?? {}),
+      },
+      cache: "no-store",
+      signal: init?.signal ?? controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new OllamaError("Ollama request timed out. Please check local Ollama runtime.");
+    }
+    throw new OllamaError(
+      error instanceof Error ? error.message : "Cannot connect to local Ollama runtime."
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");

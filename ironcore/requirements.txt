@@ -24,6 +24,7 @@ requests         # HTTP client — Ollama/VLM REST API calls
 
 # ─── LLM Integration ──────────────────────────────────────────
 litellm          # Unified API for OpenAI / Anthropic / local models
+deep-translator  # Runtime locale fallback translation for incomplete dictionaries
 
 # ─── Testing ──────────────────────────────────────────────────
 pytest

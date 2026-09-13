@@ -174,7 +174,7 @@ export default function DashboardPage() {
             </span>
           </div>
           <div className="mt-3 text-2xl font-semibold">{pendingHitl}</div>
-          <div className="mt-2 text-xs text-muted-foreground">badge đỏ khi queue có yêu cầu duyệt</div>
+          <div className="mt-2 text-xs text-muted-foreground">Red badge appears when the queue has pending approvals</div>
         </Card>
       </div>
 
