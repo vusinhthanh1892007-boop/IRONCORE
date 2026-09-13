@@ -8,8 +8,10 @@ import os
 import asyncio
 from pathlib import Path
 
-# Ensure ironcore is on sys.path
-sys.path.insert(0, "/run/media/vusinhthanh/data-1tb/vusinhthanh/ironcore-paid")
+# Ensure ironcore root directory is dynamically on sys.path
+_PROJECT_ROOT = Path(__file__).resolve().parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 os.environ["IRONCORE_EDITION"] = "enterprise"
 
 from mcp.server.mcpserver import MCPServer

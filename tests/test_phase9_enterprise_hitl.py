@@ -281,6 +281,66 @@ class TestMakerCheckerEngine:
         with pytest.raises(ValueError, match="not found"):
             await e.reject("IRON-DEADBEEF", "mgr@bank.com", "reason")
 
+    @pytest.mark.asyncio
+    async def test_four_eyes_dual_control_workflow(self) -> None:
+        e = _engine()
+        ticket = await _make_ticket(
+            e,
+            required_approvals=2,
+            approver_ids=["officer1@bank.com", "officer2@bank.com"],
+            requestor_id="system-agent",
+        )
+        assert ticket.required_approvals == 2
+        assert ticket.remaining_approvals == 2
+
+        # Step 1: First approval records signature but keeps ticket PENDING
+        t1 = await e.approve(
+            ticket.ticket_id,
+            approver_id="officer1@bank.com",
+            approver_session_key="key-1",
+            notes="First review passed",
+        )
+        assert t1.status == ApprovalStatus.PENDING
+        assert t1.approved_by_list == ["officer1@bank.com"]
+        assert len(t1.signatures) == 1
+        assert t1.remaining_approvals == 1
+
+        # Step 2: Second distinct approval satisfies 4-eyes principle and marks APPROVED
+        t2 = await e.approve(
+            ticket.ticket_id,
+            approver_id="officer2@bank.com",
+            approver_session_key="key-2",
+            notes="Second review passed",
+        )
+        assert t2.status == ApprovalStatus.APPROVED
+        assert t2.approved_by_list == ["officer1@bank.com", "officer2@bank.com"]
+        assert len(t2.signatures) == 2
+        assert t2.remaining_approvals == 0
+
+    @pytest.mark.asyncio
+    async def test_maker_cannot_be_checker_separation_of_duties(self) -> None:
+        e = _engine()
+        ticket = await _make_ticket(
+            e,
+            requestor_id="trader@bank.com",
+            approver_ids=["trader@bank.com", "risk_officer@bank.com"],
+        )
+        with pytest.raises(ValueError, match="Separation of duties violation"):
+            await e.approve(ticket.ticket_id, "trader@bank.com", "key")
+
+    @pytest.mark.asyncio
+    async def test_duplicate_approver_rejected_in_dual_control(self) -> None:
+        e = _engine()
+        ticket = await _make_ticket(
+            e,
+            required_approvals=2,
+            approver_ids=["officer1@bank.com", "officer2@bank.com"],
+        )
+        await e.approve(ticket.ticket_id, "officer1@bank.com", "key-1")
+        with pytest.raises(ValueError, match="Duplicate approval"):
+            await e.approve(ticket.ticket_id, "officer1@bank.com", "key-1-again")
+
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  TestMakerCheckerEngine — revoke

@@ -19,6 +19,7 @@ Author: Claude Security Engineer V3
 from __future__ import annotations
 
 import logging
+import os
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
@@ -304,8 +305,17 @@ class GuardrailEvaluator:
         """
         LLM-based classification (slow path).
         Returns (violated, evidence, None) — no rewrite for LLM condition.
+        
+        Security Design:
+          Enforces Fail-Closed by default (IRONCORE_GUARDRAIL_FAIL_CLOSED=true).
+          If the LLM judge fails or is unreachable, the request is flagged/blocked
+          rather than silently permitted, preventing adversarial bypass during outages.
         """
         judge_prompt: str = params.get("judge_prompt", "Does this text violate any policy?")
+        fail_closed: bool = params.get(
+            "fail_closed",
+            os.getenv("IRONCORE_GUARDRAIL_FAIL_CLOSED", "true").lower() in ("true", "1", "yes"),
+        )
         try:
             from ironcore.core.llm_bridge import LLMBridge, ModelConfig  # type: ignore
             bridge = LLMBridge()
@@ -324,9 +334,19 @@ class GuardrailEvaluator:
             violated = bool(data.get("violated", False))
             reason = str(data.get("reason", ""))[:200]
             return violated, reason, None
-        except Exception:  # noqa: BLE001
-            logger.warning("[GuardrailEvaluator] LLM judge failed — defaulting to allow")
-            return False, "", None
+        except Exception as exc:  # noqa: BLE001
+            if fail_closed:
+                logger.error(
+                    "[GuardrailEvaluator] LLM judge failed (%s: %s) — enforcing FAIL-CLOSED security policy",
+                    exc.__class__.__name__, exc,
+                )
+                return True, f"[SECURITY AUDIT] LLM judge unavailable ({exc.__class__.__name__}): fail-closed policy enforced", None
+            else:
+                logger.warning(
+                    "[GuardrailEvaluator] LLM judge failed (%s: %s) — fail-open policy active, permitting text",
+                    exc.__class__.__name__, exc,
+                )
+                return False, f"[FAIL-OPEN] LLM judge unavailable ({exc.__class__.__name__})", None
 
 
 # ── EvaluationResult ──────────────────────────────────────────────────────────

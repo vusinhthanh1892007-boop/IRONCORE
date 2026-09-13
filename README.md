@@ -1,51 +1,65 @@
 # IronCore
 
-A runtime and web control panel for AI agents. It combines browser automation, developer tools, security guards, and a multi-language dashboard into a single codebase.
+[![CI](https://github.com/vusinhthanh1892007-boop/IRONCORE/actions/workflows/ci.yml/badge.svg)](https://github.com/vusinhthanh1892007-boop/IRONCORE/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python: 3.12 | 3.13](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue.svg)](https://www.python.org/)
+[![Tests: 1,146 passing](https://img.shields.io/badge/tests-1%2C146%20passing-brightgreen.svg)](https://github.com/vusinhthanh1892007-boop/IRONCORE/actions)
+
+An AI-Agent & Red-Team Security Engineering Platform with Defense Controls. It combines offensive browser automation modeling with defensive enterprise guardrails, human-in-the-loop dual control, and observability.
 
 ---
 
 ## What is IronCore?
 
-IronCore lets you run autonomous tasks locally or on a server. It connects large language models to everyday developer workflows like browsing websites, editing code, scanning text for sensitive information, and managing LLM costs.
+IronCore bridges AI agent execution with practical security engineering. Built with a dual red-team / blue-team architecture:
+- **Red-Team & Simulation Engine**: Models how autonomous agents interact with web applications, evaluate bot detection boundaries, and spoof browser fingerprints.
+- **Enterprise Defense Controls**: Implements strict defense mechanisms including fail-closed LLM guardrails, true 4-eyes Maker-Checker approval, data loss prevention (DLP), and air-gap network boundaries.
 
-You can control IronCore using:
-- **Web UI**: A modern dashboard built with Next.js and Tailwind CSS.
-- **Terminal (TUI)**: A console assistant for fast command-line setup.
-- **MCP Server**: Standard Model Context Protocol tools you can plug into Claude Desktop, Cursor, or other MCP clients.
+You can operate IronCore via:
+- **Web UI**: Modern dashboard built with Next.js and Tailwind CSS.
+- **Terminal (TUI)**: Fast console assistant for setup and headless environments.
+- **MCP Server**: Model Context Protocol (MCP 2.x) tools ready for Claude Desktop, Cursor, or external LLM orchestrators.
 
 ---
 
-## Features
+## Architecture & Features
 
-### 1. Agent Engine & Tools
-- Runs tasks step-by-step with streaming progress.
-- Includes built-in tools for web search, file editing, Python AST checks, and weather lookups.
-- Works with cloud providers (OpenAI, Anthropic, Google Gemini) and local models (Ollama, vLLM, LocalAI).
+### 1. Agent Engine & Red-Team Tooling
+- Runs multi-step tasks with streaming progress and token optimization.
+- **Biometric Mouse Engine**: Computes realistic Bezier cursor trajectories based on Fitts's law, acceleration curves, and random overshoot.
+- **Full Fingerprint Spoofer**: Injects PRNG noise across Canvas, WebGL, AudioContext, Battery, and hardware concurrency vectors.
+- **Empirical Stealth Benchmark**: Evaluates browser stealth evasion against standard detection heuristics.
 
-### 2. Browser Automation
-- Uses Playwright to load web pages and collect information.
-- Simulates human mouse movements with Bezier curves and typing delays.
-- Includes coordinate helpers for grid-based CAPTCHA tasks.
+#### Empirical Anti-Bot Evasion Benchmark (`RFC-BOT-HEURISTIC-V1`)
+| Detection Vector | Vanilla Playwright | IronCore Stealth Spoofer |
+| :--- | :---: | :---: |
+| `navigator.webdriver` | DETECTED ❌ (`webdriver=true`) | **PASS ✅** (`webdriver=undefined`) |
+| `webgl.unmasked_renderer` | DETECTED ❌ (`SwiftShader / Mesa`) | **PASS ✅** (`Apple M2 / NVIDIA`) |
+| `canvas.noise_injection` | DETECTED ❌ (Static fingerprint hash) | **PASS ✅** (PRNG entropy injection) |
+| `audio.frequency_drift` | DETECTED ❌ (Zero oscillator jitter) | **PASS ✅** (Micro-channel drift) |
+| `window.chrome_runtime` | DETECTED ❌ (Missing runtime object) | **PASS ✅** (Native Chrome descriptor) |
+| `hardware.concurrency_memory`| DETECTED ❌ (0GB memory / headless) | **PASS ✅** (8GB normalized memory) |
+| **Heuristic Evasion Rate** | **0.0%** (0/6 passed) | **100.0%** (6/6 passed) |
 
-### 3. Model Context Protocol (MCP)
-- Built-in MCP 2.x server (`mcp_server.py`) using STDIO transport.
-- Exposes 9 tools directly to MCP-enabled tools:
-  - `dlp_scan_and_mask`: Detect and mask emails, phone numbers, and credit cards.
-  - `guardrail_evaluate_prompt`: Check prompts against security rules.
-  - `calculate_biometric_mouse_path`: Generate human-like cursor coordinates.
-  - `get_captcha_tile_coordinate`: Calculate click targets on grid images.
-  - `calculate_llm_cost_and_savings`: Track token costs and prompt caching savings.
-  - `airgap_verify_destination`: Verify if an IP or domain matches allowed networks.
-  - `hitl_submit_action`: Send risky actions to a human approval queue.
-  - `diagnose_python_code_ast`: Find syntax errors and examine functions in Python code.
-  - `get_stealth_defense_scripts`: Inspect browser fingerprint protection scripts.
+### 2. Enterprise Defense & Safety Controls
+- **Fail-Closed Guardrails**: Fast regex/keyword rules paired with an LLM judge. Configured with a strict `fail_closed=True` policy to block/flag requests if the LLM judge times out or encounters network failure, preventing adversarial fail-open bypass.
+- **4-Eyes Human-in-the-Loop (HITL)**: `MakerCheckerEngine` enforcing dual-control authorization. Tickets requiring multi-approver sign-off (`required_approvals >= 2`) remain pending until distinct authorized checkers sign with HMAC-SHA256 tokens. Separation of duties prevents the maker (`requestor_id`) from approving their own request.
+- **Data Loss Prevention (DLP)**: Scans and masks credit card numbers (validated via Luhn algorithm), emails, and telephone numbers.
+- **Air-Gap Network Guard**: Enforces strict outbound CIDR whitelist filtering.
+- **Cost & Context Optimizer**: Prompt caching, KV cache, and semantic cache tracking token savings.
 
-### 4. Security & Enterprise Guards
-- **Data Loss Prevention (DLP)**: Masks credit card numbers (with Luhn validation), email addresses, and Vietnam phone numbers before sending data to models.
-- **Prompt Guardrails**: Checks incoming prompts for prompt injection and blocked keywords.
-- **Human-in-the-Loop (HITL)**: Holds sensitive actions in a pending queue until an operator approves or rejects them.
-- **AirGap Network Guard**: Restricts outbound connections to allowed CIDR network ranges.
-- **Budget Tracking**: Tracks token usage by model and calculates cost savings from caching.
+### 3. Model Context Protocol (MCP 2.x)
+- Built-in standalone MCP server (`mcp_server.py`) using STDIO transport with zero machine-specific dependencies.
+- Exposes 9 standardized tools:
+  - `dlp_scan_and_mask`: Detect and mask PII.
+  - `guardrail_evaluate_prompt`: Evaluate safety rules with fail-closed protection.
+  - `calculate_biometric_mouse_path`: Generate human-like Bezier cursor coordinates.
+  - `get_captcha_tile_coordinate`: Calculate click coordinates on grid challenges.
+  - `calculate_llm_cost_and_savings`: Track token expenditure and cache savings.
+  - `airgap_verify_destination`: Verify destination IP against allowed CIDR networks.
+  - `hitl_submit_action`: Submit critical actions to the 4-eyes approval queue.
+  - `diagnose_python_code_ast`: Inspect Python code for AST syntax and security flaws.
+  - `get_stealth_defense_scripts`: Retrieve fingerprint protection scripts.
 
 ### 5. Web Dashboard
 - Chat interface with live token streaming.
@@ -146,7 +160,7 @@ Now your AI assistant can call IronCore's DLP scanner, mouse calculator, cost tr
 │   ├── src/components/     # UI components, layout, and language selector
 │   └── src/lib/            # Client state, settings, and offline translations
 ├── skills/                 # Agent skill packs (crypto, weather, browser, etc.)
-├── tests/                  # Pytest test suite (1000+ unit tests)
+├── tests/                  # Pytest test suite (1,146 unit tests passing)
 ├── mcp_server.py           # Standalone Model Context Protocol server
 └── pyproject.toml          # Python project settings
 ```

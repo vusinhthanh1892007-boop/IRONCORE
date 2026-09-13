@@ -217,20 +217,39 @@ class MakerCheckerEngine:
             raise ValueError(
                 f"{approver_id!r} is not in the approver allowlist for ticket {ticket_id!r}."
             )
+        if approver_id == ticket.requestor_id:
+            raise ValueError(
+                f"Separation of duties violation: Requestor {approver_id!r} cannot approve their own ticket."
+            )
+        if approver_id in ticket.approved_by_list:
+            raise ValueError(
+                f"Duplicate approval: {approver_id!r} has already approved ticket {ticket_id!r}."
+            )
 
         approved_at = time.time()
         signature = _make_signature(ticket_id, approver_id, approved_at, approver_session_key)
 
-        ticket.status = ApprovalStatus.APPROVED
+        ticket.approved_by_list.append(approver_id)
+        ticket.signatures.append(signature)
         ticket.approved_by = approver_id
         ticket.approved_at = approved_at
         ticket.digital_signature = signature
 
+        if len(ticket.approved_by_list) >= ticket.required_approvals:
+            ticket.status = ApprovalStatus.APPROVED
+            logger.info(
+                "[HITL] Ticket %s FULLY APPROVED (%d of %d) by %s (notes=%r sig=%s...)",
+                ticket_id, len(ticket.approved_by_list), ticket.required_approvals,
+                approver_id, notes, signature[:8],
+            )
+        else:
+            ticket.status = ApprovalStatus.PENDING
+            logger.info(
+                "[HITL] Ticket %s PARTIALLY APPROVED (%d of %d) by %s; awaiting remaining approvals",
+                ticket_id, len(ticket.approved_by_list), ticket.required_approvals, approver_id,
+            )
+
         await self._save(ticket)
-        logger.info(
-            "[HITL] Ticket %s APPROVED by %s (notes=%r sig=%s...)",
-            ticket_id, approver_id, notes, signature[:8],
-        )
         return ticket
 
     async def reject(

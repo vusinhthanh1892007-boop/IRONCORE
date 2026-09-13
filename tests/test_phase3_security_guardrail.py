@@ -336,3 +336,47 @@ async def test_scope_filtering(tmp_path: Path):
     triggered_ids2 = {v.rule_id for v in out_result.violations}
     assert output_rule.rule_id in triggered_ids2
     assert input_rule.rule_id not in triggered_ids2
+
+
+# ── Test 16: LLM judge fail-closed policy (security default) ─────────────────
+
+async def test_llm_judge_fail_closed_policy(tmp_path: Path):
+    from ironcore.enterprise.guardrail.evaluator import GuardrailEvaluator
+    from ironcore.enterprise.guardrail.rules_store import GuardrailConditionType, GuardrailRemedy
+
+    store = await make_store(tmp_path)
+    llm_rule = make_rule(
+        name="LLM Jailbreak Guard",
+        condition_type=GuardrailConditionType.LLM,
+        condition_params={"judge_prompt": "Check safety", "fail_closed": True},
+        remedy=GuardrailRemedy.BLOCK,
+    )
+    await store.add_rule(llm_rule)
+    eval_ = GuardrailEvaluator(store)
+
+    # When LLM bridge is unavailable or throws, fail-closed must block
+    result = await eval_.evaluate_input("Potentially adversarial prompt")
+    assert result.blocked is True
+    assert any("fail-closed policy enforced" in v.evidence for v in result.violations)
+
+
+# ── Test 17: LLM judge fail-open policy when explicitly configured ───────────
+
+async def test_llm_judge_fail_open_policy(tmp_path: Path):
+    from ironcore.enterprise.guardrail.evaluator import GuardrailEvaluator
+    from ironcore.enterprise.guardrail.rules_store import GuardrailConditionType, GuardrailRemedy
+
+    store = await make_store(tmp_path)
+    llm_rule = make_rule(
+        name="LLM Non-critical Scan",
+        condition_type=GuardrailConditionType.LLM,
+        condition_params={"judge_prompt": "Check tone", "fail_closed": False},
+        remedy=GuardrailRemedy.BLOCK,
+    )
+    await store.add_rule(llm_rule)
+    eval_ = GuardrailEvaluator(store)
+
+    # When LLM bridge fails with fail_closed=False, request is permitted
+    result = await eval_.evaluate_input("Regular text")
+    assert result.blocked is False
+

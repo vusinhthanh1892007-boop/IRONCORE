@@ -41,6 +41,8 @@ class ApprovalTicket(BaseModel):
     approved_by: Optional[str] = None
     approved_at: Optional[float] = None
     digital_signature: Optional[str] = None
+    approved_by_list: List[str] = Field(default_factory=list)
+    signatures: List[str] = Field(default_factory=list)
 
     jira_issue_key: Optional[str] = None
     slack_message_ts: Optional[str] = None
@@ -61,6 +63,10 @@ class ApprovalTicket(BaseModel):
             ApprovalStatus.EXPIRED,
             ApprovalStatus.REVOKED,
         )
+
+    @property
+    def remaining_approvals(self) -> int:
+        return max(0, self.required_approvals - len(self.approved_by_list))
 
 
 # ══════════════════════════════════════════════════════════════════════════════
