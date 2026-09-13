@@ -60,7 +60,14 @@ You can control IronCore using:
 - Python 3.11 or higher
 - Node.js 18 or higher (Node 22 recommended)
 
-### 1. Set up the Python Backend
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/vusinhthanh1892007-boop/IRONCORE.git
+cd IRONCORE
+```
+
+### 2. Set up the Python Backend
 
 ```bash
 # Create and activate a virtual environment
@@ -80,7 +87,7 @@ The API will be available at `http://127.0.0.1:8000`. You can check server healt
 curl http://127.0.0.1:8000/health
 ```
 
-### 2. Set up the Web Dashboard
+### 3. Set up the Web Dashboard
 
 ```bash
 cd web
