@@ -2,11 +2,37 @@
 import os
 import sys
 import subprocess
-import questionary
-from rich.console import Console
-from rich.panel import Panel
 
-console = Console()
+def _is_build_command() -> bool:
+    if any("_in_process.py" in arg for arg in sys.argv):
+        return True
+    script_name = os.path.basename(sys.argv[0] if sys.argv else "")
+    if script_name != "setup.py":
+        return True
+    build_verbs = {
+        "install", "develop", "build", "bdist_wheel", "egg_info",
+        "dist_info", "sdist", "editable_wheel", "clean", "--help", "-h"
+    }
+    if len(sys.argv) > 1 and any(arg in build_verbs for arg in sys.argv[1:]):
+        return True
+    return False
+
+if _is_build_command():
+    from setuptools import setup
+    setup()
+else:
+    try:
+        import questionary
+        from rich.console import Console
+        from rich.panel import Panel
+    except ImportError:
+        print(">> Installing setup wizard dependencies (questionary, rich)...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "questionary", "rich"])
+        import questionary
+        from rich.console import Console
+        from rich.panel import Panel
+
+    console = Console()
 
 # 1. Danh sách ngôn ngữ (có thể gõ để search)
 LANGUAGES = [
@@ -309,8 +335,9 @@ def main():
         # Chạy Terminal CLI
         subprocess.run([sys.executable, "cli.py"])
 
-if __name__ == "__main__":
+if __name__ == "__main__" and not _is_build_command():
     try:
         main()
     except KeyboardInterrupt:
         sys.exit(0)
+
