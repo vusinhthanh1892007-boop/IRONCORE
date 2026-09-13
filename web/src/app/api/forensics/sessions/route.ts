@@ -12,31 +12,7 @@ interface ForensicsSessionItem {
   primary_agent: string;
 }
 
-const now = Date.now();
 
-const fallbackSessions: ForensicsSessionItem[] = [
-  {
-    session_id: "sess-forensics-001",
-    started_at: Math.floor((now - 1000 * 60 * 38) / 1000),
-    ended_at: Math.floor((now - 1000 * 60 * 30) / 1000),
-    event_count: 24,
-    primary_agent: "agent-alpha",
-  },
-  {
-    session_id: "sess-forensics-002",
-    started_at: Math.floor((now - 1000 * 60 * 22) / 1000),
-    ended_at: Math.floor((now - 1000 * 60 * 8) / 1000),
-    event_count: 19,
-    primary_agent: "agent-bravo",
-  },
-  {
-    session_id: "sess-forensics-003",
-    started_at: Math.floor((now - 1000 * 60 * 10) / 1000),
-    ended_at: null,
-    event_count: 12,
-    primary_agent: "agent-charlie",
-  },
-];
 
 function proxyHeaders(req: NextRequest): Record<string, string> {
   const apiKey = req.headers.get("X-IronCore-API-Key") ?? req.headers.get("x-ironcore-api-key") ?? "";
@@ -62,6 +38,6 @@ export async function GET(req: NextRequest) {
     const data = await res.json().catch(() => []);
     return NextResponse.json(data, { status: res.status });
   } catch {
-    return NextResponse.json(fallbackSessions, { status: 200 });
+    return NextResponse.json([], { status: 200 });
   }
 }

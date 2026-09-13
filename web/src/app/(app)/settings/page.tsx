@@ -473,16 +473,21 @@ export default function SettingsPage() {
     setGoogleMapsLoading(true);
     try {
       const res = await fetch("/api/google-maps-key", { cache: "no-store" });
-      const payload = (await res.json()) as { has_key?: boolean; masked_key?: string; detail?: string };
       if (!res.ok) {
-        throw new Error(payload.detail || "Unable to load Google Maps key status.");
+        setGoogleMapsHasKey(false);
+        setGoogleMapsMasked("");
+        return;
       }
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        return;
+      }
+      const payload = (await res.json()) as { has_key?: boolean; masked_key?: string; detail?: string };
       setGoogleMapsHasKey(Boolean(payload.has_key));
       setGoogleMapsMasked(String(payload.masked_key || ""));
-    } catch (error) {
+    } catch {
       setGoogleMapsHasKey(false);
       setGoogleMapsMasked("");
-      toast.error(error instanceof Error ? error.message : "Unable to load Google Maps key status.");
     } finally {
       setGoogleMapsLoading(false);
     }
@@ -496,14 +501,18 @@ export default function SettingsPage() {
     setTokenProfilesLoading(true);
     try {
       const res = await fetch("/api/token-profiles", { cache: "no-store" });
-      const payload = (await res.json()) as { profiles?: TokenProfile[]; detail?: string };
       if (!res.ok) {
-        throw new Error(payload.detail || "Unable to load token profiles.");
+        setTokenProfiles([]);
+        return;
       }
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        return;
+      }
+      const payload = (await res.json()) as { profiles?: TokenProfile[]; detail?: string };
       setTokenProfiles(payload.profiles ?? []);
-    } catch (error) {
+    } catch {
       setTokenProfiles([]);
-      toast.error(error instanceof Error ? error.message : "Unable to load token profiles.");
     } finally {
       setTokenProfilesLoading(false);
     }

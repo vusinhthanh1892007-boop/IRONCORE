@@ -22,15 +22,7 @@ const ZONES = [
   { id: "incident", label: "⚠️ Incident", x: 510, y: 230, width: 300, height: 180 },
 ] as const;
 
-const fallbackReplayTypes: SpatialEventType[] = [
-  "start",
-  "tool_call",
-  "tool_done",
-  "tool_call",
-  "hitl_wait",
-  "tool_done",
-  "complete",
-];
+
 
 function normalizeIncoming(raw: unknown): RuntimeAgentEvent | null {
   const row = (raw ?? {}) as Record<string, unknown>;
@@ -207,26 +199,14 @@ export default function SpatialPage() {
         .filter((event) => event.session_id === sessionId)
         .slice(-120);
 
-      if (fromLive.length >= 3) {
+      if (fromLive.length > 0) {
         setReplaySource(fromLive);
         setCursor(0);
         setPaused(true);
         return;
       }
 
-      const generated: RuntimeAgentEvent[] = fallbackReplayTypes.map((type, idx) => ({
-        id: `${sessionId}-${idx}`,
-        agent_id: `agent-${sessionId.slice(0, 6) || "demo"}`,
-        event_type: type,
-        session_id: sessionId,
-        tool_name: type.includes("tool") ? "runtime.exec" : undefined,
-        cost_usd: idx % 2 === 0 ? 0.002 + idx * 0.0003 : undefined,
-        latency_ms: 180 + idx * 35,
-        severity: type === "error" ? "high" : "info",
-        timestamp: new Date(Date.now() - (fallbackReplayTypes.length - idx) * 1400).toISOString(),
-      }));
-
-      setReplaySource(generated);
+      setReplaySource([]);
       setCursor(0);
       setPaused(true);
     },
