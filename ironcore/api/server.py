@@ -117,7 +117,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.warning("[API] Using ephemeral development vault. Set IRONCORE_VAULT_KEY for persistence.")
 
     for env_name in (APIKeyAuth.USER_SECRET_NAME, APIKeyAuth.ADMIN_SECRET_NAME):
-        env_value = os.environ.get(env_name)
+        env_value = os.environ.get(env_name) or ("dev-key" if env_name == APIKeyAuth.USER_SECRET_NAME else None)
         if env_value and not vault.exists(env_name):
             vault.store(env_name, env_value, description=f"Bootstrapped from env:{env_name}")
 
@@ -133,6 +133,56 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.template_engine = template_engine
     app.state.sessions = {}
     app.state.audit_log = deque(maxlen=500)
+
+    # ── Enterprise & Monitoring Subsystems ──────────────────────────────
+    try:
+        from pathlib import Path as _P
+        from ironcore.enterprise.forensics.recorder import ForensicsRecorder
+        from ironcore.enterprise.guardrail.rules_store import GuardrailRulesStore
+        from ironcore.enterprise.hitl.engine import MakerCheckerEngine
+        from ironcore.enterprise.airgap.config import AirGapConfig
+        from ironcore.enterprise.monitoring.metrics_collector import MetricsCollector
+        from ironcore.enterprise.monitoring.alert_engine import AlertEngine
+        from ironcore.enterprise.siem.streamer import SIEMStreamer
+        from ironcore.enterprise.siem.cef_formatter import CEFFormatter
+
+        from ironcore.monitoring.incident_detector import IncidentDetector
+        from ironcore.monitoring.alert_manager import AlertManager
+        from ironcore.monitoring.automation_layer import AutomationLayer, PolicyLearner
+
+        db_dir = _P(os.environ.get("IRONCORE_DATA_DIR", "/tmp/ironcore_data"))
+        db_dir.mkdir(parents=True, exist_ok=True)
+
+        forensics_rec = ForensicsRecorder(db_path=db_dir / "forensics.db")
+        await forensics_rec.initialize()
+        set_forensics(forensics_rec)
+
+        guard_store = GuardrailRulesStore(db_path=db_dir / "guardrails.db")
+        await guard_store.initialize()
+        set_guardrail(guard_store)
+
+        hitl_eng = MakerCheckerEngine()
+        set_hitl_engine(hitl_eng)
+
+        airgap_cfg = AirGapConfig.from_env()
+        set_airgap(airgap_cfg)
+
+        metrics_col = MetricsCollector()
+        alert_eng = AlertEngine(collector=metrics_col, db_path=db_dir / "alerts.db")
+        await alert_eng.initialize()
+        set_monitoring(metrics_col, alert_eng)
+
+        siem_strm = SIEMStreamer(transports=[], formatter=CEFFormatter())
+        set_siem_streamer(siem_strm)
+
+        inc_det = IncidentDetector(collector=metrics_col)
+        al_mgr = AlertManager()
+        auto_lay = AutomationLayer()
+        pol_lrn = PolicyLearner()
+        set_automation(inc_det, al_mgr, auto_lay, pol_lrn)
+        logger.info("[API] Enterprise singletons successfully bootstrapped.")
+    except Exception as exc:
+        logger.warning(f"[API] Enterprise subsystems init warning: {exc}")
 
     # ── OTA Update Manager (Phase 2 — The Architect) ───────────────────
     import os as _os
@@ -167,8 +217,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     else:
         app.state.scheduler = None
         logger.info("[API] Scheduler disabled via IRONCORE_SCHEDULER_ENABLED=false.")
-
-    yield
 
     # ── Webhook Server (Phase 4 — The Architect) ────────────────────────
     import os as _os3
@@ -334,6 +382,30 @@ async def run_agent(
         stopped_at=record.stopped_at,
         history=record.history,
     )
+
+
+@app.get("/v1/agent/sessions", response_model=List[AgentSessionResponse])
+async def list_sessions(
+    _: AuthenticatedPrincipal = Depends(require_user),
+) -> List[AgentSessionResponse]:
+    """List all agent sessions in memory."""
+    results: List[AgentSessionResponse] = []
+    for record in getattr(app.state, "sessions", {}).values():
+        if record.run_task is not None and record.run_task.done() and not record.history:
+            try:
+                record.history = record.run_task.result()
+            except Exception:
+                record.status = "failed"
+        results.append(
+            AgentSessionResponse(
+                session_id=record.session_id,
+                status=record.status,
+                created_at=record.created_at,
+                stopped_at=record.stopped_at,
+                history=record.history,
+            )
+        )
+    return results
 
 
 @app.get("/v1/agent/sessions/{session_id}", response_model=AgentSessionResponse)

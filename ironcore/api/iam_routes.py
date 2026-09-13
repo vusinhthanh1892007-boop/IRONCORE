@@ -248,11 +248,12 @@ async def get_sso_config(
 
 
 @router.get("/sso/mappings")
+@router.get("/sso-mappings")
 async def get_sso_mappings(
     _: EnterprisePrincipal = Depends(require_enterprise),
 ) -> List[Dict[str, str]]:
     """
-    GET /api/enterprise/iam/sso/mappings
+    GET /api/enterprise/iam/sso/mappings or /sso-mappings
 
     Return configured SSO group → IronCore role mappings.
     Derived from IRONCORE_SSO_GROUP_MAPPINGS env var (JSON).
@@ -280,6 +281,7 @@ async def get_sso_mappings(
 
 
 @router.get("/vault/bindings")
+@router.get("/vault-bindings")
 async def get_vault_bindings(
     _: EnterprisePrincipal = Depends(require_enterprise),
 ) -> List[Dict[str, str]]:

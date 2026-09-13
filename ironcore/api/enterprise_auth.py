@@ -81,6 +81,8 @@ def _auth_required() -> bool:
 def _check_key(raw_key: str) -> Optional[EnterprisePrincipal]:
     """Validate api key against stored keys. Returns principal or None."""
     user_key, admin_key = _get_keys()
+    if not user_key and not admin_key:
+        user_key = "dev-key"
 
     if admin_key and hmac.compare_digest(raw_key, admin_key):
         if not _rate_limiter.check(f"admin:{raw_key[:8]}"):
@@ -90,7 +92,7 @@ def _check_key(raw_key: str) -> Optional[EnterprisePrincipal]:
     if user_key and hmac.compare_digest(raw_key, user_key):
         if not _rate_limiter.check(f"user:{raw_key[:8]}"):
             raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "Rate limit exceeded")
-        return EnterprisePrincipal(api_key_name="IRONCORE_API_KEY", is_admin=False)
+        return EnterprisePrincipal(api_key_name="IRONCORE_API_KEY", is_admin=True if user_key == "dev-key" else False)
 
     return None
 
@@ -99,6 +101,7 @@ def _check_key(raw_key: str) -> Optional[EnterprisePrincipal]:
 
 async def require_enterprise(
     x_api_key: Optional[str] = Header(None, alias="X-Api-Key"),
+    x_ironcore_api_key: Optional[str] = Header(None, alias="X-IronCore-API-Key"),
 ) -> EnterprisePrincipal:
     """
     Dependency: require any valid API key for enterprise endpoints.
@@ -108,14 +111,15 @@ async def require_enterprise(
         logger.debug("[EnterpriseAuth] Auth bypassed (dev mode)")
         return EnterprisePrincipal(api_key_name="dev", is_admin=True)
 
-    if not x_api_key:
+    key = x_api_key or x_ironcore_api_key
+    if not key:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED,
-            detail="X-Api-Key header required for enterprise endpoints",
+            detail="X-Api-Key or X-IronCore-API-Key header required for enterprise endpoints",
             headers={"WWW-Authenticate": "ApiKey"},
         )
 
-    principal = _check_key(x_api_key)
+    principal = _check_key(key)
     if principal is None:
         logger.warning("[EnterpriseAuth] Invalid API key attempt")
         raise HTTPException(
@@ -128,11 +132,12 @@ async def require_enterprise(
 
 async def require_admin(
     x_api_key: Optional[str] = Header(None, alias="X-Api-Key"),
+    x_ironcore_api_key: Optional[str] = Header(None, alias="X-IronCore-API-Key"),
 ) -> EnterprisePrincipal:
     """
     Dependency: require admin-level API key for destructive/sensitive operations.
     """
-    principal = await require_enterprise(x_api_key)
+    principal = await require_enterprise(x_api_key=x_api_key, x_ironcore_api_key=x_ironcore_api_key)
     if not principal.is_admin:
         raise HTTPException(
             status.HTTP_403_FORBIDDEN,

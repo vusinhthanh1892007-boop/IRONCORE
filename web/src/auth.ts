@@ -25,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // Bỏ qua check backend nếu dùng tài khoản admin mặc định
+        // Skip backend check if using default admin credentials
         if (credentials.email === "admin@ironcore.ai" && credentials.password === "admin") {
           return {
             id: "admin-1",

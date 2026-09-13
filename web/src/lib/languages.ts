@@ -14,7 +14,7 @@ const SUPPORTED_LANGUAGES: Record<string, string> = {
   "fa": "فارسی", "ms": "Bahasa Melayu"
 };
 
-export function buildLanguageOptions(): LanguageOption[] {
+export function buildLanguageOptions(_displayLocale = "en"): LanguageOption[] {
   return Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => ({
     code,
     label: `${name} (${code})`

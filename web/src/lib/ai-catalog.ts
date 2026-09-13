@@ -28,33 +28,33 @@ export interface CatalogSection {
 export const CATALOG_SECTIONS: CatalogSection[] = [
   {
     id: "open-source-llm-api",
-    title: "2️⃣ Open-source LLM có API",
-    description: "Bảng Provider → Model cho các LLM/LLM ecosystem phổ biến.",
+    title: "2️⃣ Open-source LLMs with API",
+    description: "Provider → Model matrix for popular open-weight LLMs and ecosystems.",
   },
   {
     id: "chinese-llm-api",
-    title: "3️⃣ Chinese LLM API",
-    description: "Bảng Provider → Model cho nhà cung cấp AI Trung Quốc.",
+    title: "3️⃣ Chinese LLM APIs",
+    description: "Provider → Model matrix for Chinese AI providers.",
   },
   {
     id: "multimodal-video-image-api",
-    title: "4️⃣ Multimodal / video / image API",
-    description: "Bảng Provider → Model cho image/video/multimodal APIs.",
+    title: "4️⃣ Multimodal / Video / Image APIs",
+    description: "Provider → Model matrix for image, video, and multimodal APIs.",
   },
   {
     id: "ai-search-api",
-    title: "5️⃣ AI Search API (RAG / agent)",
-    description: "Bảng Platform → API cho search và retrieval.",
+    title: "5️⃣ AI Search & Retrieval APIs",
+    description: "Platform → API matrix for neural search and RAG retrieval.",
   },
   {
     id: "gateway-inference-platform",
-    title: "6️⃣ ~40 AI Gateway / inference platform",
-    description: "Danh sách nền tảng gateway/router/inference phổ biến.",
+    title: "6️⃣ AI Gateways & Inference Platforms",
+    description: "Popular AI gateway, router, and managed inference platforms.",
   },
   {
     id: "universal-ai-api",
-    title: "7️⃣ ~20 open-source universal AI API",
-    description: "Danh sách project theo phân loại SDK, agent frameworks, inference engine, orchestration, routing.",
+    title: "7️⃣ Open-Source Universal AI APIs & Frameworks",
+    description: "Projects classified by SDK, agent framework, inference engine, and orchestration.",
   },
 ];
 
@@ -870,22 +870,22 @@ export function validateModelId(modelId: string) {
 export function addProviderModel(providerId: string, modelId: string, modelName?: string) {
   const provider = getProvider(providerId);
   if (!provider) {
-    return { ok: false as const, message: "Provider không tồn tại trong catalog local." };
+    return { ok: false as const, message: "Provider does not exist in local catalog." };
   }
 
   if (!validateModelId(modelId)) {
-    return { ok: false as const, message: "model_id không hợp lệ. Dùng format provider/model_name." };
+    return { ok: false as const, message: "Invalid model_id. Expected format: provider/model_name." };
   }
 
   const exists = provider.models.some((model) => normalize(model.model_id) === normalize(modelId));
   if (exists) {
-    return { ok: false as const, message: "Model đã tồn tại trong danh sách provider này." };
+    return { ok: false as const, message: "Model already exists for this provider." };
   }
 
   const pendingModel: CatalogModel = {
     model_id: modelId.trim(),
     model_name: modelName?.trim() || modelId.split("/")[1],
-    short_description: "Pending metadata - sẽ được cập nhật khi agent fetch được metadata.",
+    short_description: "Pending metadata - will be updated once agent fetches metadata.",
     tags: ["pending-metadata"],
   };
 
@@ -897,7 +897,7 @@ export function addProviderModel(providerId: string, modelId: string, modelName?
 
   return {
     ok: true as const,
-    message: "Model đã được thêm local; sẽ được cập nhật khi agent fetch được metadata.",
+    message: "Model added locally; will update once agent fetches metadata.",
     model: pendingModel,
   };
 }
@@ -926,14 +926,14 @@ export function buildCatalogMarkdown() {
     section.providers.forEach((provider) => {
       lines.push(`### Provider: ${provider.provider_name}`);
       lines.push(`> ${provider.short_description}`);
-      lines.push(`[👉 Xem models của ${provider.provider_name}](${provider.models_endpoint})`);
+      lines.push(`[👉 View models for ${provider.provider_name}](${provider.models_endpoint})`);
       lines.push("");
     });
   });
 
-  lines.push("## Hướng dẫn tích hợp");
-  lines.push("Cách tích hợp: expose endpoint /models?provider=Meta&page=1&filter=... returning JSON above");
-  lines.push("Tùy chọn cập nhật web khả dụng");
+  lines.push("## Integration Guide");
+  lines.push("How to integrate: expose endpoint /models?provider=Meta&page=1&filter=... returning JSON above");
+  lines.push("Web update options available");
 
   return lines.join("\n");
 }

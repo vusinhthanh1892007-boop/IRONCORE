@@ -137,9 +137,9 @@ class SlidingWindowSummarizer:
             conversation_text += f"\n{role.upper()}: {content}"
 
         prompt = (
-            "Tóm tắt cuộc trò chuyện sau trong 200 tokens, giữ lại: "
-            "quyết định kỹ thuật, entities được đề cập, open questions. "
-            "Format: bullet points ngắn gọn.\n\n"
+            "Summarize the following conversation in under 200 tokens, preserving key: "
+            "technical decisions, mentioned entities, and open questions. "
+            "Format: concise bullet points.\n\n"
             f"CONVERSATION:{conversation_text}"
         )
 

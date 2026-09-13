@@ -18,6 +18,7 @@ import {
   Check,
 } from "@phosphor-icons/react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LanguageSelector } from "@/components/layout/LanguageSelector";
 
 const SAVED_SCRIPTS = [
   { label: "Deploy Staging", requiresConfirm: false },
@@ -333,6 +334,7 @@ export function EngineSidebar() {
       </div>
 
       <div className="mt-auto space-y-3 border-t border-border px-2 pt-4">
+        <LanguageSelector />
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-xs font-semibold">
             U
